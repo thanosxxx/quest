@@ -113,9 +113,6 @@
     <Compile Include="EditBrowser.xaml.vb">
       <DependentUpon>EditBrowser.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GameDescription.xaml.vb">
-      <DependentUpon>GameDescription.xaml</DependentUpon>
-    </Compile>
     <Compile Include="GameList.xaml.vb">
       <DependentUpon>GameList.xaml</DependentUpon>
     </Compile>
@@ -125,12 +122,6 @@
     <Compile Include="Helper.vb" />
     <Compile Include="Launcher.xaml.vb">
       <DependentUpon>Launcher.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PlayBrowser.xaml.vb">
-      <DependentUpon>PlayBrowser.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ReviewItem.xaml.vb">
-      <DependentUpon>ReviewItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="VersionInfo.xaml.vb">
       <DependentUpon>VersionInfo.xaml</DependentUpon>
@@ -204,10 +195,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="GameDescription.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="GameList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -217,14 +204,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Launcher.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PlayBrowser.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ReviewItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

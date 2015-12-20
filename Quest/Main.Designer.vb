@@ -57,6 +57,7 @@ Partial Class Main
         '
         'ctlLauncherHost
         '
+        Me.ctlLauncherHost.BackColor = System.Drawing.SystemColors.Window
         Me.ctlLauncherHost.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ctlLauncherHost.Location = New System.Drawing.Point(0, 24)
         Me.ctlLauncherHost.Name = "ctlLauncherHost"

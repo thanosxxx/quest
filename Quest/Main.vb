@@ -17,9 +17,6 @@ Public Class Main
         ' Add any initialization after the InitializeComponent() call.
         ctlLauncher.QuestVersion = My.Application.Info.Version
         ctlLauncher.MaxASLVersion = Constants.MaxASLVersion
-        ctlLauncher.DownloadFolder = Options.Instance.GetStringValue(OptionNames.GamesFolder)
-        ctlLauncher.ShowSandpit = Options.Instance.GetBooleanValue(OptionNames.ShowSandpit)
-        ctlLauncher.ShowAdult = Options.Instance.GetBooleanValue(OptionNames.ShowAdult)
         InitialiseMenuHandlers()
 
         Dim helper As New TextAdventures.Utility.WindowHelper(Me, "Quest", "Main")
@@ -158,8 +155,6 @@ Public Class Main
     Private Sub Main_FormClosing(sender As Object, e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
         If Not ctlEditor.CloseEditor(False, True) Then
             e.Cancel = True
-        ElseIf Not ctlLauncher.CloseLauncher() Then
-            e.Cancel = True
         End If
     End Sub
 
@@ -195,8 +190,6 @@ Public Class Main
     End Sub
 
     Private Sub Main_Shown(sender As Object, e As System.EventArgs) Handles Me.Shown
-        ctlLauncher.MainWindowShown()
-
         If m_cmdLineLaunch IsNot Nothing Then
             LaunchEdit(m_cmdLineLaunch)
         End If
