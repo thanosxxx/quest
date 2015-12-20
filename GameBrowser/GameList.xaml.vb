@@ -65,27 +65,6 @@ Public Class GameList
                     newItem.IsOnlineItem = True
                 End If
 
-                If String.IsNullOrEmpty(data.Filename) Then
-                    newItem.URL = data.URL
-
-                    System.IO.Directory.CreateDirectory(m_downloadFolder)
-
-                    Dim downloadFilename As String = System.IO.Path.Combine(
-                        m_downloadFolder, data.DownloadFilename)
-
-                    newItem.DownloadFilename = downloadFilename
-                    newItem.Author = data.Author
-                    newItem.GameId = data.GameId
-                    If Not String.IsNullOrEmpty(data.Thumbnail) Then
-                        newItem.SetImageURL(data.Thumbnail)
-                    End If
-
-                    If System.IO.File.Exists(downloadFilename) Then
-                        ' The file has already been downloaded
-                        data.Filename = downloadFilename
-                    End If
-                End If
-
                 If Not String.IsNullOrEmpty(data.Filename) Then
                     newItem.GameInfo = System.IO.Path.GetFileName(data.Filename)
                     newItem.Filename = data.Filename
@@ -184,10 +163,4 @@ Public Class GameList
     Public Function DownloadingCount() As Integer
         Return m_gameListItems.Values.Where(Function(g) g.CurrentState = GameListItem.State.Downloading).Count()
     End Function
-
-    Public Sub CancelDownloads()
-        For Each item As GameListItem In m_gameListItems.Values.Where(Function(g) g.CurrentState = GameListItem.State.Downloading)
-            item.CancelDownload()
-        Next
-    End Sub
 End Class

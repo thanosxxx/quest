@@ -16,7 +16,6 @@ Public Class Main
 
         ' Add any initialization after the InitializeComponent() call.
         ctlLauncher.QuestVersion = My.Application.Info.Version
-        ctlLauncher.MaxASLVersion = Constants.MaxASLVersion
         InitialiseMenuHandlers()
 
         Dim helper As New TextAdventures.Utility.WindowHelper(Me, "Quest", "Main")

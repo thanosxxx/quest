@@ -54,16 +54,6 @@
         End Get
         Set(value As Version)
             m_questVersion = value
-            WebClientFactory.QuestVersion = value.ToString
-        End Set
-    End Property
-
-    Public Property MaxASLVersion As Integer
-        Get
-            Return WebClientFactory.MaxASLVersion
-        End Get
-        Set(value As Integer)
-            WebClientFactory.MaxASLVersion = value
         End Set
     End Property
 

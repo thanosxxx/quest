@@ -167,22 +167,6 @@ Public Class GameListItem
         End Set
     End Property
 
-    Public Sub SetImageURL(url As String)
-        m_imageClient = WebClientFactory.GetNewWebClient
-        m_imageClient.DownloadDataAsync(New Uri(url))
-    End Sub
-
-    Private Sub m_imageClient_DownloadDataCompleted(sender As Object, e As Net.DownloadDataCompletedEventArgs) Handles m_imageClient.DownloadDataCompleted
-        If e.Error Is Nothing Then
-            Dim bitmap As New Imaging.BitmapImage()
-            bitmap.BeginInit()
-            bitmap.StreamSource = New System.IO.MemoryStream(e.Result)
-            bitmap.EndInit()
-            imageBorder.Visibility = Windows.Visibility.Visible
-            image.Source = bitmap
-        End If
-    End Sub
-
     Private Sub SetToolTipText(text As String)
         If text.Length = 0 Then
             Windows.Controls.ToolTipService.SetIsEnabled(textBlock, False)
@@ -198,61 +182,7 @@ Public Class GameListItem
     End Sub
 
     Public Sub LaunchButtonClick()
-        Select Case CurrentState
-            Case State.ReadyToPlay
-                RaiseEvent Launch(m_filename)
-            Case State.NotDownloaded
-                StartDownload()
-            Case State.Downloading
-                CancelDownload()
-        End Select
-    End Sub
-
-    Private Sub StartDownload()
-        CurrentState = State.Downloading
-        m_client = WebClientFactory.GetNewWebClient
-        Dim newThread As New System.Threading.Thread(Sub() m_client.DownloadFileAsync(New System.Uri(m_url), m_downloadFilename))
-        newThread.Start()
-    End Sub
-
-    Public Sub CancelDownload()
-        CurrentState = State.NotDownloaded
-        m_client.CancelAsync()
-    End Sub
-
-    Private Sub m_client_DownloadFileCompleted(sender As Object, e As System.ComponentModel.AsyncCompletedEventArgs) Handles m_client.DownloadFileCompleted
-        Dispatcher.BeginInvoke(Sub()
-                                   If e.Error Is Nothing Then
-                                       Filename = m_downloadFilename
-                                       CurrentState = State.ReadyToPlay
-                                   Else
-                                       If Not e.Cancelled Then
-                                           MsgBox(String.Format(
-                                                  "Failed to download file. The following error occurred:{0}{1}{2}",
-                                                  Environment.NewLine,
-                                                  Environment.NewLine,
-                                                  e.Error.Message), MsgBoxStyle.Critical, "Download Failed")
-                                       End If
-                                       CurrentState = State.NotDownloaded
-                                       DeleteDownloadedFile()
-                                   End If
-                               End Sub)
-    End Sub
-
-    Private Sub m_client_DownloadProgressChanged(sender As Object, e As System.Net.DownloadProgressChangedEventArgs) Handles m_client.DownloadProgressChanged
-        Dispatcher.BeginInvoke(Sub()
-                                   progressBar.Value = e.ProgressPercentage
-                                   If Not m_setDownloadTooltip Then
-                                       SetToolTipText(String.Format("Downloading ({0} bytes)", e.TotalBytesToReceive))
-                                       m_setDownloadTooltip = True
-                                   End If
-                               End Sub)
-    End Sub
-
-    Private Sub DeleteDownloadedFile()
-        If System.IO.File.Exists(m_downloadFilename) Then
-            System.IO.File.Delete(m_downloadFilename)
-        End If
+        RaiseEvent Launch(m_filename)
     End Sub
 
     Public Property ContextMenuType As ContextMenuTypes
