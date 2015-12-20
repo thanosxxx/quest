@@ -44,7 +44,6 @@
         AddMenuData("walkthrough", MenuMode.Player)
         AddMenuData("debugger", MenuMode.Player)
         AddMenuData("log", MenuMode.Player)
-        AddMenuData("windowmenu", MenuMode.Player)
         AddMenuData("add", MenuMode.Editor)
         AddMenuData("open", MenuMode.GameBrowser, MenuMode.Player)
         AddMenuData("openedit", MenuMode.GameBrowser, MenuMode.Editor)
@@ -57,7 +56,6 @@
         AddMenuData("publish", MenuMode.Editor)
         AddMenuData("find", MenuMode.Editor)
         AddMenuData("replace", MenuMode.Editor)
-        AddMenuData("options", MenuMode.GameBrowser, MenuMode.Player)
         AddMenuData("simplemode", MenuMode.Editor)
         AddMenuData("codeview", MenuMode.Editor)
         AddMenuData("wordwrap", MenuMode.Editor)
@@ -231,30 +229,6 @@
         End If
 
         m_handlers.Add(key, handler)
-    End Sub
-
-    Public Sub ClearWindowMenu()
-        WindowMenuToolStripMenuItem.Visible = False
-    End Sub
-
-    Public Sub CreateWindowMenu(title As String, options As IDictionary(Of String, String), handler As WindowMenuClickHandler)
-        WindowMenuToolStripMenuItem.Text = title
-
-        WindowMenuToolStripMenuItem.DropDownItems.Clear()
-
-        For Each kvp As KeyValuePair(Of String, String) In options
-            Dim text As String = kvp.Value
-            If text = "-" Then
-                Dim newItem As New ToolStripSeparator()
-                WindowMenuToolStripMenuItem.DropDownItems.Add(newItem)
-            Else
-                Dim newItem As ToolStripItem = WindowMenuToolStripMenuItem.DropDownItems.Add(text)
-                newItem.Tag = kvp.Key
-                AddHandler newItem.Click, Sub(sender As Object, e As System.EventArgs) handler(DirectCast(DirectCast(sender, ToolStripItem).Tag, String))
-            End If
-        Next
-
-        WindowMenuToolStripMenuItem.Visible = True
     End Sub
 
     Public Sub SetShortcut(menu As String, keys As System.Windows.Forms.Keys)

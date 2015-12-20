@@ -168,13 +168,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Options.vb" />
-    <Compile Include="OptionsDialog.Designer.vb">
-      <DependentUpon>OptionsDialog.vb</DependentUpon>
-    </Compile>
-    <Compile Include="OptionsDialog.vb">
-      <SubType>Form</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="About.resx">
@@ -191,9 +184,6 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OptionsDialog.resx">
-      <DependentUpon>OptionsDialog.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -238,9 +228,6 @@
     <None Include="Resources\quest.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="jfwapi.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="q2_48x48c.ico" />
   </ItemGroup>
   <ItemGroup>

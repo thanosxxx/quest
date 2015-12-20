@@ -44,7 +44,6 @@ Public Class Main
         ctlMenu.AddMenuClickHandler("viewhelp", AddressOf Help)
         ctlMenu.AddMenuClickHandler("forums", AddressOf Forums)
         ctlMenu.AddMenuClickHandler("logbug", AddressOf LogBug)
-        ctlMenu.AddMenuClickHandler("options", AddressOf ShowOptions)
     End Sub
 
     Private Sub ctlLauncher_BrowseForGameEdit()
@@ -238,9 +237,4 @@ Public Class Main
             End If
         End Set
     End Property
-
-    Private Sub ShowOptions()
-        Dim optionsForm As New OptionsDialog
-        optionsForm.ShowDialog()
-    End Sub
 End Class
