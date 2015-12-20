@@ -41,7 +41,67 @@ namespace TextAdventures.Quest
         v550
     }
 
-    public class WorldModel : IASL, IASLDebug
+    public class ObjectsUpdatedEventArgs : EventArgs
+    {
+        public string Added { get; set; }
+        public string Removed { get; set; }
+    }
+
+    public class DebugDataItem
+    {
+        public string Value
+        {
+            get;
+            private set;
+        }
+
+        public bool IsInherited
+        {
+            get;
+            set;
+        }
+
+        public string Source
+        {
+            get;
+            set;
+        }
+
+        public bool IsDefaultType
+        {
+            get;
+            set;
+        }
+
+        public DebugDataItem(string value)
+            : this(value, false)
+        {
+        }
+
+        public DebugDataItem(string value, bool isInherited)
+            : this(value, isInherited, null)
+        {
+        }
+
+        public DebugDataItem(string value, bool isInherited, string source)
+        {
+            Value = value;
+            IsInherited = isInherited;
+            Source = source;
+        }
+    }
+
+    public class DebugData
+    {
+        private Dictionary<string, DebugDataItem> m_data = new Dictionary<string, DebugDataItem>();
+        public Dictionary<string, DebugDataItem> Data
+        {
+            get { return m_data; }
+            set { m_data = value; }
+        }
+    }
+
+    public class WorldModel : IASL
     {
         private Element m_game;
         private Elements m_elements;
@@ -66,7 +126,7 @@ namespace TextAdventures.Quest
         private IPlayer m_playerUI = null;
         private ThreadState m_threadState = ThreadState.Ready;
         private object m_threadLock = new object();
-        private Walkthroughs m_walkthroughs;
+        private WalkthroughList m_walkthroughs;
         private List<string> m_attributeNames = new List<string>();
         private bool m_commandOverride = false;
         private string m_commandOverrideInput;
@@ -490,7 +550,7 @@ namespace TextAdventures.Quest
             bool result = InitialiseInternal(loader);
             if (result)
             {
-                m_walkthroughs = new Walkthroughs(this);
+                m_walkthroughs = new WalkthroughList(this);
             }
             return result;
         }
@@ -611,7 +671,7 @@ namespace TextAdventures.Quest
             get { return m_errors; }
         }
 
-        public IWalkthroughs Walkthroughs
+        public WalkthroughList Walkthroughs
         {
             get
             {

@@ -5,11 +5,11 @@ using System.Text;
 
 namespace TextAdventures.Quest
 {
-    public sealed class Walkthroughs : IWalkthroughs
+    public sealed class WalkthroughList
     {
-        private Dictionary<string, IWalkthrough> m_walkthroughs = new Dictionary<string, IWalkthrough>();
+        private Dictionary<string, Walkthrough> m_walkthroughs = new Dictionary<string, Walkthrough>();
 
-        public Walkthroughs(WorldModel worldModel)
+        public WalkthroughList(WorldModel worldModel)
         {
             foreach (Element walkthroughElement in worldModel.Elements.GetElements(ElementType.Walkthrough))
             {
@@ -17,18 +17,18 @@ namespace TextAdventures.Quest
             }
         }
 
-        IDictionary<string, IWalkthrough> IWalkthroughs.Walkthroughs
+        public IDictionary<string, Walkthrough> Walkthroughs
         {
             get { return m_walkthroughs; }
         }
     }
 
-    public class Walkthrough : IWalkthrough
+    public class Walkthrough
     {
         private Element m_element;
-        private IWalkthroughs m_walkthroughs;
+        private WalkthroughList m_walkthroughs;
 
-        public Walkthrough(Element element, Walkthroughs walkthroughs)
+        public Walkthrough(Element element, WalkthroughList walkthroughs)
         {
             m_element = element;
             m_walkthroughs = walkthroughs;
