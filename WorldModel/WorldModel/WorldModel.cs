@@ -41,7 +41,7 @@ namespace TextAdventures.Quest
         v550
     }
 
-    public class WorldModel : IASL, IASLDebug, IASLTimer
+    public class WorldModel : IASL, IASLDebug
     {
         private Element m_game;
         private Elements m_elements;
