@@ -13,8 +13,6 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Quest", "Quest\Quest.vbproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldModel", "WorldModel\WorldModel\WorldModel.csproj", "{F8CA1A78-02F7-405B-B223-3EFBEFBD8A88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IASL", "IASL\IASL.csproj", "{BE34CB28-317F-4732-AA32-9D715B4F2C7E}"
-EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "GameBrowser", "GameBrowser\GameBrowser.vbproj", "{F93B56A3-2DB6-47BE-9DC3-1A9204AAA832}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Utility\Utility.csproj", "{0E926905-F750-49F9-AEBD-CE14B2B231D8}"
@@ -69,18 +67,6 @@ Global
 		{F8CA1A78-02F7-405B-B223-3EFBEFBD8A88}.Release|Mixed Platforms.Build.0 = Release|x86
 		{F8CA1A78-02F7-405B-B223-3EFBEFBD8A88}.Release|x86.ActiveCfg = Release|x86
 		{F8CA1A78-02F7-405B-B223-3EFBEFBD8A88}.Release|x86.Build.0 = Release|x86
-		{BE34CB28-317F-4732-AA32-9D715B4F2C7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE34CB28-317F-4732-AA32-9D715B4F2C7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE34CB28-317F-4732-AA32-9D715B4F2C7E}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{BE34CB28-317F-4732-AA32-9D715B4F2C7E}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{BE34CB28-317F-4732-AA32-9D715B4F2C7E}.Debug|x86.ActiveCfg = Debug|x86
-		{BE34CB28-317F-4732-AA32-9D715B4F2C7E}.Debug|x86.Build.0 = Debug|x86
-		{BE34CB28-317F-4732-AA32-9D715B4F2C7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE34CB28-317F-4732-AA32-9D715B4F2C7E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE34CB28-317F-4732-AA32-9D715B4F2C7E}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{BE34CB28-317F-4732-AA32-9D715B4F2C7E}.Release|Mixed Platforms.Build.0 = Release|x86
-		{BE34CB28-317F-4732-AA32-9D715B4F2C7E}.Release|x86.ActiveCfg = Release|x86
-		{BE34CB28-317F-4732-AA32-9D715B4F2C7E}.Release|x86.Build.0 = Release|x86
 		{F93B56A3-2DB6-47BE-9DC3-1A9204AAA832}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F93B56A3-2DB6-47BE-9DC3-1A9204AAA832}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F93B56A3-2DB6-47BE-9DC3-1A9204AAA832}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
