@@ -26,7 +26,6 @@ Partial Class Main
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Main))
         Me.dlgOpenFile = New System.Windows.Forms.OpenFileDialog()
-        Me.ctlPlayer = New TextAdventures.Quest.Player()
         Me.ctlEditor = New TextAdventures.Quest.Editor()
         Me.ctlMenu = New TextAdventures.Quest.Controls.Menu()
         Me.ctlLauncherHost = New System.Windows.Forms.Integration.ElementHost()
@@ -36,19 +35,6 @@ Partial Class Main
         'dlgOpenFile
         '
         Me.dlgOpenFile.FileName = "OpenFileDialog1"
-        '
-        'ctlPlayer
-        '
-        Me.ctlPlayer.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ctlPlayer.Location = New System.Drawing.Point(0, 24)
-        Me.ctlPlayer.Name = "ctlPlayer"
-        Me.ctlPlayer.PostLaunchAction = Nothing
-        Me.ctlPlayer.PreLaunchAction = Nothing
-        Me.ctlPlayer.RecordWalkthrough = Nothing
-        Me.ctlPlayer.Size = New System.Drawing.Size(734, 464)
-        Me.ctlPlayer.TabIndex = 0
-        Me.ctlPlayer.UseGameColours = True
-        Me.ctlPlayer.UseGameFont = True
         '
         'ctlEditor
         '
@@ -86,7 +72,6 @@ Partial Class Main
         Me.ClientSize = New System.Drawing.Size(734, 488)
         Me.Controls.Add(Me.ctlLauncherHost)
         Me.Controls.Add(Me.ctlEditor)
-        Me.Controls.Add(Me.ctlPlayer)
         Me.Controls.Add(Me.ctlMenu)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.KeyPreview = True
@@ -95,7 +80,6 @@ Partial Class Main
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents ctlPlayer As TextAdventures.Quest.Player
     Friend WithEvents dlgOpenFile As System.Windows.Forms.OpenFileDialog
     Friend WithEvents ctlEditor As Editor
     Friend WithEvents ctlMenu As TextAdventures.Quest.Controls.Menu
