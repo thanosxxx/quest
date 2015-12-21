@@ -39,15 +39,7 @@ namespace TextAdventures.Quest
 
             public void DoUndo(WorldModel worldModel)
             {
-                const string undoTurnTemplate = "UndoTurn";
                 m_attributes.Reverse();
-                if (!worldModel.EditMode)
-                {
-                    if (worldModel.Template.DynamicTemplateExists(undoTurnTemplate))
-                    {
-                        worldModel.Print(worldModel.Template.GetDynamicText(undoTurnTemplate, m_command));
-                    }
-                }
                 foreach (IUndoAction l in m_attributes)
                 {
                     l.DoUndo(worldModel);
@@ -135,19 +127,9 @@ namespace TextAdventures.Quest
 
         public void Undo()
         {
-            const string NothingToUndoTemplate = "NothingToUndo";
-
             if (m_undoTransactions.Count == 0)
             {
-                if (m_worldModel.Template.TemplateExists(NothingToUndoTemplate))
-                {
-                    m_worldModel.PrintTemplate("NothingToUndo");
-                }
-                else
-                {
-                    throw new Exception("Nothing to undo");
-                }
-                return;
+                throw new Exception("Nothing to undo");
             }
 
             Transaction undoTransaction = m_undoTransactions.Pop();

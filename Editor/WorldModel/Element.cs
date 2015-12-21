@@ -170,15 +170,6 @@ namespace TextAdventures.Quest
         void Fields_AttributeChanged(object sender, AttributeChangedEventArgs e)
         {
             m_worldModel.NotifyElementFieldUpdate(this, e.Property, e.Value, false);
-            if (!m_worldModel.EditMode)
-            {
-                string changedScript = "changed" + e.Property;
-                if (Fields.HasType<IScript>(changedScript))
-                {
-                    Parameters parameters = new Parameters("oldvalue", e.OldValue);
-                    m_worldModel.RunScript(Fields.GetAsType<IScript>(changedScript), parameters, this);
-                }
-            }
         }
 
         void MetaFields_AttributeChanged(object sender, AttributeChangedEventArgs e)

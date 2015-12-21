@@ -47,8 +47,6 @@ namespace TextAdventures.Quest.Scripts
 
         public override void Execute(Context c)
         {
-            object result = m_function.Execute(c);
-            m_worldModel.Print(result.ToString());
         }
 
         public override string Save()

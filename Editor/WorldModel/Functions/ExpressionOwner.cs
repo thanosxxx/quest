@@ -321,28 +321,6 @@ namespace TextAdventures.Quest.Functions
             return WorldModel.ConvertTypeToTypeName(value.GetType());
         }
 
-        public object RunDelegateFunction(/* Element */ object obj, string del, params object[] parameters)
-        {
-            Element element = GetParameter<Element>(obj, "RunDelegateFunction", "object");
-            DelegateImplementation impl = element.Fields.Get(del) as DelegateImplementation;
-
-            if (impl == null)
-            {
-                throw new Exception(string.Format("Object '{0}' has no delegate implementation '{1}'", element.Name, del));
-            }
-
-            Parameters paramValues = new Parameters();
-
-            int cnt = 0;
-            foreach (object p in parameters)
-            {
-                paramValues.Add((string)impl.Definition.Fields[FieldDefinitions.ParamNames][cnt], p);
-                cnt++;
-            }
-
-            return m_worldModel.RunDelegateScript(impl.Implementation.Fields[FieldDefinitions.Script], paramValues, element);
-        }
-
         public string SafeXML(string input)
         {
             return Utility.SafeXML(input);

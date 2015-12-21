@@ -47,7 +47,6 @@ namespace TextAdventures.Quest.Scripts
 
         public override void Execute(Context c)
         {
-            m_worldModel.AddOnReady(m_callbackScript, c);
         }
 
         public override string Save()

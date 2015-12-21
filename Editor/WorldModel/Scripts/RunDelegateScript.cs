@@ -75,32 +75,6 @@ namespace TextAdventures.Quest.Scripts
 
         public override void Execute(Context c)
         {
-            if (m_parameters == null)
-            {
-                throw new NotImplementedException();
-            }
-            else
-            {
-                Element obj = m_appliesTo.Execute(c);
-                string delName = m_delegate.Execute(c);
-                DelegateImplementation impl = obj.Fields.Get(delName) as DelegateImplementation;
-
-                if (impl == null)
-                {
-                    throw new Exception(string.Format("Object '{0}' has no delegate implementation '{1}'", obj.Name, m_delegate));
-                }
-
-                Parameters paramValues = new Parameters();
-
-                int cnt = 0;
-                foreach (IFunction<object> f in m_parameters.Parameters)
-                {
-                    paramValues.Add((string)impl.Definition.Fields[FieldDefinitions.ParamNames][cnt], f.Execute(c));
-                    cnt++;
-                }
-
-                m_worldModel.RunScript(impl.Implementation.Fields[FieldDefinitions.Script], paramValues, obj);
-            }
         }
 
         public override string Save()

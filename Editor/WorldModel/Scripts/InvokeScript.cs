@@ -59,15 +59,6 @@ namespace TextAdventures.Quest.Scripts
 
         public override void Execute(Context c)
         {
-            IScript script = m_script.Execute(c);
-            if (m_parameters == null)
-            {
-                m_worldModel.RunScript(script);
-            }
-            else
-            {
-                m_worldModel.RunScript(script, new Parameters(m_parameters.Execute(c)));
-            }
         }
 
         public override string Save()

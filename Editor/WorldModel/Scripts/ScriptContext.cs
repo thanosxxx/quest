@@ -36,43 +36,7 @@ namespace TextAdventures.Quest.Scripts
 
             m_expressionContext.Variables.ResolveVariableType += new EventHandler<ResolveVariableTypeEventArgs>(Variables_ResolveVariableType);
             m_expressionContext.Variables.ResolveVariableValue += new EventHandler<ResolveVariableValueEventArgs>(Variables_ResolveVariableValue);
-            m_expressionContext.Variables.ResolveFunction += new EventHandler<ResolveFunctionEventArgs>(Variables_ResolveFunction);
-            m_expressionContext.Variables.InvokeFunction += new EventHandler<InvokeFunctionEventArgs>(Variables_InvokeFunction);
             m_expressionContext.Options.ParseCulture = System.Globalization.CultureInfo.InvariantCulture;
-        }
-
-        void Variables_ResolveFunction(object sender, ResolveFunctionEventArgs e)
-        {
-            if (e.FunctionName == "IsDefined")
-            {
-                e.ReturnType = typeof(bool);
-                return;
-            }
-            Element proc = m_worldModel.Procedure(e.FunctionName);
-            if (proc != null)
-            {
-                e.ReturnType = WorldModel.ConvertTypeNameToType(proc.Fields[FieldDefinitions.ReturnType]);
-            }
-        }
-
-        void Variables_InvokeFunction(object sender, InvokeFunctionEventArgs e)
-        {
-            if (e.FunctionName == "IsDefined")
-            {
-                e.Result = m_context.Parameters.ContainsKey((string)e.Arguments[0]);
-                return;
-            }
-            Element proc = m_worldModel.Procedure(e.FunctionName);
-            Parameters parameters = new Parameters();
-            int cnt = 0;
-            // TO DO: Check number of parameters matches
-            foreach (object val in e.Arguments)
-            {
-                parameters.Add((string)proc.Fields[FieldDefinitions.ParamNames][cnt], val);
-                cnt++;
-            }
-
-            e.Result = m_worldModel.RunProcedure(e.FunctionName, parameters, true);
         }
 
         void Variables_ResolveVariableValue(object sender, ResolveVariableValueEventArgs e)

@@ -113,8 +113,6 @@ namespace TextAdventures.Quest
         private readonly string m_data;
         private string m_libFolder = null;
         private List<string> m_errors;
-        private Dictionary<string, ObjectType> m_debuggerObjectTypes = new Dictionary<string, ObjectType>();
-        private Dictionary<string, ElementType> m_debuggerElementTypes = new Dictionary<string, ElementType>();
         private GameState m_state = GameState.NotStarted;
         private Dictionary<ElementType, IElementFactory> m_elementFactories = new Dictionary<ElementType, IElementFactory>();
         private ObjectFactory m_objectFactory;
@@ -132,6 +130,7 @@ namespace TextAdventures.Quest
         private static Dictionary<string, Type> s_typeNamesToTypes = new Dictionary<string, Type>();
         private static Dictionary<Type, string> s_typesToTypeNames = new Dictionary<Type, string>();
 
+        public event EventHandler<ObjectsUpdatedEventArgs> ObjectsUpdated;
         public event EventHandler<ElementFieldUpdatedEventArgs> ElementFieldUpdated;
         public event EventHandler<ElementRefreshEventArgs> ElementRefreshed;
         public event EventHandler<ElementFieldUpdatedEventArgs> ElementMetaFieldUpdated;
@@ -220,7 +219,6 @@ namespace TextAdventures.Quest
             InitialiseElementFactories();
             m_objectFactory = (ObjectFactory)m_elementFactories[ElementType.Object];
 
-            InitialiseDebuggerObjectTypes();
             m_filename = filename;
             m_originalFilename = originalFilename;
             m_elements = new Elements();
@@ -250,24 +248,14 @@ namespace TextAdventures.Quest
             factory.ObjectsUpdated += ElementsUpdated;
         }
 
-        internal static Dictionary<ObjectType, string> DefaultTypeNames
-        {
-            get { return s_defaultTypeNames; }
-        }
-
         void ElementsUpdated(object sender, ObjectsUpdatedEventArgs args)
         {
             if (ObjectsUpdated != null) ObjectsUpdated(this, args);
         }
 
-        private void InitialiseDebuggerObjectTypes()
+        internal static Dictionary<ObjectType, string> DefaultTypeNames
         {
-            m_debuggerObjectTypes.Add("Objects", ObjectType.Object);
-            m_debuggerObjectTypes.Add("Exits", ObjectType.Exit);
-            m_debuggerObjectTypes.Add("Commands", ObjectType.Command);
-            m_debuggerObjectTypes.Add("Game", ObjectType.Game);
-            m_debuggerObjectTypes.Add("Turn Scripts", ObjectType.TurnScript);
-            m_debuggerElementTypes.Add("Timers", ElementType.Timer);
+            get { return s_defaultTypeNames; }
         }
 
         internal string GetUniqueID()
@@ -313,52 +301,9 @@ namespace TextAdventures.Quest
             return m_elementFactories[t];
         }
 
-        public void PrintTemplate(string t)
-        {
-            Print(m_template.GetText(t));
-        }
-
-        public void Print(string text, bool linebreak = true)
-        {
-            if (Version >= WorldModelVersion.v540 && m_elements.ContainsKey(ElementType.Function, "OutputText"))
-            {
-                try
-                {
-                    RunProcedure("OutputText", new Parameters(new Dictionary<string, string> {{"text", text}}), false);
-                }
-                catch (Exception ex)
-                {
-                    LogException(ex);
-                }
-            }
-            else
-            {
-                if (PrintText != null)
-                {
-                    if (linebreak)
-                    {
-                        PrintText("<output>" + text + "</output>");
-                    }
-                    else
-                    {
-                        PrintText("<output nobr=\"true\">" + text + "</output>");
-                    }
-                }
-            }
-        }
-
         internal QuestList<Element> GetAllObjects()
         {
             return new QuestList<Element>(m_elements.Objects);
-        }
-
-        internal QuestList<Element> GetObjectsInScope(string scopeFunction)
-        {
-            if (m_elements.ContainsKey(ElementType.Function, scopeFunction))
-            {
-                return (QuestList<Element>)RunProcedure(scopeFunction, true);
-            }
-            throw new Exception(string.Format("No function '{0}'", scopeFunction));
         }
 
         public bool ObjectContains(Element parent, Element searchObj)
@@ -467,11 +412,6 @@ namespace TextAdventures.Quest
             get { return m_errors; }
         }
 
-        public List<string> DebuggerObjectTypes
-        {
-            get { return new List<string>(m_debuggerObjectTypes.Keys.Union(m_debuggerElementTypes.Keys)); }
-        }
-
         public string Filename
         {
             get { return m_filename; }
@@ -489,11 +429,6 @@ namespace TextAdventures.Quest
 
         public string SaveExtension { get { return "quest-save"; } }
 
-        public event PrintTextHandler PrintText;
-        public event UpdateListHandler UpdateList;
-        public event EventHandler<ObjectsUpdatedEventArgs> ObjectsUpdated;
-        public event ErrorHandler LogError;
-
         internal Template Template
         {
             get { return m_template; }
@@ -502,144 +437,6 @@ namespace TextAdventures.Quest
         public UndoLogger UndoLogger
         {
             get { return m_undoLogger; }
-        }
-
-        private void UpdateStatusVariables()
-        {
-            if (m_elements.ContainsKey(ElementType.Function, "UpdateStatusAttributes"))
-            {
-                try
-                {
-                    RunProcedure("UpdateStatusAttributes");
-                }
-                catch (Exception ex)
-                {
-                    LogException(ex);
-                }
-            }
-        }
-
-        internal void UpdateLists()
-        {
-            UpdateObjectsList();
-            UpdateExitsList();
-            UpdateStatusVariables();
-        }
-
-        internal void UpdateObjectsList()
-        {
-            UpdateObjectsList("GetPlacesObjectsList", ListType.ObjectsList);
-            UpdateObjectsList("ScopeInventory", ListType.InventoryList);
-        }
-
-        internal void UpdateObjectsList(string scope, ListType listType)
-        {
-            if (UpdateList != null)
-            {
-                List<ListData> objects = new List<ListData>();
-                foreach (Element obj in GetObjectsInScope(scope))
-                {
-                    if (Version <= WorldModelVersion.v520 || !m_elements.ContainsKey(ElementType.Function, "GetDisplayVerbs"))
-                    {
-                        if (scope == "ScopeInventory")
-                        {
-                            objects.Add(new ListData(GetListDisplayAlias(obj), obj.Fields[FieldDefinitions.InventoryVerbs], obj.Name, GetDisplayAlias(obj)));
-                        }
-                        else
-                        {
-                            objects.Add(new ListData(GetListDisplayAlias(obj), obj.Fields[FieldDefinitions.DisplayVerbs], obj.Name, GetDisplayAlias(obj)));
-                        }
-                    }
-                    else
-                    {
-                        objects.Add(new ListData(GetListDisplayAlias(obj), GetDisplayVerbs(obj), obj.Name, GetDisplayAlias(obj)));
-                    }
-                }
-                // The "Places and Objects" list is generated by function, so we also
-                // need to add any exits. (The UI is responsible for filtering out the
-                // directional exits so they only display in the compass)
-                if (scope == "GetPlacesObjectsList") objects.AddRange(GetExitsListData());
-                UpdateList(listType, objects);
-            }
-        }
-
-        internal void UpdateExitsList()
-        {
-            if (UpdateList != null)
-            {
-                UpdateList(ListType.ExitsList, GetExitsListData());
-            }
-        }
-
-        private string GetListDisplayAlias(Element obj)
-        {
-            if (m_elements.ContainsKey(ElementType.Function, "GetListDisplayAlias"))
-            {
-                return (string)RunProcedure("GetListDisplayAlias", new Parameters("obj", obj), true);
-            }
-            return GetDisplayAlias(obj);
-        }
-
-        private string GetDisplayAlias(Element obj)
-        {
-            if (m_elements.ContainsKey(ElementType.Function, "GetDisplayAlias"))
-            {
-                return (string)RunProcedure("GetDisplayAlias", new Parameters("obj", obj), true);
-            }
-            return obj.Name;
-        }
-
-        private IEnumerable<string> GetDisplayVerbs(Element obj)
-        {
-            return (QuestList<string>)RunProcedure("GetDisplayVerbs", new Parameters("object", obj), true);
-        }
-
-        private List<ListData> GetExitsListData()
-        {
-            List<ListData> exits = new List<ListData>();
-            var scopeFunction = "ScopeExits";
-            if (Version >= WorldModelVersion.v530 && Elements.ContainsKey(ElementType.Function, "GetExitsList"))
-            {
-                scopeFunction = "GetExitsList";
-            }
-            foreach (Element exit in GetObjectsInScope(scopeFunction))
-            {
-                IEnumerable<string> verbs;
-                if (Version <= WorldModelVersion.v520 || !m_elements.ContainsKey(ElementType.Function, "GetDisplayVerbs"))
-                {
-                    verbs = exit.Fields[FieldDefinitions.DisplayVerbs];
-                }
-                else
-                {
-                    verbs = GetDisplayVerbs(exit);
-                }
-                exits.Add(new ListData(GetListDisplayAlias(exit), verbs, exit.Name, GetDisplayAlias(exit)));
-            }
-            return exits;
-        }
-
-        public List<string> GetObjects(string type)
-        {
-            List<string> result = new List<string>();
-            IEnumerable<Element> elements;
-
-            if (m_debuggerObjectTypes.ContainsKey(type))
-            {
-                ObjectType filterType = m_debuggerObjectTypes[type];
-                elements = m_elements.ObjectsFiltered(o => o.Type == filterType);
-            }
-            else
-            {
-                ElementType filterType = m_debuggerElementTypes[type];
-                elements = m_elements.GetElements(filterType);
-            }
-
-            foreach (Element obj in elements)
-            {
-                result.Add(obj.Name);
-            }
-
-            return result;
         }
 
         public DebugData GetDebugData(string el)
@@ -692,71 +489,6 @@ namespace TextAdventures.Quest
             return result;
         }
 
-        public void RunScript(IScript script)
-        {
-            RunScript(script, (Parameters)null, false);
-        }
-
-        /// <summary>
-        /// Use this version of RunScript when executing an object action. Set thisElement to the object whose action it is.
-        /// </summary>
-        /// <param name="script"></param>
-        /// <param name="thisElement"></param>
-        public void RunScript(IScript script, Element thisElement)
-        {
-            RunScript(script, null, false, thisElement);
-        }
-
-        public void RunScript(IScript script, Parameters parameters)
-        {
-            RunScript(script, parameters, false);
-        }
-
-        public void RunScript(IScript script, Parameters parameters, Element thisElement)
-        {
-            RunScript(script, parameters, false, thisElement);
-        }
-
-        public object RunDelegateScript(IScript script, Parameters parameters, Element thisElement)
-        {
-            return RunScript(script, parameters, true, thisElement);
-        }
-
-        private object RunScript(IScript script, Parameters parameters, bool expectResult)
-        {
-            return RunScript(script, parameters, expectResult, null);
-        }
-
-        private object RunScript(IScript script, Parameters parameters, bool expectResult, Element thisElement)
-        {
-            Context c = new Context();
-            if (parameters == null) parameters = new Parameters();
-            if (thisElement != null) parameters.Add("this", thisElement);
-            c.Parameters = parameters;
-
-            return RunScript(script, c, expectResult);
-        }
-
-        private void RunScript(IScript script, Context c)
-        {
-            RunScript(script, c, false);
-        }
-
-        private object RunScript(IScript script, Context c, bool expectResult)
-        {
-            try
-            {
-                script.Execute(c);
-                if (expectResult && c.ReturnValue is NoReturnValue) throw new Exception("Function did not return a value");
-                return c.ReturnValue;
-            }
-            catch (Exception ex)
-            {
-                Print("Error running script: " + Utility.SafeXML(ex.Message));
-            }
-            return null;
-        }
-
         public Element AddProcedure(string name)
         {
             Element proc = GetElementFactory(ElementType.Function).Create(name);
@@ -775,52 +507,6 @@ namespace TextAdventures.Quest
         {
             Element del = GetElementFactory(ElementType.Delegate).Create(name);
             return del;
-        }
-
-        public void RunProcedure(string name)
-        {
-            RunProcedure(name, false);
-        }
-
-        public object RunProcedure(string name, bool expectResult)
-        {
-            return RunProcedure(name, null, expectResult);
-        }
-
-        public object RunProcedure(string name, Parameters parameters, bool expectResult)
-        {
-            if (m_elements.ContainsKey(ElementType.Function, name))
-            {
-                Element function = m_elements.Get(ElementType.Function, name);
-
-                // Only check for too few parameters for games for Quest 5.2 or later, as previous Quest versions
-                // would ignore this (but would usually still fail when the function was run, as the required
-                // variable wouldn't exist). For Quest 5.3, an additional check if parameters is non-null but empty.
-
-                bool parametersInvalid = false;
-                if (Version == WorldModelVersion.v520)
-                {
-                    parametersInvalid = parameters == null && function.Fields[FieldDefinitions.ParamNames].Count > 0;
-                }
-                else if (Version >= WorldModelVersion.v530)
-                {
-                    parametersInvalid = (parameters == null || parameters.Count == 0) && function.Fields[FieldDefinitions.ParamNames].Count > 0;
-                }
-
-                if (parametersInvalid)
-                {
-                    throw new Exception(string.Format("No parameters passed to {0} function - expected {1} parameters",
-                            name,
-                            function.Fields[FieldDefinitions.ParamNames].Count));
-                }
-
-                return RunScript(function.Fields[FieldDefinitions.Script], parameters, expectResult);
-            }
-            else
-            {
-                Print(string.Format("Error - no such procedure '{0}'", name));
-            }
-            return null;
         }
 
         public Element Procedure(string name)
@@ -1061,11 +747,6 @@ namespace TextAdventures.Quest
             WaitUntilFinishedWorking();
         }
 
-        void LogException(Exception ex)
-        {
-            if (LogError != null) LogError(ex.Message + Environment.NewLine + ex.StackTrace);
-        }
-
         public ElementType GetElementTypeForTypeString(string typeString)
         {
             return Element.GetElementTypeForTypeString(typeString);
@@ -1205,50 +886,7 @@ namespace TextAdventures.Quest
             movedElement.MetaFields[MetaFieldDefinitions.SortIndex] = maxIndex + 1;
         }
 
-        public bool Assert(string expr)
-        {
-            Expression<bool> expression = new Expression<bool>(expr, new ScriptContext(this));
-            Context c = new Context();
-            return expression.Execute(c);
-        }
-
-        internal void AddOnReady(IScript callback, Context c)
-        {
-            if (!m_callbacks.AnyOutstanding())
-            {
-                RunScript(callback, c);
-            }
-            else
-            {
-                m_callbacks.AddOnReadyCallback(new Callback(callback, c));
-            }
-        }
-
-        public Stream GetResource(string filename)
-        {
-            string path = TryGetExternalPath(filename);
-            if (path == null) return null;
-            return new FileStream(GetExternalPath(filename), FileMode.Open, FileAccess.Read);
-        }
-
-        public string GetResourcePath(string filename)
-        {
-            return TryGetExternalPath(filename);
-        }
-
         internal RegexCache RegexCache { get { return m_regexCache; } }
-
-        ~WorldModel()
-        {
-            if (ResourcesFolder != null && System.IO.Directory.Exists(ResourcesFolder))
-            {
-                try
-                {
-                    System.IO.Directory.Delete(ResourcesFolder, true);
-                }
-                catch { }
-            }
-        }
 
         public WorldModelVersion Version { get; internal set; }
 
@@ -1289,45 +927,6 @@ namespace TextAdventures.Quest
         InventoryList,
         ExitsList,
         ObjectsList
-    }
-
-    public enum UIOption
-    {
-        UseGameColours,
-        UseGameFont,
-        OverrideForeground,
-        OverrideLinkForeground,
-        OverrideFontName,
-        OverrideFontSize
-    }
-
-    public class MenuData
-    {
-        private string m_caption;
-        private IDictionary<string, string> m_options;
-        private bool m_allowCancel;
-
-        public MenuData(string caption, IDictionary<string, string> options, bool allowCancel)
-        {
-            m_caption = caption;
-            m_options = options;
-            m_allowCancel = allowCancel;
-        }
-
-        public string Caption
-        {
-            get { return m_caption; }
-        }
-
-        public IDictionary<string, string> Options
-        {
-            get { return m_options; }
-        }
-
-        public bool AllowCancel
-        {
-            get { return m_allowCancel; }
-        }
     }
 
     public class ListData
