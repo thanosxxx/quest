@@ -85,12 +85,6 @@ namespace TextAdventures.Quest
             }
             writer.WriteAttributeString("version", m_worldModel.VersionString);
 
-            if (mode == SaveMode.SavedGame)
-            {
-                writer.WriteAttributeString("original", m_worldModel.Filename);
-                m_worldModel.OutputLogger.Save(html);
-            }
-
             foreach (ElementType t in Enum.GetValues(typeof(ElementType)))
             {
                 if (m_elementsSavers.ContainsKey(t))

@@ -51,8 +51,6 @@ namespace TextAdventures.Quest.Scripts
 
         public override void Execute(Context c)
         {
-            string filename = m_filename.Execute(c);
-            m_worldModel.PlaySound(filename, m_synchronous.Execute(c), m_loop.Execute(c));
         }
 
         public override string Save()
@@ -136,7 +134,6 @@ namespace TextAdventures.Quest.Scripts
 
         public override void Execute(Context c)
         {
-            m_worldModel.PlayerUI.StopSound();
         }
 
         public override string Save()

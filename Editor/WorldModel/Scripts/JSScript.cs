@@ -66,17 +66,6 @@ namespace TextAdventures.Quest.Scripts
 
         public override void Execute(Context c)
         {
-            if (string.IsNullOrEmpty(m_function)) return;
-
-            if (m_parameters != null)
-            {
-                var paramValues = m_parameters.Select(p => p.Execute(c));
-                m_scriptContext.WorldModel.PlayerUI.RunScript(m_function, paramValues.ToArray());
-            }
-            else
-            {
-                m_scriptContext.WorldModel.PlayerUI.RunScript(m_function, null);
-            }
         }
 
         public override string Save()

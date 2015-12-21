@@ -67,12 +67,6 @@ namespace EditorControllerTests
         {
         }
 
-        [TestCleanup]
-        public void Cleanup()
-        {
-            m_controller.Dispose();
-        }
-
         void m_controller_ClearTree(object sender, EventArgs e)
         {
             m_tree.Clear();

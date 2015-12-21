@@ -44,17 +44,6 @@ namespace TextAdventures.Quest.Scripts
 
         public override void Execute(Context c)
         {
-            string filename = m_filename.Execute(c);
-            
-            if (m_worldModel.Version >= WorldModelVersion.v540)
-            {
-                m_worldModel.Print("<img src=\"" + m_worldModel.ExpressionOwner.GetFileURL(filename) + "\" />");
-            }
-            else
-            {
-                m_worldModel.PlayerUI.ShowPicture(filename);
-                ((LegacyOutputLogger)m_worldModel.OutputLogger).AddPicture(filename);
-            }
         }
 
         public override string Save()

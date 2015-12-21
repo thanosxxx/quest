@@ -58,7 +58,6 @@ namespace TextAdventures.Quest.Scripts
 
         public override void Execute(Context c)
         {
-            m_worldModel.ShowQuestionAsync(m_caption.Execute(c), m_callbackScript, c);
         }
 
         public override string Save()

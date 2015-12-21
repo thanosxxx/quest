@@ -509,7 +509,6 @@ namespace TextAdventures.Quest
             public override object Load(XmlReader reader, ref Element current)
             {
                 string name = reader.GetAttribute("name");
-                WorldModel.SetGameName(name);
                 WorldModel.Game.Fields[FieldDefinitions.GameName] = name;
                 return WorldModel.Game;
             }

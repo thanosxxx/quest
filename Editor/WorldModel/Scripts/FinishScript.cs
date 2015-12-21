@@ -40,7 +40,6 @@ namespace TextAdventures.Quest.Scripts
 
         public override void Execute(Context c)
         {
-            m_worldModel.FinishGame();
         }
 
         public override string Save()

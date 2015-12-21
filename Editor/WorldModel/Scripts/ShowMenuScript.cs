@@ -62,30 +62,6 @@ namespace TextAdventures.Quest.Scripts
 
         public override void Execute(Context c)
         {
-            object options = m_options.Execute(c);
-            IList<string> stringListOptions = options as IList<string>;
-            IDictionary<string, string> stringDictionaryOptions = options as IDictionary<string, string>;
-
-            if (stringListOptions != null)
-            {
-                if (stringListOptions.Count == 0)
-                {
-                    throw new Exception("No menu options specified");
-                }
-                m_worldModel.DisplayMenuAsync(m_caption.Execute(c), stringListOptions, m_allowCancel.Execute(c), m_callbackScript, c);
-            }
-            else if (stringDictionaryOptions != null)
-            {
-                if (stringDictionaryOptions.Count == 0)
-                {
-                    throw new Exception("No menu options specified");
-                }
-                m_worldModel.DisplayMenuAsync(m_caption.Execute(c), stringDictionaryOptions, m_allowCancel.Execute(c), m_callbackScript, c);
-            }
-            else
-            {
-                throw new Exception("Unknown menu options type");
-            }
         }
 
         public override string Save()

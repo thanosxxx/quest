@@ -402,24 +402,6 @@ namespace TextAdventures.Quest.Functions
             return dictionary[key] as IScript;
         }
 
-        public string ShowMenu(string caption, QuestDictionary<string> options, bool allowCancel)
-        {
-            if (m_worldModel.Version >= WorldModelVersion.v540)
-            {
-                throw new Exception("The 'ShowMenu' function is not supported for games written for Quest 5.4 or later. Use the 'show menu' script command instead.");
-            }
-            return m_worldModel.DisplayMenu(caption, options, allowCancel, false);
-        }
-
-        public string ShowMenu(string caption, QuestList<string> options, bool allowCancel)
-        {
-            if (m_worldModel.Version >= WorldModelVersion.v540)
-            {
-                throw new Exception("The 'ShowMenu' function is not supported for games written for Quest 5.4 or later. Use the 'show menu' script command instead.");
-            }
-            return m_worldModel.DisplayMenu(caption, options, allowCancel, false);
-        }
-
         public bool DictionaryContains(/* IDictionary */ object obj, string key)
         {
             IDictionary dictionary = GetParameter<IDictionary>(obj, "DictionaryContains", "dictionary");
@@ -469,39 +451,9 @@ namespace TextAdventures.Quest.Functions
             return double.TryParse(number, System.Globalization.NumberStyles.AllowDecimalPoint | System.Globalization.NumberStyles.AllowLeadingSign, System.Globalization.CultureInfo.InvariantCulture, out result);
         }
 
-        public string GetInput()
-        {
-            if (m_worldModel.Version >= WorldModelVersion.v540)
-            {
-                throw new Exception("The 'GetInput' function is not supported for games written for Quest 5.4 or later. Use the 'get input' script command instead.");
-            }
-            return m_worldModel.GetNextCommandInput(false);
-        }
-
-        public string GetFileURL(string filename)
-        {
-            if (filename.Contains("..")) throw new ArgumentOutOfRangeException("Invalid filename");
-            return m_worldModel.GetExternalURL(filename);
-        }
-
-        public string GetFileData(string filename)
-        {
-            if (filename.Contains("..")) throw new ArgumentOutOfRangeException("Invalid filename");
-            return m_worldModel.GetResourceData(filename);
-        }
-
         public string GetUniqueElementName(string name)
         {
             return m_worldModel.GetUniqueElementName(name);
-        }
-
-        public bool Ask(string caption)
-        {
-            if (m_worldModel.Version >= WorldModelVersion.v540)
-            {
-                throw new Exception("The 'Ask' function is not supported for games written for Quest 5.4 or later. Use the 'ask' script command instead.");
-            }
-            return m_worldModel.ShowQuestion(caption);
         }
 
         public int GetRandomInt(int min, int max)
@@ -655,16 +607,6 @@ namespace TextAdventures.Quest.Functions
         {
             var list = GetParameter<QuestList<string>>(obj, "StringListSortDescending", "objectlist");
             return new QuestList<string>(StringListSort(list).Reverse());
-        }
-
-        public string GetUIOption(string optionName)
-        {
-            UIOption option;
-            if (Enum.TryParse(optionName, out option))
-            {
-                return m_worldModel.PlayerUI.GetUIOption(option);
-            }
-            throw new Exception(string.Format("Unrecognised UI option name '{0}'", optionName));
         }
     }
 }

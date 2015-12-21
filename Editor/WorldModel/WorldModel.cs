@@ -119,22 +119,13 @@ namespace TextAdventures.Quest
         private Dictionary<ElementType, IElementFactory> m_elementFactories = new Dictionary<ElementType, IElementFactory>();
         private ObjectFactory m_objectFactory;
         private GameSaver m_saver;
-        private bool m_loadedFromSaved = false;
         private string m_saveFilename = string.Empty;
         private bool m_editMode = false;
         private Functions.ExpressionOwner m_expressionOwner;
-        private IPlayer m_playerUI = null;
         private ThreadState m_threadState = ThreadState.Ready;
         private object m_threadLock = new object();
-        private WalkthroughList m_walkthroughs;
         private List<string> m_attributeNames = new List<string>();
-        private bool m_commandOverride = false;
-        private string m_commandOverrideInput;
-        private object m_commandOverrideLock = new object();
-        private TimerRunner m_timerRunner;
         private RegexCache m_regexCache = new RegexCache();
-        private IOutputLogger m_outputLogger;
-        private LegacyOutputLogger m_legacyOutputLogger;
         private CallbackManager m_callbacks = new CallbackManager();
 
         private static Dictionary<ObjectType, string> s_defaultTypeNames = new Dictionary<ObjectType, string>();
@@ -145,8 +136,6 @@ namespace TextAdventures.Quest
         public event EventHandler<ElementRefreshEventArgs> ElementRefreshed;
         public event EventHandler<ElementFieldUpdatedEventArgs> ElementMetaFieldUpdated;
         public event EventHandler<LoadStatusEventArgs> LoadStatus;
-
-        public event Action<int> RequestNextTimerTick;
 
         public class ElementFieldUpdatedEventArgs : EventArgs
         {
@@ -281,32 +270,6 @@ namespace TextAdventures.Quest
             m_debuggerElementTypes.Add("Timers", ElementType.Timer);
         }
 
-        public void FinishGame()
-        {
-            m_state = GameState.Finished;
-
-            // Pulse all locks in case we're in the middle of waiting for player input for GetInput() etc.
-
-            lock (m_commandOverrideLock)
-            {
-                Monitor.PulseAll(m_commandOverrideLock);
-            }
-
-            lock (m_threadLock)
-            {
-                Monitor.PulseAll(m_threadLock);
-            }
-
-            lock (m_waitForResponseLock)
-            {
-                Monitor.PulseAll(m_waitForResponseLock);
-            }
-
-            if (RequestNextTimerTick != null) RequestNextTimerTick(0);
-
-            if (Finished != null) Finished();
-        }
-
         internal string GetUniqueID()
         {
             return GetUniqueID(null);
@@ -381,11 +344,6 @@ namespace TextAdventures.Quest
                         PrintText("<output nobr=\"true\">" + text + "</output>");
                     }
                 }
-
-                if (m_legacyOutputLogger != null)
-                {
-                    m_legacyOutputLogger.AddText(text, linebreak);
-                }
             }
         }
 
@@ -408,88 +366,6 @@ namespace TextAdventures.Quest
             if (searchObj.Parent == null) return false;
             if (searchObj.Parent == parent) return true;
             return ObjectContains(parent, searchObj.Parent);
-        }
-
-        private object m_waitForResponseLock = new object();
-        private string m_menuResponse = null;
-        private IDictionary<string, string> m_menuOptions = null;
-
-        internal string DisplayMenu(string caption, IDictionary<string, string> options, bool allowCancel, bool async)
-        {
-            Print(caption);
-
-            MenuData menuData = new MenuData(caption, options, allowCancel);
-            m_menuOptions = options;
-
-            m_playerUI.ShowMenu(menuData);
-
-            if (async)
-            {
-                return string.Empty;
-            }
-
-            m_callbacks.Pop(CallbackManager.CallbackTypes.Menu);
-            m_menuOptions = null;
-
-            ChangeThreadState(ThreadState.Waiting);
-
-            lock (m_waitForResponseLock)
-            {
-                Monitor.Wait(m_waitForResponseLock);
-            }
-
-            ChangeThreadState(ThreadState.Working);
-
-            return m_menuResponse;
-        }
-
-        internal string DisplayMenu(string caption, IList<string> options, bool allowCancel, bool async)
-        {
-            Dictionary<string, string> optionsDictionary = new Dictionary<string, string>();
-            foreach (string option in options)
-            {
-                optionsDictionary.Add(option, option);
-            }
-            return DisplayMenu(caption, optionsDictionary, allowCancel, async);
-        }
-
-        public void SetMenuResponse(string response)
-        {
-            Callback menuCallback = m_callbacks.Pop(CallbackManager.CallbackTypes.Menu);
-            if (menuCallback != null)
-            {
-                if (response != null) Print(" - " + m_menuOptions[response]);
-                menuCallback.Context.Parameters["result"] = response;
-                m_menuOptions = null;
-                DoInNewThreadAndWait(() =>
-                {
-                    RunCallbackAndFinishTurn(menuCallback);
-                });
-            }
-            else
-            {
-                DoInNewThreadAndWait(() =>
-                {
-                    m_menuResponse = response;
-
-                    lock (m_waitForResponseLock)
-                    {
-                        Monitor.Pulse(m_waitForResponseLock);
-                    }
-                });
-            }
-        }
-
-        internal void DisplayMenuAsync(string caption, IList<string> options, bool allowCancel, IScript callback, Context c)
-        {
-            m_callbacks.Push(CallbackManager.CallbackTypes.Menu, new Callback(callback, c), "Only one menu can be shown at a time.");
-            DisplayMenu(caption, options, allowCancel, true);
-        }
-
-        internal void DisplayMenuAsync(string caption, IDictionary<string, string> options, bool allowCancel, IScript callback, Context c)
-        {
-            m_callbacks.Push(CallbackManager.CallbackTypes.Menu, new Callback(callback, c), "Only one menu can be shown at a time.");
-            DisplayMenu(caption, options, allowCancel, true);
         }
 
         public IEnumerable<Element> Objects
@@ -537,24 +413,6 @@ namespace TextAdventures.Quest
             get { return m_elements.GetElements(ElementType.ObjectType); }
         }
 
-        internal void SetGameName(string name)
-        {
-            if (m_playerUI != null) m_playerUI.UpdateGameName(name);
-        }
-
-        public bool Initialise(IPlayer player, bool? isCompiled = null)
-        {
-            m_editMode = false;
-            m_playerUI = player;
-            GameLoader loader = new GameLoader(this, GameLoader.LoadMode.Play, isCompiled);
-            bool result = InitialiseInternal(loader);
-            if (result)
-            {
-                m_walkthroughs = new WalkthroughList(this);
-            }
-            return result;
-        }
-
         public bool InitialiseEdit()
         {
             m_editMode = true;
@@ -586,15 +444,6 @@ namespace TextAdventures.Quest
             m_state = success ? GameState.Running : GameState.Finished;
             m_errors = loader.Errors;
             m_saver = new GameSaver(this);
-            if (Version <= WorldModelVersion.v530)
-            {
-                m_legacyOutputLogger = new LegacyOutputLogger(this);
-                m_outputLogger = m_legacyOutputLogger;
-            }
-            else
-            {
-                m_outputLogger = new OutputLogger(this);
-            }
             return success;
         }
 
@@ -611,59 +460,6 @@ namespace TextAdventures.Quest
             // Update base ASLX filename to original filename if we're loading a saved game
             m_saveFilename = m_filename;
             m_filename = filename;
-            m_loadedFromSaved = true;
-        }
-
-        public void Begin()
-        {
-            DoInNewThreadAndWait(() =>
-            {
-                try
-                {
-                    m_timerRunner = new TimerRunner(this, !m_loadedFromSaved);
-                    if (Version <= WorldModelVersion.v540)
-                    {
-                        PlayerUI.Show("Panes");
-                        PlayerUI.Show("Location");
-                        PlayerUI.Show("Command");
-                    }
-                    if (m_elements.ContainsKey(ElementType.Function, "InitInterface")) RunProcedure("InitInterface");
-                    if (!m_loadedFromSaved)
-                    {
-                        if (m_elements.ContainsKey(ElementType.Function, "StartGame")) RunProcedure("StartGame");
-                    }
-                    TryRunOnFinallyScripts();
-                    UpdateLists();
-                    if (m_loadedFromSaved)
-                    {
-                        var output = Elements.GetSingle(ElementType.Output);
-                        if (output == null)
-                        {
-                            Print("Loaded saved game");
-                        }
-                        else if (Version >= WorldModelVersion.v540)
-                        {
-                            PlayerUI.RunScript("loadHtml", new object[] { output.Fields.GetString("html") });
-                            PlayerUI.RunScript("markScrollPosition", null);
-                            ScrollToEnd();
-                        }
-                        else if (m_legacyOutputLogger != null)
-                        {
-                            m_legacyOutputLogger.DisplayOutput(output.Fields.GetString("text"));
-                        }
-                    }
-                    SendNextTimerRequest();
-                }
-                catch (Exception ex)
-                {
-                    LogException(ex);
-                    Finish();
-                }
-
-                ChangeThreadState(ThreadState.Ready);
-            });
-
-            SendNextTimerRequest();
         }
 
         public List<string> Errors
@@ -671,123 +467,9 @@ namespace TextAdventures.Quest
             get { return m_errors; }
         }
 
-        public WalkthroughList Walkthroughs
-        {
-            get
-            {
-                return m_walkthroughs;
-            }
-        }
-
         public List<string> DebuggerObjectTypes
         {
             get { return new List<string>(m_debuggerObjectTypes.Keys.Union(m_debuggerElementTypes.Keys)); }
-        }
-
-        public void SendCommand(string command, int elapsedTime, IDictionary<string, string> metadata)
-        {
-            if (elapsedTime > 0)
-            {
-                m_timerRunner.IncrementTime(elapsedTime);
-            }
-
-            DoInNewThreadAndWait(() =>
-            {
-                if (!m_commandOverride)
-                {
-                    if (Version < WorldModelVersion.v520)
-                    {
-                        Print("");
-                        Print("> " + Utility.SafeXML(command));
-                    }
-
-                    try
-                    {
-                        RunProcedure("HandleCommand", new Parameters(new Dictionary<string, object>{
-                            {"command", command},
-                            {"metadata", new QuestDictionary<string>(metadata)}
-                        }), false);
-                        TryFinishTurn();
-                    }
-                    catch (Exception ex)
-                    {
-                        LogException(ex);
-                    }
-
-                    if (State != GameState.Finished)
-                    {
-                        UpdateLists();
-                    }
-
-                    ChangeThreadState(ThreadState.Ready);
-                }
-                else
-                {
-                    Callback getinputCallback = m_callbacks.Pop(CallbackManager.CallbackTypes.GetInput);
-                    if (getinputCallback != null)
-                    {
-                        m_commandOverride = false;
-                        getinputCallback.Context.Parameters["result"] = command;
-                        RunCallbackAndFinishTurn(getinputCallback);
-                    }
-                    else
-                    {
-                        m_commandOverrideInput = command;
-
-                        lock (m_commandOverrideLock)
-                        {
-                            Monitor.Pulse(m_commandOverrideLock);
-                        }
-                    }
-                }
-            });
-
-            if (elapsedTime > 0)
-            {
-                // we increase the timer counter above, before the command has been run,
-                // so we pass in 0 here
-                Tick(0);
-            }
-            else
-            {
-                SendNextTimerRequest();
-            }
-        }
-
-        public void SendCommand(string command, IDictionary<string, string> metadata)
-        {
-            SendCommand(command, 0, metadata);
-        }
-
-        public void SendCommand(string command)
-        {
-            SendCommand(command, 0, null);
-        }
-
-        public void SendEvent(string eventName, string param)
-        {
-            Element handler;
-            m_elements.TryGetValue(ElementType.Function, eventName, out handler);
-
-            if (handler == null)
-            {
-                Print(string.Format("Error - no handler for event '{0}'", eventName));
-                return;
-            }
-
-            Parameters parameters = new Parameters();
-            parameters.Add((string)handler.Fields[FieldDefinitions.ParamNames][0], param);
-
-            RunProcedure(eventName, parameters, false);
-            if (Version >= WorldModelVersion.v540)
-            {
-                TryFinishTurn();
-                if (State != GameState.Finished)
-                {
-                    UpdateLists();
-                }
-                SendNextTimerRequest();
-            }
         }
 
         public string Filename
@@ -805,16 +487,10 @@ namespace TextAdventures.Quest
             get { return System.IO.Path.GetDirectoryName(m_filename); }
         }
 
-        public void Finish()
-        {
-            FinishGame();
-        }
-
         public string SaveExtension { get { return "quest-save"; } }
 
         public event PrintTextHandler PrintText;
         public event UpdateListHandler UpdateList;
-        public event FinishedHandler Finished;
         public event EventHandler<ObjectsUpdatedEventArgs> ObjectsUpdated;
         public event ErrorHandler LogError;
 
@@ -979,75 +655,6 @@ namespace TextAdventures.Quest
         public DebugDataItem GetDebugDataItem(string el, string attribute)
         {
             return m_elements.Get(el).Fields.GetDebugDataItem(attribute);
-        }
-
-        public void StartWait()
-        {
-            m_callbacks.Pop(CallbackManager.CallbackTypes.Wait);
-            m_playerUI.DoWait();
-
-            ChangeThreadState(ThreadState.Waiting);
-
-            lock (m_waitForResponseLock)
-            {
-                Monitor.Wait(m_waitForResponseLock);
-            }
-
-            ChangeThreadState(ThreadState.Working);
-        }
-
-        public void StartWaitAsync(IScript callback, Context c)
-        {
-            m_callbacks.Push(CallbackManager.CallbackTypes.Wait, new Callback(callback, c), "Only one wait can be in progress at a time.");
-            m_playerUI.DoWait();
-        }
-
-        public void FinishWait()
-        {
-            Callback waitCallback = m_callbacks.Pop(CallbackManager.CallbackTypes.Wait);
-            if (waitCallback != null)
-            {
-                DoInNewThreadAndWait(() =>
-                {
-                    RunCallbackAndFinishTurn(waitCallback);
-                });
-            }
-            else
-            {
-                if (m_state == GameState.Finished) return;
-                DoInNewThreadAndWait(() =>
-                {
-                    lock (m_waitForResponseLock)
-                    {
-                        Monitor.Pulse(m_waitForResponseLock);
-                    }
-                });
-            }
-        }
-
-        public void StartPause(int ms)
-        {
-            m_playerUI.DoPause(ms);
-
-            ChangeThreadState(ThreadState.Waiting);
-
-            lock (m_waitForResponseLock)
-            {
-                Monitor.Wait(m_waitForResponseLock);
-            }
-
-            ChangeThreadState(ThreadState.Working);
-        }
-
-        public void FinishPause()
-        {
-            DoInNewThreadAndWait(() =>
-            {
-                lock (m_waitForResponseLock)
-                {
-                    Monitor.Pulse(m_waitForResponseLock);
-                }
-            });
         }
 
         public IEnumerable<string> GetExternalScripts()
@@ -1330,11 +937,6 @@ namespace TextAdventures.Quest
             return null;
         }
 
-        internal string GetExternalURL(string file)
-        {
-            return m_playerUI.GetURL(file);
-        }
-
         public IEnumerable<string> GetAvailableLibraries()
         {
             List<string> result = new List<string>();
@@ -1421,18 +1023,8 @@ namespace TextAdventures.Quest
             get { return m_expressionOwner; }
         }
 
-        private void ScrollToEnd()
-        {
-            PlayerUI.RunScript("scrollToEnd", null);
-        }
-
         private void ChangeThreadState(ThreadState newState, bool scroll = true)
         {
-            if (scroll && Version >= WorldModelVersion.v540 && (newState == ThreadState.Ready || newState == ThreadState.Waiting))
-            {
-                ScrollToEnd();
-            }
-
             if (newState == ThreadState.Waiting && m_state == GameState.Finished) throw new Exception("Game is finished");
             m_threadState = newState;
             lock (m_threadLock)
@@ -1472,11 +1064,6 @@ namespace TextAdventures.Quest
         void LogException(Exception ex)
         {
             if (LogError != null) LogError(ex.Message + Environment.NewLine + ex.StackTrace);
-        }
-
-        internal IPlayer PlayerUI
-        {
-            get { return m_playerUI; }
         }
 
         public ElementType GetElementTypeForTypeString(string typeString)
@@ -1557,162 +1144,6 @@ namespace TextAdventures.Quest
             get { return m_attributeNames.AsReadOnly(); }
         }
 
-        internal string GetNextCommandInput(bool async)
-        {
-            m_commandOverride = true;
-
-            if (async)
-            {
-                return string.Empty;
-            }
-
-            m_callbacks.Pop(CallbackManager.CallbackTypes.GetInput);
-
-            ChangeThreadState(ThreadState.Waiting);
-
-            lock (m_commandOverrideLock)
-            {
-                Monitor.Wait(m_commandOverrideLock);
-            }
-
-            ChangeThreadState(ThreadState.Working);
-
-            m_commandOverride = false;
-            return m_commandOverrideInput;
-        }
-
-        internal void GetNextCommandInputAsync(IScript callback, Context c)
-        {
-            m_callbacks.Push(CallbackManager.CallbackTypes.GetInput, new Callback(callback, c), "Only one 'get input' can be in progress at a time");
-            GetNextCommandInput(true);
-        }
-
-        public void Tick(int elapsedTime)
-        {
-            if (m_state == GameState.Finished) return;
-            DoInNewThreadAndWait(() =>
-            {
-                try
-                {
-                    var scripts = m_timerRunner.TickAndGetScripts(elapsedTime);
-
-                    foreach (var timerScript in scripts)
-                    {
-                        RunScript(timerScript.Value, timerScript.Key);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    LogException(ex);
-                }
-
-                UpdateLists();
-
-                ChangeThreadState(ThreadState.Ready, false);
-            });
-
-            SendNextTimerRequest();
-        }
-
-        private void SendNextTimerRequest()
-        {
-            if (m_state == GameState.Finished) return;
-            int next = m_timerRunner.GetTimeUntilNextTimerRuns();
-            if (RequestNextTimerTick != null) RequestNextTimerTick(next);
-            System.Diagnostics.Debug.Print("Request next timer in {0}", next);
-        }
-
-        private bool m_questionResponse;
-
-        internal bool ShowQuestion(string caption)
-        {
-            m_callbacks.Pop(CallbackManager.CallbackTypes.Question);
-            m_playerUI.ShowQuestion(caption);
-
-            ChangeThreadState(ThreadState.Waiting);
-
-            lock (m_waitForResponseLock)
-            {
-                Monitor.Wait(m_waitForResponseLock);
-            }
-
-            ChangeThreadState(ThreadState.Working);
-
-            return m_questionResponse;
-        }
-
-        internal void ShowQuestionAsync(string caption, IScript callback, Context c)
-        {
-            m_callbacks.Push(CallbackManager.CallbackTypes.Question, new Callback(callback, c), "Only one question can be asked at a time.");
-            m_playerUI.ShowQuestion(caption);
-        }
-
-        public void SetQuestionResponse(bool response)
-        {
-            Callback questionCallback = m_callbacks.Pop(CallbackManager.CallbackTypes.Question);
-            if (questionCallback != null)
-            {
-                questionCallback.Context.Parameters["result"] = response;
-                DoInNewThreadAndWait(() =>
-                {
-                    RunCallbackAndFinishTurn(questionCallback);
-                });
-            }
-            else
-            {
-                DoInNewThreadAndWait(() =>
-                {
-                    m_questionResponse = response;
-
-                    lock (m_waitForResponseLock)
-                    {
-                        Monitor.Pulse(m_waitForResponseLock);
-                    }
-                });
-            }
-        }
-
-        private void RunCallbackAndFinishTurn(Callback callback)
-        {
-            RunScript(callback.Script, callback.Context);
-            TryFinishTurn();
-            if (State != GameState.Finished)
-            {
-                UpdateLists();
-            }
-            ChangeThreadState(ThreadState.Ready);
-            SendNextTimerRequest();
-        }
-
-        private void TryFinishTurn()
-        {
-            TryRunOnFinallyScripts();
-            if (!m_callbacks.AnyOutstanding())
-            {
-                if (m_elements.ContainsKey(ElementType.Function, "FinishTurn"))
-                {
-                    try
-                    {
-                        RunProcedure("FinishTurn");
-                    }
-                    catch (Exception ex)
-                    {
-                        LogException(ex);
-                    }
-                }
-            }
-        }
-
-        private void TryRunOnFinallyScripts()
-        {
-            if (m_callbacks.AnyOutstanding()) return;
-            IEnumerable<Callback> onReadyScripts = m_callbacks.FlushOnReadyCallbacks();
-            foreach (var callback in onReadyScripts)
-            {
-                RunScript(callback.Script, callback.Context);
-            }
-        }
-
         public class PackageIncludeFile
         {
             public string Filename { get; set; }
@@ -1743,20 +1174,6 @@ namespace TextAdventures.Quest
             }
 
             return s_functionNames.AsReadOnly();
-        }
-
-        public void PlaySound(string filename, bool sync, bool looped)
-        {
-            m_playerUI.PlaySound(filename, sync, looped);
-            if (sync)
-            {
-                ChangeThreadState(ThreadState.Waiting);
-
-                lock (m_waitForResponseLock)
-                {
-                    Monitor.Wait(m_waitForResponseLock);
-                }
-            }
         }
 
         internal void UpdateElementSortOrder(Element movedElement)
@@ -1814,20 +1231,6 @@ namespace TextAdventures.Quest
             return new FileStream(GetExternalPath(filename), FileMode.Open, FileAccess.Read);
         }
 
-        public string GetResourceData(string filename)
-        {
-            if (Config.ReadGameFileFromAzureBlob)
-            {
-                var url = GetExternalURL(filename);
-                using (var client = new WebClient())
-                {
-                    return client.DownloadString(url);
-                }
-            }
-
-            return File.ReadAllText(GetExternalPath(filename));
-        }
-
         public string GetResourcePath(string filename)
         {
             return TryGetExternalPath(filename);
@@ -1852,8 +1255,6 @@ namespace TextAdventures.Quest
         internal string VersionString { get; set; }
 
         public string TempFolder { get; set; }
-
-        internal IOutputLogger OutputLogger { get { return m_outputLogger; } }
 
         public int ASLVersion { get { return int.Parse(VersionString); } }
 
@@ -1882,42 +1283,6 @@ namespace TextAdventures.Quest
     public delegate void UpdateListHandler(ListType listType, List<ListData> items);
     public delegate void FinishedHandler();
     public delegate void ErrorHandler(string errorMessage);
-
-    public interface IPlayer
-    {
-        void ShowMenu(MenuData menuData);
-        void DoWait();
-        void DoPause(int ms);
-        void ShowQuestion(string caption);
-        void SetWindowMenu(MenuData menuData);
-        string GetNewGameFile(string originalFilename, string extensions);
-        void PlaySound(string filename, bool synchronous, bool looped);
-        void StopSound();
-        void WriteHTML(string html);
-        string GetURL(string file);
-        void LocationUpdated(string location);
-        void UpdateGameName(string name);
-        void ClearScreen();
-        void ShowPicture(string filename);
-        void SetPanesVisible(string data);
-        void SetStatusText(string text);
-        void SetBackground(string colour);
-        void SetForeground(string colour);
-        void SetLinkForeground(string colour);
-        void RunScript(string function, object[] parameters);
-        void Quit();
-        void SetFont(string fontName);
-        void SetFontSize(string fontSize);
-        void Speak(string text);
-        void RequestSave(string html);
-        void Show(string element);
-        void Hide(string element);
-        void SetCompassDirections(IEnumerable<string> dirs);
-        void SetInterfaceString(string name, string text);
-        void SetPanelContents(string html);
-        void Log(string text);
-        string GetUIOption(UIOption option);
-    }
 
     public enum ListType
     {

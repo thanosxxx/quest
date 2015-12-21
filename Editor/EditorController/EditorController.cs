@@ -59,7 +59,7 @@ namespace TextAdventures.Quest
         public EditorStyle Type { get; set; }
     }
 
-    public sealed class EditorController : IDisposable
+    public sealed class EditorController
     {
         private const string k_commands = "_gameCommands";
         private const string k_verbs = "_gameVerbs";
@@ -1142,11 +1142,6 @@ namespace TextAdventures.Quest
             }
 
             return newRef;
-        }
-
-        public void Dispose()
-        {
-            m_worldModel.FinishGame();
         }
 
         public void AddControlType(string name, Type type)

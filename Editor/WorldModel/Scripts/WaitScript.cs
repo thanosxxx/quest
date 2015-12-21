@@ -46,7 +46,6 @@ namespace TextAdventures.Quest.Scripts
 
         public override void Execute(Context c)
         {
-            m_worldModel.StartWaitAsync(m_callbackScript, c);
         }
 
         public override string Save()
