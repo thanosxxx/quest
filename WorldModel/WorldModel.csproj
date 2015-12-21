@@ -454,7 +454,7 @@
     <Compile Include="WorldModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Utility\Utility.csproj">
+    <ProjectReference Include="..\Utility\Utility.csproj">
       <Project>{0E926905-F750-49F9-AEBD-CE14B2B231D8}</Project>
       <Name>Utility</Name>
     </ProjectReference>
