@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
-using System.Threading;
 using TextAdventures.Quest.Scripts;
 using System.Linq;
-using System.Net;
 using TextAdventures.Quest.Functions;
 
 namespace TextAdventures.Quest
@@ -16,13 +13,6 @@ namespace TextAdventures.Quest
         Loading,
         Running,
         Finished
-    }
-
-    public enum ThreadState
-    {
-        Ready,
-        Working,
-        Waiting
     }
 
     public enum UpdateSource
@@ -109,8 +99,6 @@ namespace TextAdventures.Quest
         private Template m_template;
         private UndoLogger m_undoLogger;
         private string m_filename;
-        private string m_originalFilename;
-        private readonly string m_data;
         private string m_libFolder = null;
         private List<string> m_errors;
         private GameState m_state = GameState.NotStarted;
@@ -120,7 +108,6 @@ namespace TextAdventures.Quest
         private string m_saveFilename = string.Empty;
         private bool m_editMode = false;
         private Functions.ExpressionOwner m_expressionOwner;
-        private ThreadState m_threadState = ThreadState.Ready;
         private object m_threadLock = new object();
         private List<string> m_attributeNames = new List<string>();
         private RegexCache m_regexCache = new RegexCache();
@@ -206,12 +193,6 @@ namespace TextAdventures.Quest
         {
         }
 
-        public WorldModel(string data)
-            : this(null, null)
-        {
-            m_data = data;
-        }
-
         public WorldModel(string filename, string originalFilename)
         {
             m_expressionOwner = new Functions.ExpressionOwner(this);
@@ -220,7 +201,6 @@ namespace TextAdventures.Quest
             m_objectFactory = (ObjectFactory)m_elementFactories[ElementType.Object];
 
             m_filename = filename;
-            m_originalFilename = originalFilename;
             m_elements = new Elements();
             m_undoLogger = new UndoLogger(this);
             m_game = ObjectFactory.CreateObject("game", ObjectType.Game);
@@ -353,11 +333,6 @@ namespace TextAdventures.Quest
             m_elements.Remove(type, name);
         }
 
-        internal IEnumerable<Element> ElementTypes
-        {
-            get { return m_elements.GetElements(ElementType.ObjectType); }
-        }
-
         public bool InitialiseEdit()
         {
             m_editMode = true;
@@ -375,16 +350,7 @@ namespace TextAdventures.Quest
             loader.LoadStatus += loader_LoadStatus;
             m_state = GameState.Loading;
             
-            bool success;
-            if (m_data != null)
-            {
-                success = loader.Load(data: m_data);
-            }
-            else
-            {
-                success = m_filename == null || loader.Load(m_filename);    
-            }
-            
+            var success = m_filename == null || loader.Load(m_filename);
             DebugEnabled = !loader.IsCompiledFile;
             m_state = success ? GameState.Running : GameState.Finished;
             m_errors = loader.Errors;
@@ -417,18 +383,6 @@ namespace TextAdventures.Quest
             get { return m_filename; }
         }
 
-        public string SaveFilename
-        {
-            get { return m_saveFilename; }
-        }
-
-        public string BasePath
-        {
-            get { return System.IO.Path.GetDirectoryName(m_filename); }
-        }
-
-        public string SaveExtension { get { return "quest-save"; } }
-
         internal Template Template
         {
             get { return m_template; }
@@ -454,52 +408,9 @@ namespace TextAdventures.Quest
             return m_elements.Get(el).Fields.GetDebugDataItem(attribute);
         }
 
-        public IEnumerable<string> GetExternalScripts()
-        {
-            var result = new List<string>();
-            foreach (Element jsRef in m_elements.GetElements(ElementType.Javascript))
-            {
-                if (Version == WorldModelVersion.v500)
-                {
-                    // v500 games used Frame.js functions for static panel feature. This is now implemented natively
-                    // in Player and WebPlayer.
-                    if (jsRef.Fields[FieldDefinitions.Src].ToLower() == "frame.js") continue;
-                }
-
-                result.Add(jsRef.Fields[FieldDefinitions.Src]);
-            }
-            return result;
-        }
-
-        // TO DO: This could actually be removed now, as we can dynamically load stylesheets. Core.aslx InitInterface
-        // should simply be able to use the SetWebFontName function to load game.defaultwebfont
-        public IEnumerable<string> GetExternalStylesheets()
-        {
-            if (Version < WorldModelVersion.v530) return null;
-
-            var webFontsInUse = new List<string>();
-            var defaultWebFont = m_game.Fields[FieldDefinitions.DefaultWebFont];
-            if (!string.IsNullOrEmpty(defaultWebFont))
-            {
-                webFontsInUse.Add(defaultWebFont);
-            }
-            
-            var result = webFontsInUse.Select(f => "https://fonts.googleapis.com/css?family=" + f.Replace(' ', '+'));
-            
-            return result;
-        }
-
         public Element AddProcedure(string name)
         {
             Element proc = GetElementFactory(ElementType.Function).Create(name);
-            return proc;
-        }
-
-        public Element AddProcedure(string name, IScript script, string[] parameters)
-        {
-            Element proc = AddProcedure(name);
-            proc.Fields[FieldDefinitions.Script] = script;
-            proc.Fields[FieldDefinitions.ParamNames] = new QuestList<string>(parameters);
             return proc;
         }
 
@@ -528,18 +439,6 @@ namespace TextAdventures.Quest
         public Elements Elements
         {
             get { return m_elements; }
-        }
-
-        public void Save(string filename, string html)
-        {
-            string saveData = Save(SaveMode.SavedGame, html: html);
-            File.WriteAllText(filename, saveData);
-        }
-
-        public byte[] Save(string html)
-        {
-            string saveData = Save(SaveMode.SavedGame, html: html);
-            return System.Text.Encoding.UTF8.GetBytes(saveData);
         }
 
         public string Save(SaveMode mode, bool? includeWalkthrough = null, string html = null)
@@ -585,11 +484,6 @@ namespace TextAdventures.Quest
         public string GetExternalPath(string file)
         {
             return GetExternalPath(file, true);
-        }
-
-        private string TryGetExternalPath(string file)
-        {
-            return GetExternalPath(file, false);
         }
 
         private string GetExternalPath(string file, bool throwException)
@@ -701,50 +595,13 @@ namespace TextAdventures.Quest
 
         public bool EditMode
         {
+            // TODO: Always true
             get { return m_editMode; }
         }
 
         internal Functions.ExpressionOwner ExpressionOwner
         {
             get { return m_expressionOwner; }
-        }
-
-        private void ChangeThreadState(ThreadState newState, bool scroll = true)
-        {
-            if (newState == ThreadState.Waiting && m_state == GameState.Finished) throw new Exception("Game is finished");
-            m_threadState = newState;
-            lock (m_threadLock)
-            {
-                Monitor.PulseAll(m_threadLock);
-            }
-        }
-
-        private void WaitUntilFinishedWorking()
-        {
-            lock (m_threadLock)
-            {
-                while (m_threadState == ThreadState.Working)
-                {
-                    Monitor.Wait(m_threadLock);
-                }
-            }
-        }
-
-        private void DoInNewThreadAndWait(Action routine)
-        {
-            Action wrappedRoutine = () =>
-            {
-                try
-                {
-                    routine();
-                }
-                catch { }
-            };
-
-            ChangeThreadState(ThreadState.Working);
-            Thread newThread = new Thread(new ThreadStart(wrappedRoutine));
-            newThread.Start();
-            WaitUntilFinishedWorking();
         }
 
         public ElementType GetElementTypeForTypeString(string typeString)
@@ -770,11 +627,6 @@ namespace TextAdventures.Quest
         public bool IsDefaultTypeName(string typeName)
         {
             return DefaultTypeNames.ContainsValue(typeName);
-        }
-
-        public string OriginalFilename
-        {
-            get { return m_originalFilename; }
         }
 
         public Element AddNewTemplate(string templateName)
@@ -914,61 +766,4 @@ namespace TextAdventures.Quest
         public string Description { get { return m_game.Fields[FieldDefinitions.Description]; } }
         public string Cover { get { return m_game.Fields[FieldDefinitions.Cover]; } }
     }
-
-    // ************ TODO: Get rid of this.... *************************************************
-
-    public delegate void PrintTextHandler(string text);
-    public delegate void UpdateListHandler(ListType listType, List<ListData> items);
-    public delegate void FinishedHandler();
-    public delegate void ErrorHandler(string errorMessage);
-
-    public enum ListType
-    {
-        InventoryList,
-        ExitsList,
-        ObjectsList
-    }
-
-    public class ListData
-    {
-        private string m_text;
-        private IEnumerable<string> m_verbs;
-        private string m_elementId;
-        private string m_elementName;
-
-        public ListData(string text, IEnumerable<string> verbs)
-            : this(text, verbs, null, text)
-        {
-        }
-
-        public ListData(string text, IEnumerable<string> verbs, string elementId, string elementName)
-        {
-            m_text = text;
-            m_verbs = verbs;
-            m_elementId = elementId;
-            m_elementName = elementName;
-        }
-
-        public string Text
-        {
-            get { return m_text; }
-        }
-
-        public IEnumerable<string> Verbs
-        {
-            get { return m_verbs; }
-        }
-
-        public string ElementId
-        {
-            get { return m_elementId; }
-        }
-
-        public string ElementName
-        {
-            get { return m_elementName; }
-        }
-    }
-
-    // ************ END TODO: Get rid of this.... *************************************************
 }
