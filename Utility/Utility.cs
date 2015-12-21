@@ -81,7 +81,7 @@ namespace TextAdventures.Utility
             }
             catch (Exception ex)
             {
-                MessageBox.Show(string.Format("Error launching {0}\n\n{1}", url, ex.Message), "Quest", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(string.Format("Error launching {0}\n\n{1}", url, ex.Message), "Quest Editor", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

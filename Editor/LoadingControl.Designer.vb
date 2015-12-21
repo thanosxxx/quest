@@ -73,6 +73,7 @@ Partial Class LoadingControl
         Me.PictureBox1.Location = New System.Drawing.Point(228, 75)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(134, 141)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox1.TabIndex = 9
         Me.PictureBox1.TabStop = False
         '

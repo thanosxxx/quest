@@ -8,10 +8,10 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("Quest")> 
+<Assembly: AssemblyTitle("Quest Editor")>
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("Alex Warren")> 
-<Assembly: AssemblyProduct("Quest")> 
+<Assembly: AssemblyCompany("Alex Warren")>
+<Assembly: AssemblyProduct("Quest Editor")>
 <Assembly: AssemblyCopyright("Copyright © 2015 Alex Warren")> 
 <Assembly: AssemblyTrademark("")> 
 
@@ -31,4 +31,4 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("5.6.*")> 
+<Assembly: AssemblyVersion("6.0.*")> 
