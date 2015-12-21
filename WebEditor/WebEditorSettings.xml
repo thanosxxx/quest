@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" ?>
+
+<!-- After entering settings, this file should be saved as WebEditorSettings.xml -->
+
+<appSettings>
+  <add key="PlayURL" value="http://play.textadventures.co.uk/Play.aspx"/>
+  <add key="PublishURL" value="http://path/to/publish/app/"/>
+  <add key="FileManagerType" value="WebEditor.Services.DebugEditorFileManager, WebEditor"/>
+  <!-- <add key="FileManagerType" value="TASessionManager.TAEditorFileManager, WebEditor"/> -->
+  <add key="DebugFileManagerFile" value="C:\Users\alexwarren\Documents\Quest Games\new7\new7.aslx"/>
+  <add key="AzureConnectionString" value="DefaultEndpointsProtocol=https;AccountName=textadventures;AccountKey=X8+v9lFyrDDUhqT7EBDt1JQxWj8GztSe77DD82WI+++j1TTJ7eq5Ovtz1P/gjZY7x5UTkcVsgj8eY48P4OMh2g==" />
+  <add key="DebugUserId" value="82" />
+  <add key="AzureFiles" value="true" />
+  <add key="AzureFilesBase" value="http://textadventures.blob.core.windows.net/editorgames/" />
+  <add key="CookieName" value="ta_session2" />
+</appSettings>

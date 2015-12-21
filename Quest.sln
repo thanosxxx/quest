@@ -29,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldModelTests", "WorldMod
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorControls", "EditorControls\EditorControls.csproj", "{4FE4228C-502B-47B7-A79B-79BEE6221C25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebEditor", "WebEditor\WebEditor\WebEditor.csproj", "{79A63298-BF11-4C6B-A239-918C3BF81B6F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebEditor", "WebEditor\WebEditor.csproj", "{79A63298-BF11-4C6B-A239-918C3BF81B6F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UtilityTests", "UtilityTests\UtilityTests.csproj", "{69D2D258-4E82-404F-98A6-1E93EFAB9CDF}"
 EndProject
