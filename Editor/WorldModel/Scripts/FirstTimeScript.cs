@@ -48,7 +48,6 @@ namespace TextAdventures.Quest.Scripts
         private IScript m_otherwiseScript;
         private WorldModel m_worldModel;
         private IScriptFactory m_scriptFactory;
-        private bool m_hasRun = false;
 
         public FirstTimeScript(WorldModel worldModel, IScriptFactory scriptFactory, IScript firstTimeScript)
         {
@@ -70,26 +69,6 @@ namespace TextAdventures.Quest.Scripts
         protected override void ParentUpdated()
         {
             m_firstTimeScript.Parent = Parent;
-        }
-
-        private class UndoFirstTime : TextAdventures.Quest.UndoLogger.IUndoAction
-        {
-            private FirstTimeScript m_parent;
-            
-            public UndoFirstTime(FirstTimeScript parent)
-            {
-                m_parent = parent;
-            }
-
-            public void DoUndo(WorldModel worldModel)
-            {
-                m_parent.m_hasRun = false;
-            }
-
-            public void DoRedo(WorldModel worldModel)
-            {
-                m_parent.m_hasRun = true;
-            }
         }
 
         public override string Save()

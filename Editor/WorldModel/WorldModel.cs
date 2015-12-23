@@ -343,7 +343,6 @@ namespace TextAdventures.Quest
             {
                 throw new Exception("Game already initialised");
             }
-            loader.FilenameUpdated += loader_FilenameUpdated;
             loader.LoadStatus += loader_LoadStatus;
             m_state = GameState.Loading;
             
@@ -360,13 +359,6 @@ namespace TextAdventures.Quest
             {
                 LoadStatus(this, new LoadStatusEventArgs(e.Status));
             }
-        }
-
-        void loader_FilenameUpdated(string filename)
-        {
-            // Update base ASLX filename to original filename if we're loading a saved game
-            m_saveFilename = m_filename;
-            m_filename = filename;
         }
 
         public List<string> Errors

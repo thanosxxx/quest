@@ -38,7 +38,6 @@ namespace TextAdventures.Quest
         private Stack<FileData> m_currentFile = new Stack<FileData>();
 
         public delegate void FilenameUpdatedHandler(string filename);
-        public event FilenameUpdatedHandler FilenameUpdated;
 
         public event EventHandler<LoadStatusEventArgs> LoadStatus;
 
