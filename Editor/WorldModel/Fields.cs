@@ -390,11 +390,11 @@ namespace TextAdventures.Quest
                 IMutableField mutableNewValue = value as IMutableField;
                 if (mutableOldValue != null)
                 {
-                    if (m_worldModel.EditMode || mutableOldValue.RequiresCloning) oldValue = mutableOldValue.Clone();
+                    oldValue = mutableOldValue.Clone();
                 }
                 if (mutableNewValue != null)
                 {
-                    if (m_worldModel.EditMode || mutableNewValue.RequiresCloning) value = mutableNewValue.Clone();
+                    value = mutableNewValue.Clone();
                     IMutableField mutableValue = (IMutableField)value;
                     mutableValue.Locked = m_mutableFieldsLocked;
                     mutableValue.UndoLog = m_worldModel.UndoLogger;
@@ -428,11 +428,6 @@ namespace TextAdventures.Quest
 
             if (name == "name" && changed && value != null && !added && NameChanged != null)
             {
-                if (!m_worldModel.EditMode)
-                {
-                    // Actually we could allow this I suppose but I don't think it's sensible.
-                    throw new InvalidOperationException("Cannot change name of element when not in Edit mode");
-                }
                 NameChanged(this, new NameChangedEventArgs
                 {
                     OldName = (string)oldValue,

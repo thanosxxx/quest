@@ -381,16 +381,6 @@ namespace TextAdventures.Quest
             get { return ElementType.ObjectType; }
         }
 
-        public override Element Create(string name)
-        {
-            Element newType = base.Create(name);
-            if (!WorldModel.EditMode)
-            {
-                newType.Fields.MutableFieldsLocked = true;
-            }
-            return newType;
-        }
-
         protected override void RemoveReferences(Element destroyedElement)
         {
             // When deleting an object type, we must also remove references to the deleted type

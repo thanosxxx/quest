@@ -51,13 +51,9 @@ namespace TextAdventures.Quest
         {
             if (!m_templateLookup.ContainsKey(t))
             {
-                if (m_worldModel.EditMode && throwException)
-                {
-                    return string.Format("{{UNKNOWN TEMPLATE: {0}}}", t);
-                }
                 if (throwException)
                 {
-                    throw new Exception(string.Format("No template named '{0}'", t));
+                    return string.Format("{{UNKNOWN TEMPLATE: {0}}}", t);
                 }
                 return null;
             }
@@ -140,14 +136,7 @@ namespace TextAdventures.Quest
                 template = m_worldModel.GetElementFactory(ElementType.DynamicTemplate).Create(t);
             }
 
-            if (!m_worldModel.EditMode)
-            {
-                template.Fields[FieldDefinitions.Function] = new Expression<string>(expression, new ScriptContext(m_worldModel));
-            }
-            else
-            {
-                template.Fields[FieldDefinitions.Text] = expression;
-            }
+            template.Fields[FieldDefinitions.Text] = expression;
 
             return template;
         }

@@ -106,7 +106,6 @@ namespace TextAdventures.Quest
         private ObjectFactory m_objectFactory;
         private GameSaver m_saver;
         private string m_saveFilename = string.Empty;
-        private bool m_editMode = false;
         private Functions.ExpressionOwner m_expressionOwner;
         private object m_threadLock = new object();
         private List<string> m_attributeNames = new List<string>();
@@ -335,7 +334,6 @@ namespace TextAdventures.Quest
 
         public bool InitialiseEdit()
         {
-            m_editMode = true;
             GameLoader loader = new GameLoader(this, GameLoader.LoadMode.Edit);
             return InitialiseInternal(loader);
         }
@@ -593,12 +591,6 @@ namespace TextAdventures.Quest
             if (ElementRefreshed != null) ElementRefreshed(this, new ElementRefreshEventArgs(element));
         }
 
-        public bool EditMode
-        {
-            // TODO: Always true
-            get { return m_editMode; }
-        }
-
         internal Functions.ExpressionOwner ExpressionOwner
         {
             get { return m_expressionOwner; }
@@ -711,18 +703,6 @@ namespace TextAdventures.Quest
 
         internal void UpdateElementSortOrder(Element movedElement)
         {
-            // There's no need to worry about element sort order when playing the game, unless this is an element that can be seen by the
-            // player
-            if (!EditMode)
-            {
-                bool doUpdate = false;
-                if (movedElement.ElemType == ElementType.Object && (movedElement.Type == ObjectType.Exit || movedElement.Type == ObjectType.Object))
-                {
-                    doUpdate = true;
-                }
-                if (!doUpdate) return;
-            }
-
             // This function is called when an element is moved to a new parent.
             // When this happens, its SortIndex MetaField must be updated so that it
             // is at the end of the list of children.

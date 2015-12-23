@@ -111,27 +111,13 @@ namespace TextAdventures.Quest.Scripts
 
         public override string Save()
         {
-            if (m_worldModel.EditMode || !m_hasRun)
+            if (m_otherwiseScript == null)
             {
-                if (m_otherwiseScript == null)
-                {
-                    return SaveScript("firsttime", m_firstTimeScript);
-                }
-                else
-                {
-                    return SaveScript("firsttime", m_firstTimeScript) + Environment.NewLine + SaveScript("otherwise", m_otherwiseScript);
-                }
+                return SaveScript("firsttime", m_firstTimeScript);
             }
             else
             {
-                if (m_otherwiseScript == null)
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    return m_otherwiseScript.Save();
-                }
+                return SaveScript("firsttime", m_firstTimeScript) + Environment.NewLine + SaveScript("otherwise", m_otherwiseScript);
             }
         }
 

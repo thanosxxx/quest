@@ -53,18 +53,7 @@ namespace TextAdventures.Quest.Scripts
                         // Case expression can have multiple values separated by commas. In Edit mode,
                         // just load this as one expression for editing.
 
-                        if (!scriptContext.WorldModel.EditMode)
-                        {
-                            var matchList = Utility.SplitParameter(expr);
-                            foreach (var match in matchList)
-                            {
-                                result.Add(new ExpressionGeneric(match, scriptContext), script);
-                            }
-                        }
-                        else
-                        {
-                            result.Add(new ExpressionGeneric(expr, scriptContext), script);
-                        }
+                        result.Add(new ExpressionGeneric(expr, scriptContext), script);
                     }
                     else if (cases.StartsWith("default"))
                     {
@@ -207,10 +196,7 @@ namespace TextAdventures.Quest.Scripts
             private SwitchCases(SwitchScript parent)
             {
                 m_parent = parent;
-                if (parent.m_worldModel.EditMode)
-                {
-                    m_cases.UndoLog = parent.m_worldModel.UndoLogger;
-                }
+                m_cases.UndoLog = parent.m_worldModel.UndoLogger;
             }
 
             internal SwitchCases Clone(SwitchScript newParent)

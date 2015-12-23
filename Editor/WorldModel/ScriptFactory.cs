@@ -105,7 +105,7 @@ namespace TextAdventures.Quest
             }
 
             line = Utility.RemoveSurroundingBraces(line);
-            line = Utility.RemoveComments(line, m_worldModel.EditMode);
+            line = Utility.RemoveComments(line, true);
 
             while (!finished)
             {

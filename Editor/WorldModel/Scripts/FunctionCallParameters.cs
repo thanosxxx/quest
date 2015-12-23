@@ -19,10 +19,7 @@ namespace TextAdventures.Quest.Scripts
 
         public FunctionCallParameters(WorldModel worldModel, IList<IFunction<object>> parameters)
         {
-            if (worldModel.EditMode)
-            {
-                m_parameterStrings.UndoLog = worldModel.UndoLogger;
-            }
+            m_parameterStrings.UndoLog = worldModel.UndoLogger;
             m_parameters = parameters;
 
             if (parameters != null)

@@ -50,8 +50,6 @@ namespace TextAdventures.Quest.Scripts
             }
             catch
             {
-                if (!m_worldModel.EditMode) throw;
-
                 m_script = new FailedScript(m_scriptString);
                 if (m_scriptConstructor == null)
                 {

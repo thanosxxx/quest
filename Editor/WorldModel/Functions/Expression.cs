@@ -19,13 +19,7 @@ namespace TextAdventures.Quest.Functions
         {
             m_scriptContext = scriptContext;
             m_worldModel = scriptContext.WorldModel;
-
             m_originalExpression = expression;
-            if (!m_worldModel.EditMode)
-            {
-                expression = Utility.ConvertVariablesToFleeFormat(expression);
-            }
-
             m_expression = expression;
         }
 

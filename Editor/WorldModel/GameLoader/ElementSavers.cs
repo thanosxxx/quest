@@ -103,15 +103,7 @@ namespace TextAdventures.Quest
             {
                 writer.WriteStartElement("dynamictemplate");
                 writer.WriteAttributeString("name", e.Name);
-
-                if (!GameSaver.m_worldModel.EditMode)
-                {
-                    writer.WriteString(e.Fields[FieldDefinitions.Function].Save());
-                }
-                else
-                {
-                    writer.WriteString(e.Fields[FieldDefinitions.Text]);
-                }
+                writer.WriteString(e.Fields[FieldDefinitions.Text]);
                 writer.WriteEndElement();
             }
         }

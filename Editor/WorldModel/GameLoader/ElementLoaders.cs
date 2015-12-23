@@ -223,19 +223,7 @@ namespace TextAdventures.Quest
             private void LoadTemplate(Element newCommand, string template)
             {
                 string pattern = WorldModel.Template.GetText(template);
-                if (WorldModel.EditMode)
-                {
-                    newCommand.Fields.Set(FieldDefinitions.Pattern.Property, new EditorCommandPattern(Utility.ConvertVerbSimplePatternForEditor(pattern)));
-                }
-                else
-                {
-                    if (WorldModel.Version >= WorldModelVersion.v530)
-                    {
-                        string[] verbs = pattern.Split(';');
-                        newCommand.Fields[FieldDefinitions.DisplayVerb] = verbs[0].Trim();
-                    }
-                    LoadPattern(newCommand, pattern);
-                }
+                newCommand.Fields.Set(FieldDefinitions.Pattern.Property, new EditorCommandPattern(Utility.ConvertVerbSimplePatternForEditor(pattern)));
             }
 
             protected virtual void LoadPattern(Element newCommand, string pattern)
@@ -556,10 +544,6 @@ namespace TextAdventures.Quest
                 string to = reader.GetAttribute("to");
                 string id = reader.GetAttribute("name");
                 Element newElement;
-                if (string.IsNullOrEmpty(alias) && !WorldModel.EditMode)
-                {
-                    alias = to;
-                }
                 if (string.IsNullOrEmpty(id))
                 {
                     newElement = WorldModel.ObjectFactory.CreateExitLazy(alias, (Element)current, to);

@@ -53,14 +53,7 @@ namespace TextAdventures.Quest.Scripts
                 }
             }
 
-            if (!WorldModel.EditMode && WorldModel.Procedure(procName) == null)
-            {
-                throw new Exception(string.Format("Function not found: '{0}'", procName));
-            }
-            else
-            {
-                return new FunctionCallScript(WorldModel, procName, paramExpressions, paramScript);
-            }
+            return new FunctionCallScript(WorldModel, procName, paramExpressions, paramScript);
         }
 
         public IScriptFactory ScriptFactory { get; set; }
