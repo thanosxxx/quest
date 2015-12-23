@@ -102,20 +102,6 @@ namespace TextAdventures.Quest.Scripts
             return clone;
         }
 
-        public override void Execute(Context c)
-        {
-            object result = m_expr.Execute(c);
-            bool success = false;
-
-            // using .ToString() here as an object comparison of ints won't work
-            success = m_cases.Execute(c, result.ToString());
-
-            if (!success && m_default != null)
-            {
-                m_default.Execute(c);
-            }
-        }
-
         public override string Save()
         {
             string result = SaveScript("switch", m_expr.Save()) + " {" + Environment.NewLine;
@@ -224,21 +210,6 @@ namespace TextAdventures.Quest.Scripts
                     result += m_parent.SaveScript("case", caseItem.Value, caseItem.Key);
                 }
                 return result;
-            }
-
-            public bool Execute(Context c, string result)
-            {
-                foreach (var switchCase in m_cases)
-                {
-                    IFunctionGeneric expr = m_compiledExpressions[switchCase.Key];
-
-                    if (result == expr.Execute(c).ToString())
-                    {
-                        switchCase.Value.Execute(c);
-                        return true;
-                    }
-                }
-                return false;
             }
         }
     }

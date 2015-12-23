@@ -141,15 +141,6 @@ namespace TextAdventures.Quest.Scripts
             }
         }
 
-        public override void Execute(Context c)
-        {
-            foreach (IScript script in m_scripts)
-            {
-                script.Execute(c);
-                if (c.IsReturned) break;
-            }
-        }
-
         public override string Line
         {
             get

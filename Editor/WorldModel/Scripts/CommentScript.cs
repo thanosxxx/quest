@@ -37,10 +37,6 @@ namespace TextAdventures.Quest.Scripts
             return new CommentScript(m_comment);
         }
 
-        public override void Execute(Context c)
-        {
-        }
-
         public override string Save()
         {
             return "// " + string.Join(Environment.NewLine + "// ", m_comment.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries));

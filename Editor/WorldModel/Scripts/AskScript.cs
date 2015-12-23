@@ -56,10 +56,6 @@ namespace TextAdventures.Quest.Scripts
             return new AskScript(m_scriptContext, m_scriptFactory, m_caption.Clone(), (IScript)m_callbackScript.Clone());
         }
 
-        public override void Execute(Context c)
-        {
-        }
-
         public override string Save()
         {
             return SaveScript("ask", m_callbackScript, m_caption.Save());

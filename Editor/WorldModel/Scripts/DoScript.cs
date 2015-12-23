@@ -62,10 +62,6 @@ namespace TextAdventures.Quest.Scripts
             return new DoActionScript(m_scriptContext, m_obj.Clone(), m_action.Clone(), m_parameters == null ? null : m_parameters.Clone());
         }
 
-        public override void Execute(Context c)
-        {
-        }
-
         public override string Save()
         {
             string parameters = (m_parameters == null) ? null : m_parameters.Save();

@@ -83,33 +83,6 @@ namespace TextAdventures.Quest.Scripts
             m_loopScript.Parent = Parent;
         }
 
-        public override void Execute(Context c)
-        {
-            int from = m_from.Execute(c);
-            int to = m_to.Execute(c);
-            int step = m_step == null ? 1 : m_step.Execute(c);
-            int count;
-            c.Parameters[m_variable] = 0;
-
-            for (count = from; (step > 0 && count <= to) || (step < 0 && count >= to); count += step)
-            {
-                c.Parameters[m_variable] = count;
-                m_loopScript.Execute(c);
-                if (c.IsReturned) break;
-
-                object newCount = c.Parameters[m_variable];
-                if (newCount is int)
-                {
-                    count = (int)newCount;
-                }
-                else
-                {
-                    // The type of the count variable has changed, so abort the loop
-                    break;
-                }
-            }
-        }
-
         public override string Save()
         {
             if (m_step == null)

@@ -63,18 +63,6 @@ namespace TextAdventures.Quest.Scripts
             }
         }
 
-        public override void Execute(Context c)
-        {
-            if (m_type == null)
-            {
-                m_worldModel.ObjectFactory.CreateObject(m_expr.Execute(c));
-            }
-            else
-            {
-                m_worldModel.ObjectFactory.CreateObject(m_expr.Execute(c), ObjectType.Object, true, new List<string> { m_type.Execute(c) }, null);
-            }
-        }
-
         public override string Save()
         {
             if (m_type == null)
@@ -195,11 +183,6 @@ namespace TextAdventures.Quest.Scripts
             return new CreateExitScript(m_scriptContext, m_name.Clone(), m_from.Clone(), m_to.Clone(), m_initialType.Clone(), m_id.Clone());
         }
 
-        public override void Execute(Context c)
-        {
-            m_worldModel.ObjectFactory.CreateExit(m_id == null ? null : m_id.Execute(c), m_name.Execute(c), m_from.Execute(c), m_to.Execute(c), m_initialType == null ? null : m_initialType.Execute(c));
-        }
-
         public override string Save()
         {
             if (m_initialType == null)
@@ -301,12 +284,6 @@ namespace TextAdventures.Quest.Scripts
             return new CreateTimerScript(m_scriptContext, m_expr.Clone());
         }
 
-
-        public override void Execute(Context c)
-        {
-            m_worldModel.GetElementFactory(ElementType.Timer).Create(m_expr.Execute(c));
-        }
-
         public override string Save()
         {
             return SaveScript("create timer", m_expr.Save());
@@ -365,11 +342,6 @@ namespace TextAdventures.Quest.Scripts
         protected override ScriptBase CloneScript()
         {
             return new CreateTurnScript(m_scriptContext, m_expr.Clone());
-        }
-
-        public override void Execute(Context c)
-        {
-            m_worldModel.ObjectFactory.CreateTurnScript(m_expr.Execute(c), null);
         }
 
         public override string Save()

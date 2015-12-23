@@ -45,12 +45,6 @@ namespace TextAdventures.Quest.Scripts
             return new ErrorScript(m_scriptContext, m_function.Clone());
         }
 
-        public override void Execute(Context c)
-        {
-            object result = m_function.Execute(c);
-            throw new Exception(result.ToString());
-        }
-
         public override string Save()
         {
             return SaveScript("error", m_function.Save());

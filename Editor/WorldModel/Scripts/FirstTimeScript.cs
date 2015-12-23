@@ -72,23 +72,6 @@ namespace TextAdventures.Quest.Scripts
             m_firstTimeScript.Parent = Parent;
         }
 
-        public override void Execute(Context c)
-        {
-            if (!m_hasRun)
-            {
-                m_hasRun = true;
-                m_worldModel.UndoLogger.AddUndoAction(new UndoFirstTime(this));
-                m_firstTimeScript.Execute(c);
-            }
-            else
-            {
-                if (m_otherwiseScript != null)
-                {
-                    m_otherwiseScript.Execute(c);
-                }
-            }
-        }
-
         private class UndoFirstTime : TextAdventures.Quest.UndoLogger.IUndoAction
         {
             private FirstTimeScript m_parent;

@@ -49,10 +49,6 @@ namespace TextAdventures.Quest.Scripts
             return new PlaySoundScript(m_scriptContext, m_filename.Clone(), m_synchronous.Clone(), m_loop.Clone());
         }
 
-        public override void Execute(Context c)
-        {
-        }
-
         public override string Save()
         {
             return SaveScript("play sound", m_filename.Save(), m_synchronous.Save(), m_loop.Save());
@@ -130,10 +126,6 @@ namespace TextAdventures.Quest.Scripts
         protected override ScriptBase CloneScript()
         {
             return new StopSoundScript(m_worldModel);
-        }
-
-        public override void Execute(Context c)
-        {
         }
 
         public override string Save()

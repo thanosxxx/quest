@@ -42,20 +42,6 @@ namespace TextAdventures.Quest.Scripts
             return new DestroyScript(m_scriptContext, m_expr.Clone());
         }
 
-        public override void Execute(Context c)
-        {
-            string elementName = m_expr.Execute(c);
-            Element element = m_worldModel.Elements.Get(elementName);
-            if (element.ElemType == ElementType.Object || element.ElemType == ElementType.Timer)
-            {
-                m_worldModel.GetElementFactory(element.ElemType).DestroyElement(elementName);
-            }
-            else
-            {
-                throw new InvalidOperationException(string.Format("Unable to destroy element of type {0}", element.ElemType));
-            }
-        }
-
         public override string Save()
         {
             return SaveScript("destroy", m_expr.Save());

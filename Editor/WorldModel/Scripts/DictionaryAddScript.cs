@@ -50,20 +50,6 @@ namespace TextAdventures.Quest.Scripts
             return new DictionaryAddScript(m_scriptContext, m_dictionary.Clone(), m_key.Clone(), m_value.Clone());
         }
 
-        public override void Execute(Context c)
-        {
-            IDictionary result = m_dictionary.Execute(c) as IDictionary;
-
-            if (result != null)
-            {
-                result.Add(m_key.Execute(c), m_value.Execute(c));
-            }
-            else
-            {
-                throw new Exception("Unrecognised dictionary type");
-            }
-        }
-
         public override string Save()
         {
             return SaveScript("dictionary add", m_dictionary.Save(), m_key.Save(), m_value.Save());
@@ -149,20 +135,6 @@ namespace TextAdventures.Quest.Scripts
         protected override ScriptBase CloneScript()
         {
             return new DictionaryRemoveScript(m_scriptContext, m_dictionary.Clone(), m_key.Clone());
-        }
-
-        public override void Execute(Context c)
-        {
-            IDictionary result = m_dictionary.Execute(c) as IDictionary;
-
-            if (result != null)
-            {
-                result.Remove(m_key.Execute(c));
-            }
-            else
-            {
-                throw new Exception("Unrecognised dictionary type");
-            }
         }
 
         public override string Save()

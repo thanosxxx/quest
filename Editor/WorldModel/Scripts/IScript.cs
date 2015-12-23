@@ -55,7 +55,6 @@ namespace TextAdventures.Quest.Scripts
 
     public interface IScript : IMutableField
     {
-        void Execute(Context c);
         string Line { get; set; }
         string Save();
         void SetParameter(int index, object value);
@@ -143,8 +142,6 @@ namespace TextAdventures.Quest.Scripts
         public Element Owner { get; set; }
 
         protected abstract ScriptBase CloneScript();
-
-        public abstract void Execute(Context c);
 
         public abstract string Save();
 

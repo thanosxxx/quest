@@ -42,10 +42,6 @@ namespace TextAdventures.Quest.Scripts
             return new InsertScript(m_scriptContext, m_filename.Clone());
         }
 
-        public override void Execute(Context c)
-        {
-        }
-
         public override string Save()
         {
             return SaveScript("insert", m_filename.Save());

@@ -45,10 +45,6 @@ namespace TextAdventures.Quest.Scripts
             return new MsgScript(m_scriptContext, m_function.Clone());
         }
 
-        public override void Execute(Context c)
-        {
-        }
-
         public override string Save()
         {
             return SaveScript("msg", m_function.Save());

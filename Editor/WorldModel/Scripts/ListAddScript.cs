@@ -47,20 +47,6 @@ namespace TextAdventures.Quest.Scripts
             return new ListAddScript(m_scriptContext, m_list.Clone(), m_value.Clone());
         }
 
-        public override void Execute(Context c)
-        {
-            IQuestList result = m_list.Execute(c) as IQuestList;
-
-            if (result != null)
-            {
-                result.Add(m_value.Execute(c));
-            }
-            else
-            {
-                throw new Exception("Unrecognised list type");
-            }
-        }
-
         public override string Save()
         {
             return SaveScript("list add", m_list.Save(), m_value.Save());
@@ -141,20 +127,6 @@ namespace TextAdventures.Quest.Scripts
         protected override ScriptBase CloneScript()
         {
             return new ListRemoveScript(m_scriptContext, m_list.Clone(), m_value.Clone());
-        }
-
-        public override void Execute(Context c)
-        {
-            IQuestList result = m_list.Execute(c) as IQuestList;
-
-            if (result != null)
-            {
-                result.Remove(m_value.Execute(c));
-            }
-            else
-            {
-                throw new Exception("Unrecognised list type");
-            }
         }
 
         public override string Save()

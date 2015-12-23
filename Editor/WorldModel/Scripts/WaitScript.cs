@@ -44,10 +44,6 @@ namespace TextAdventures.Quest.Scripts
             return new WaitScript(m_worldModel, m_scriptFactory, (IScript)m_callbackScript.Clone());
         }
 
-        public override void Execute(Context c)
-        {
-        }
-
         public override string Save()
         {
             return SaveScript("wait", m_callbackScript);

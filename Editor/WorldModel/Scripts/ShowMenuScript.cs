@@ -60,10 +60,6 @@ namespace TextAdventures.Quest.Scripts
             return new ShowMenuScript(m_scriptContext, m_scriptFactory, m_caption.Clone(), m_options.Clone(), m_allowCancel.Clone(), (IScript)m_callbackScript.Clone());
         }
 
-        public override void Execute(Context c)
-        {
-        }
-
         public override string Save()
         {
             return SaveScript("show menu", m_callbackScript, m_caption.Save(), m_options.Save(), m_allowCancel.Save());

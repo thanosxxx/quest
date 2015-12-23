@@ -46,12 +46,6 @@ namespace TextAdventures.Quest.Scripts
             return new SetFieldScript(m_scriptContext, m_obj.Clone(), m_field.Clone(), m_value.Clone());
         }
 
-        public override void Execute(Context c)
-        {
-            Element obj = m_obj.Execute(c);
-            obj.Fields.Set(m_field.Execute(c), m_value.Execute(c));
-        }
-
         public override string Save()
         {
             return SaveScript("set", m_obj.Save(), m_field.Save(), m_value.Save());

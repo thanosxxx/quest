@@ -64,10 +64,6 @@ namespace TextAdventures.Quest.Scripts
             return new JSScript(m_scriptContext, m_function, m_parameters == null ? null : new List<IFunctionGeneric>(m_parameters));
         }
 
-        public override void Execute(Context c)
-        {
-        }
-
         public override string Save()
         {
             if (string.IsNullOrEmpty(m_function)) return "JS.";

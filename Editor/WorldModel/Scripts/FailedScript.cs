@@ -19,11 +19,6 @@ namespace TextAdventures.Quest.Scripts
             return new FailedScript(m_script);
         }
 
-        public override void Execute(Context c)
-        {
-            throw new NotImplementedException();
-        }
-
         public override string Save()
         {
             return m_script;

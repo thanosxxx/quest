@@ -38,10 +38,6 @@ namespace TextAdventures.Quest.Scripts
             return new FinishScript(m_worldModel);
         }
 
-        public override void Execute(Context c)
-        {
-        }
-
         public override string Save()
         {
             return "finish";

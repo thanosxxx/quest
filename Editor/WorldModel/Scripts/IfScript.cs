@@ -269,31 +269,6 @@ namespace TextAdventures.Quest.Scripts
             get { return m_elseIfScript.AsReadOnly(); }
         }
 
-        #region IScript Members
-
-        public override void Execute(Context c)
-        {
-            if (m_expression.Execute(c))
-            {
-                m_thenScript.Execute(c);
-                return;
-            }
-
-            if (m_elseIfScript != null)
-            {
-                foreach (ElseIfScript elseIfScript in m_elseIfScript)
-                {
-                    if (elseIfScript.Expression.Execute(c))
-                    {
-                        elseIfScript.Script.Execute(c);
-                        return;
-                    }
-                }
-            }
-
-            if (m_elseScript != null) m_elseScript.Execute(c);
-        }
-
         public override string Save()
         {
             string result = SaveScript("if", m_thenScript, m_expression.Save());
@@ -335,8 +310,6 @@ namespace TextAdventures.Quest.Scripts
         {
             throw new NotImplementedException();
         }
-
-        #endregion
 
         public string ExpressionString
         {

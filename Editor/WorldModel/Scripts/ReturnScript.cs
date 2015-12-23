@@ -42,12 +42,6 @@ namespace TextAdventures.Quest.Scripts
             return new ReturnScript(m_scriptContext, m_returnValue.Clone());
         }
 
-        public override void Execute(Context c)
-        {
-            c.ReturnValue = m_returnValue.Execute(c);
-            if (m_worldModel.Version >= WorldModelVersion.v550) c.IsReturned = true;
-        }
-
         public override string Save()
         {
             return SaveScript("return", m_returnValue.Save());

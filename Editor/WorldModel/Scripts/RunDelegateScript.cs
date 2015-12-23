@@ -73,10 +73,6 @@ namespace TextAdventures.Quest.Scripts
             return new RunDelegateScript(m_scriptContext, m_appliesTo.Clone(), m_delegate.Clone(), m_parameters.Parameters);
         }
 
-        public override void Execute(Context c)
-        {
-        }
-
         public override string Save()
         {
             List<string> saveParameters = new List<string>();

@@ -55,37 +55,6 @@ namespace TextAdventures.Quest.Scripts
             return new ForEachScript(m_scriptContext, m_variable, m_list.Clone(), (IScript)m_loopScript.Clone());
         }
 
-        public override void Execute(Context c)
-        {
-            object result = m_list.Execute(c);
-            IEnumerable resultList = null;
-
-            // Cannot foreach over strings as of Quest 5.3, as the Char data type is not supported (retained functionality
-            // for pre-5.3 to prevent breaking existing scripts)
-
-            if (m_scriptContext.WorldModel.Version < WorldModelVersion.v530 || !(result is string))
-            {
-                var resultDictionary = result as IDictionary;
-                if (resultDictionary != null)
-                {
-                    resultList = resultDictionary.Keys;
-                }
-                else
-                {
-                    resultList = result as IEnumerable;
-                }
-            }
-
-            if (resultList == null) throw new Exception(string.Format("Cannot foreach over '{0}' as it is not a list", result));
-
-            foreach (object variable in resultList)
-            {
-                c.Parameters[m_variable] = variable;
-                m_loopScript.Execute(c);
-                if (c.IsReturned) break;
-            }
-        }
-
         public override string Save()
         {
             return SaveScript("foreach", m_loopScript, m_variable, m_list.Save());

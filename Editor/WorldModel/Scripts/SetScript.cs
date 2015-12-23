@@ -121,23 +121,6 @@ namespace TextAdventures.Quest.Scripts
             }
         }
 
-        public override void Execute(Context c)
-        {
-            object result = GetResult(c);
-
-            if (AppliesTo != null)
-            {
-                // we're setting an object property
-                Element obj = AppliesTo.Execute(c);
-                obj.Fields.Set(Property, result);
-            }
-            else
-            {
-                // we're setting a local variable
-                c.Parameters[Property] = result;
-            }
-        }
-
         public override string Save()
         {
             string result;

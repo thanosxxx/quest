@@ -116,10 +116,6 @@ namespace TextAdventures.Quest.Scripts
             return new FunctionCallScript(m_worldModel, m_procedure, m_parameters == null ? null : m_parameters.Parameters, m_paramFunction);
         }
 
-        public override void Execute(Context c)
-        {
-        }
-
         public override string Keyword
         {
             get

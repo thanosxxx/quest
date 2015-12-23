@@ -45,10 +45,6 @@ namespace TextAdventures.Quest.Scripts
             return new GetInputScript(m_scriptContext, m_scriptFactory, (IScript)m_callbackScript.Clone());
         }
 
-        public override void Execute(Context c)
-        {
-        }
-
         public override string Save()
         {
             return SaveScript("get input", m_callbackScript);

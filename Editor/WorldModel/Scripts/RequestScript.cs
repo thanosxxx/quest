@@ -73,10 +73,6 @@ namespace TextAdventures.Quest.Scripts
             return new RequestScript(m_scriptContext, m_request.ToString(), m_data.Clone());
         }
 
-        public override void Execute(Context c)
-        {
-        }
-
         public override string Save()
         {
             return SaveScript("request", m_request.ToString(), m_data.Save());

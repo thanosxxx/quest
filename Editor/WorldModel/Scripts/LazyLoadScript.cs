@@ -97,12 +97,6 @@ namespace TextAdventures.Quest.Scripts
             }
         }
 
-        public void Execute(Context c)
-        {
-            Initialise();
-            m_script.Execute(c);
-        }
-
         public string Line
         {
             get

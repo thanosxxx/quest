@@ -45,10 +45,6 @@ namespace TextAdventures.Quest.Scripts
             return new OnReadyScript(m_scriptContext, m_scriptFactory, (IScript)m_callbackScript.Clone());
         }
 
-        public override void Execute(Context c)
-        {
-        }
-
         public override string Save()
         {
             return SaveScript("on ready", m_callbackScript);

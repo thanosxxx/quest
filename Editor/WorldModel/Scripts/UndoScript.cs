@@ -38,11 +38,6 @@ namespace TextAdventures.Quest.Scripts
             return new UndoScript(m_worldModel);
         }
 
-        public override void Execute(Context c)
-        {
-            m_worldModel.UndoLogger.RollbackTransaction();
-        }
-
         public override string Save()
         {
             return "undo";
@@ -101,11 +96,6 @@ namespace TextAdventures.Quest.Scripts
         protected override ScriptBase CloneScript()
         {
             return new StartTransactionScript(m_scriptContext, m_command.Clone());
-        }
-
-        public override void Execute(Context c)
-        {
-            m_worldModel.UndoLogger.RollTransaction(m_command.Execute(c));
         }
 
         public override string Save()
