@@ -146,11 +146,6 @@ namespace TextAdventures.Quest
             return m_templateLookup.ContainsKey(name);
         }
 
-        public bool DynamicTemplateExists(string name)
-        {
-            return m_worldModel.Elements.ContainsKey(ElementType.DynamicTemplate, name);
-        }
-
         internal Element GetTemplateElement(string name)
         {
             return m_templateLookup[name];

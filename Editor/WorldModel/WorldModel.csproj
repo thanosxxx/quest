@@ -82,7 +82,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Callback.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Element.cs" />
     <Compile Include="Elements.cs" />
@@ -101,7 +100,6 @@
     <Compile Include="GameLoader\GameXmlWriter.cs" />
     <Compile Include="GameLoader\ObjectSaver.cs" />
     <Compile Include="GameLoader\Packager.cs" />
-    <Compile Include="GameLoader\PackageReader.cs" />
     <Compile Include="ObjectFactory.cs" />
     <Compile Include="QuestDictionary.cs" />
     <Compile Include="QuestList.cs" />
@@ -440,7 +438,6 @@
     <Compile Include="Scripts\WaitScript.cs" />
     <Compile Include="Scripts\WhileScript.cs" />
     <Compile Include="Templates.cs" />
-    <Compile Include="TimerRunner.cs" />
     <Compile Include="Types\EditorCommandPattern.cs" />
     <Compile Include="Types\LazyObjectDictionary.cs" />
     <Compile Include="Types\LazyObjectList.cs" />
@@ -449,7 +446,6 @@
     <Compile Include="Types\LazyScriptDictionary.cs" />
     <Compile Include="UndoLogger.cs" />
     <Compile Include="Utility.cs" />
-    <Compile Include="Walkthrough.cs" />
     <Compile Include="WorldModel.cs" />
   </ItemGroup>
   <ItemGroup>

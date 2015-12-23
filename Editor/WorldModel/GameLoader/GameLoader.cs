@@ -51,9 +51,8 @@ namespace TextAdventures.Quest
             {"550", WorldModelVersion.v550},
         };
 
-        public GameLoader(WorldModel worldModel, LoadMode mode, bool? isCompiled = null)
+        public GameLoader(WorldModel worldModel, LoadMode mode)
         {
-            IsCompiledFile = isCompiled ?? false;
             m_worldModel = worldModel;
             m_scriptFactory = new ScriptFactory(worldModel);
             m_scriptFactory.ErrorHandler += AddError;
@@ -67,16 +66,6 @@ namespace TextAdventures.Quest
             if (filename == null && data == null)
             {
                 throw new ArgumentException("Expected filename or data");
-            }
-
-            if (Path.GetExtension(filename) == ".quest")
-            {
-                if (Config.ReadGameFileFromAzureBlob)
-                {
-                    throw new InvalidOperationException("Not expecting a .quest file when loading file from Azure");
-                }
-
-                filename = LoadCompiledFile(filename);
             }
 
             try
@@ -124,18 +113,6 @@ namespace TextAdventures.Quest
                             m_worldModel.Version = s_versions[version];
                             m_worldModel.VersionString = version;
                         }
-
-                        string originalFile = reader.GetAttribute("original");
-
-                        if (!string.IsNullOrEmpty(originalFile) && System.IO.Path.GetExtension(originalFile) == ".quest")
-                        {
-                            LoadCompiledFile(originalFile);
-                        }
-
-                        if (!string.IsNullOrEmpty(originalFile))
-                        {
-                            FilenameUpdated(originalFile);
-                        }
                     }
                     else
                     {
@@ -172,15 +149,6 @@ namespace TextAdventures.Quest
             return (m_errors.Count == 0);
         }
 
-        private string LoadCompiledFile(string filename)
-        {
-            PackageReader packageReader = new PackageReader();
-            var result = packageReader.LoadPackage(filename);
-            WorldModel.ResourcesFolder = result.Folder;
-            IsCompiledFile = true;
-            return result.GameFile;
-        }
-
         private void LoadXML(string filename, XmlReader reader)
         {
             Element current = null;
@@ -191,7 +159,7 @@ namespace TextAdventures.Quest
             if (m_currentFile.Count > 0 && m_currentFile.Peek().IsEditorLibrary) isEditorLibrary = true;
             if (reader.GetAttribute("type") == "editor") isEditorLibrary = true;
             
-            if (!IsCompiledFile && m_currentFile.Count == 0 && m_worldModel.Version >= WorldModelVersion.v530)
+            if (m_currentFile.Count == 0 && m_worldModel.Version >= WorldModelVersion.v530)
             {
                 ScanForTemplates(filename);
             }
@@ -473,7 +441,5 @@ namespace TextAdventures.Quest
                 return element + "~" + property;
             }
         }
-
-        public bool IsCompiledFile { get; private set; }
     }
 }

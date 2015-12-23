@@ -110,7 +110,6 @@ namespace TextAdventures.Quest
         private object m_threadLock = new object();
         private List<string> m_attributeNames = new List<string>();
         private RegexCache m_regexCache = new RegexCache();
-        private CallbackManager m_callbacks = new CallbackManager();
 
         private static Dictionary<ObjectType, string> s_defaultTypeNames = new Dictionary<ObjectType, string>();
         private static Dictionary<string, Type> s_typeNamesToTypes = new Dictionary<string, Type>();
@@ -349,7 +348,6 @@ namespace TextAdventures.Quest
             m_state = GameState.Loading;
             
             var success = m_filename == null || loader.Load(m_filename);
-            DebugEnabled = !loader.IsCompiledFile;
             m_state = success ? GameState.Running : GameState.Finished;
             m_errors = loader.Errors;
             m_saver = new GameSaver(this);
@@ -486,7 +484,7 @@ namespace TextAdventures.Quest
 
         private string GetExternalPath(string file, bool throwException)
         {
-            string resourcesFolder = ResourcesFolder ?? Path.GetDirectoryName(Filename);
+            string resourcesFolder = Path.GetDirectoryName(Filename);
             return GetExternalPath(resourcesFolder, file, throwException);
         }
 
@@ -495,17 +493,14 @@ namespace TextAdventures.Quest
             string path;
 
             if (TryPath(current, file, out path, false)) return path;
-            if (ResourcesFolder == null)
-            {
-                // Only try other folders if we're not using a resource folder (i.e. a .quest file)
-                // Because if we do have a resource folder, all required external files should be there.
+            // Only try other folders if we're not using a resource folder (i.e. a .quest file)
+            // Because if we do have a resource folder, all required external files should be there.
 
-                if (TryPath(Environment.CurrentDirectory, file, out path, false)) return path;
-                if (!string.IsNullOrEmpty(m_libFolder) && TryPath(m_libFolder, file, out path, true)) return path;
-                if (System.Reflection.Assembly.GetEntryAssembly() != null)
-                {
-                    if (TryPath(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().CodeBase), file, out path, true)) return path;
-                }
+            if (TryPath(Environment.CurrentDirectory, file, out path, false)) return path;
+            if (!string.IsNullOrEmpty(m_libFolder) && TryPath(m_libFolder, file, out path, true)) return path;
+            if (System.Reflection.Assembly.GetEntryAssembly() != null)
+            {
+                if (TryPath(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().CodeBase), file, out path, true)) return path;
             }
             if (throwException)
             {
@@ -680,9 +675,6 @@ namespace TextAdventures.Quest
             Packager packager = new Packager(this);
             return packager.CreatePackage(filename, includeWalkthrough, out error, includeFiles, outputStream);
         }
-
-        public string ResourcesFolder { get; internal set; }
-        public bool DebugEnabled { get; private set; }
 
         private static List<string> s_functionNames = null;
 
