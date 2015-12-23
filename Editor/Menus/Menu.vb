@@ -2,7 +2,6 @@
 
     Public Enum MenuMode
         GameBrowser
-        Player
         Editor
     End Enum
 
@@ -31,35 +30,25 @@
     End Sub
 
     Private Sub InitialiseMenuData()
-        AddMenuData("restart", MenuMode.Player)
-        AddMenuData("save", MenuMode.Player, MenuMode.Editor)
-        AddMenuData("saveas", MenuMode.Player, MenuMode.Editor)
-        AddMenuData("undo", MenuMode.Player, MenuMode.Editor)
+        AddMenuData("save", MenuMode.Editor)
+        AddMenuData("saveas", MenuMode.Editor)
+        AddMenuData("undo", MenuMode.Editor)
         AddMenuData("redo", MenuMode.Editor)
-        AddMenuData("selectall", MenuMode.Player)
         AddMenuData("cut", MenuMode.Editor)
-        AddMenuData("copy", MenuMode.Player, MenuMode.Editor)
+        AddMenuData("copy", MenuMode.Editor)
         AddMenuData("paste", MenuMode.Editor)
         AddMenuData("delete", MenuMode.Editor)
-        AddMenuData("walkthrough", MenuMode.Player)
-        AddMenuData("debugger", MenuMode.Player)
-        AddMenuData("log", MenuMode.Player)
         AddMenuData("add", MenuMode.Editor)
-        AddMenuData("open", MenuMode.GameBrowser, MenuMode.Player)
         AddMenuData("openedit", MenuMode.GameBrowser, MenuMode.Editor)
         AddMenuData("close", MenuMode.Editor)
         AddMenuData("createnew", MenuMode.GameBrowser, MenuMode.Editor)
         AddMenuData("play", MenuMode.Editor)
-        AddMenuData("stop", MenuMode.Player)
-        AddMenuData("view", MenuMode.Player)
-        AddMenuData("fullscreen", MenuMode.Player)
         AddMenuData("publish", MenuMode.Editor)
         AddMenuData("find", MenuMode.Editor)
         AddMenuData("replace", MenuMode.Editor)
         AddMenuData("simplemode", MenuMode.Editor)
         AddMenuData("codeview", MenuMode.Editor)
         AddMenuData("wordwrap", MenuMode.Editor)
-        AddMenuData("htmldevtools", MenuMode.Player)
     End Sub
 
     Private Sub AddMenuData(key As String, ParamArray modes() As MenuMode)
