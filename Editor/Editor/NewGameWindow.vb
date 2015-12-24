@@ -16,20 +16,6 @@ Public Class NewGameWindow
 
         ' Add any initialization after the InitializeComponent() call.
         SetFilename()
-
-        AddHandler picTextAdventure.Click, AddressOf SelectTextAdventure
-        AddHandler picTextAdventureBorder.Click, AddressOf SelectTextAdventure
-        AddHandler lstTemplate.SelectedIndexChanged, AddressOf SelectTextAdventure
-        AddHandler picGamebook.Click, AddressOf SelectGamebook
-        AddHandler picGamebookBorder.Click, AddressOf SelectGamebook
-    End Sub
-
-    Private Sub SelectTextAdventure(sender As Object, e As EventArgs)
-        optTextAdventure.Checked = True
-    End Sub
-
-    Private Sub SelectGamebook(sender As Object, e As EventArgs)
-        optGamebook.Checked = True
     End Sub
 
     Private Sub SetFilename()
@@ -113,11 +99,7 @@ Public Class NewGameWindow
     End Sub
 
     Public Function GetSelectedTemplate() As TemplateData
-        If optTextAdventure.Checked Then
-            Return m_templates(lstTemplate.Text)
-        Else
-            Return m_templates.Values.First(Function(template) template.Type = EditorStyle.GameBook)
-        End If
+        Return m_templates(lstTemplate.Text)
     End Function
 
     Private Sub NewGameWindow_Shown(sender As Object, e As System.EventArgs) Handles Me.Shown
