@@ -1,11 +1,16 @@
 {
-  "name": "jsrunner",
-  "version": "1.0.0",
+  "name": "quest-player",
+  "version": "6.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "main.js",
   "scripts": {
     "start": "node server.js",
     "package": "node node_modules/requirejs/bin/r.js -o build.js"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/textadventures/quest.git"
   },
   "dependencies": {
     "finalhandler": "^0.4.0",
@@ -17,6 +22,7 @@
     "gulp-sourcemaps": "^1.5.2",
     "gulp-typescript": "^2.9.2",
     "gulp-uglify": "^1.4.0",
-    "requirejs": "^2.1.22"
+    "requirejs": "^2.1.22",
+    "electron-prebuilt": "^0.34.3"
   }
 }
