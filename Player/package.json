@@ -23,6 +23,6 @@
     "gulp-typescript": "^2.9.2",
     "gulp-uglify": "^1.4.0",
     "requirejs": "^2.1.22",
-    "electron-prebuilt": "^0.34.3"
+    "electron-prebuilt": "^0.36.2"
   }
 }
