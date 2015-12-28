@@ -1,10 +1,11 @@
 /* global __dirname */
 /* global process */
 
-var app = require('app');  // Module to control application life.
-var BrowserWindow = require('browser-window');  // Module to create native browser window.
-var storage = require('./storage');
-var dialog = require('electron').dialog;
+const app = require('electron').app;
+const BrowserWindow = require('electron').BrowserWindow;
+const dialog = require('electron').dialog;
+const ipcMain = require('electron').ipcMain;
+const storage = require('./storage');
 
 var argv = process.argv;
 
@@ -97,6 +98,19 @@ app.on('activate-with-no-open-windows', init);
 // initialization and ready for creating browser windows.
 app.on('ready', init);
 
+var fileOpen = function () {
+    var result = dialog.showOpenDialog({
+    filters: [
+        { name: 'Quest games', extensions: ['aslx', 'asl', 'cas'] }
+    ]
+    });
+    if (!result) return;
+    mainWindow.openFile = result[0];
+    mainWindow.loadURL('file://' + __dirname + '/index.html');
+};
+
+ipcMain.on('file-open', fileOpen);
+
 var template = [
     {
         label: 'File',
@@ -104,16 +118,7 @@ var template = [
             {
                 label: 'Open...',
                 accelerator: 'CmdOrCtrl+O',
-                click: function () {
-                    var result = dialog.showOpenDialog({
-                    filters: [
-                        { name: 'Quest games', extensions: ['aslx', 'asl', 'cas'] }
-                    ]
-                    });
-                    if (!result) return;
-                    mainWindow.openFile = result[0];
-                    mainWindow.loadURL('file://' + __dirname + '/index.html');
-                }
+                click: fileOpen
             },
             {
                 label: 'Save',

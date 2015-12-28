@@ -6,14 +6,24 @@
 
         <title>Quest Player</title>
 
-        <!--
         <script>
-        window.$ = window.jQuery = require(__dirname + "/bower_components/jquery/dist/jquery.min.js");
+            window.$ = window.jQuery = require(__dirname + "/lib/jquery-2.1.1.min.js");
         </script>
-        -->
+        
+        <script>
+            $(function () {
+                const ipcRenderer = require('electron').ipcRenderer;
+                
+                $('#file-open').click(function () {
+                    ipcRenderer.send('file-open');
+                });
+            });
+        </script>
     </head>
 
     <body>
-        <p>Hello world</p>
+        <h1>Quest Player</h1>
+        
+        <a id="file-open" href="#">Open file...</a>
     </body>
 </html>
