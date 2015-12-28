@@ -11,7 +11,7 @@ var argv = process.argv;
 
 var openFile;
 
-if (process.platform !== 'darwin') {
+if (process.platform !== 'darwin' && process.argv[1] !== '.') {
     openFile = process.argv[1];
 }
 
