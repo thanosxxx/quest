@@ -18,16 +18,16 @@ define([
 function (state, ui, expressions, scriptParser, scriptRunner) {
     
     var commands = {
-        'msg': require('scripts/msg'),
-        '=': require('scripts/set'),
-        '=>': require('scripts/setscript'),
-        'request': require('scripts/request'),
-        'return': require('scripts/return'),
-        'invoke': require('scripts/invoke'),
-        'if': require('scripts/if'),
-        'switch': require('scripts/switch'),
-        'for': require('scripts/for'),
-        'JS.': require('scripts/js')
+        'msg': requirejs('scripts/msg'),
+        '=': requirejs('scripts/set'),
+        '=>': requirejs('scripts/setscript'),
+        'request': requirejs('scripts/request'),
+        'return': requirejs('scripts/return'),
+        'invoke': requirejs('scripts/invoke'),
+        'if': requirejs('scripts/if'),
+        'switch': requirejs('scripts/switch'),
+        'for': requirejs('scripts/for'),
+        'JS.': requirejs('scripts/js')
     };
     
     var getSetScript = function (line) {

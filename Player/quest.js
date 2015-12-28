@@ -2,7 +2,7 @@
 /* global $ */
 /* global quest */
 
-require.config({
+requirejs.config({
 	paths: {
 		'jsep': 'jsep.min'
 	},
@@ -13,7 +13,7 @@ require.config({
 	}
 });
 
-require(['asl6', 'ui'], function (asl6, ui) {
+requirejs(['asl6', 'ui'], function (asl6, ui) {
 	window.quest = window.quest || {};
 	
 	var paperScript = document.createElement('script');
@@ -77,7 +77,7 @@ require(['asl6', 'ui'], function (asl6, ui) {
 		
 		// Local testing only =========
 		
-		var filename = $_GET['file'];
+		var filename = $_GET['file'] || 'test.aslx';
 		if (filename) {
 			$.get(filename, function (data) {
 				launchV6(data);

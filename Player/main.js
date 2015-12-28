@@ -98,7 +98,7 @@ var template = [
                 label: 'Open...',
                 accelerator: 'CmdOrCtrl+O',
                 click: function () {
-                    
+                    mainWindow.loadURL('file://' + __dirname + '/index.html');
                 }
             },
             {
