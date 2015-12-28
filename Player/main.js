@@ -4,6 +4,7 @@
 var app = require('app');  // Module to control application life.
 var BrowserWindow = require('browser-window');  // Module to create native browser window.
 var storage = require('./storage');
+var dialog = require('electron').dialog;
 
 var argv = process.argv;
 
@@ -15,10 +16,12 @@ if (process.platform !== 'darwin') {
 
 app.on('open-file', function (event, path) {
     event.preventDefault();
-    openFile = path;
-    if (mainWindow) {
-      mainWindow.webContents.executeJavaScript('loadFile(' + JSON.stringify(path) + ')');
-    }
+    // TODO: This handles dragging file onto app in OS X
+    
+    // openFile = path;
+    // if (mainWindow) {
+    //   mainWindow.webContents.executeJavaScript('loadFile(' + JSON.stringify(path) + ')');
+    // }
 });
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -49,8 +52,12 @@ var init = function() {
 
     mainWindow.openFile = openFile;
 
-    // and load the index.html of the app.
-    mainWindow.loadURL('file://' + __dirname + '/start.html');
+    if (openFile) {
+        mainWindow.loadURL('file://' + __dirname + '/index.html');
+    }
+    else {
+        mainWindow.loadURL('file://' + __dirname + '/start.html');
+    }
     
     mainWindow.on('close', function () {
         var bounds = mainWindow.getBounds(); 
@@ -98,6 +105,13 @@ var template = [
                 label: 'Open...',
                 accelerator: 'CmdOrCtrl+O',
                 click: function () {
+                    var result = dialog.showOpenDialog({
+                    filters: [
+                        { name: 'Quest games', extensions: ['aslx', 'asl', 'cas'] }
+                    ]
+                    });
+                    if (!result) return;
+                    mainWindow.openFile = result[0];
                     mainWindow.loadURL('file://' + __dirname + '/index.html');
                 }
             },
@@ -193,7 +207,7 @@ var template = [
         submenu: [
             {
                 label: 'Documentation',
-                click: function() { require('electron').shell.openExternal('http://docs.textadventures.co.uk/quest/') }
+                click: function() { require('electron').shell.openExternal('http://docs.textadventures.co.uk/quest/'); }
             },
         ]
     },

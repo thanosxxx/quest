@@ -64,28 +64,54 @@ requirejs(['asl6', 'ui'], function (asl6, ui) {
 		});
 	};
 	
-	var launchV6 = function (data) {
-		quest.sendCommand = asl6.sendCommand;
-		asl6.load(data);
-		asl6.begin();
+    var launchV4 = function (url, resourceRoot, resumeData) {
+        var game = new LegacyGame(url, url, resumeData, fileFetcher, binaryFileFetcher, resourceRoot);
+        var onSuccess = function () {
+            game.Begin();
+        };
+        var onFailure = function () {
+            console.log("fail");
+        };
+        quest.sendCommand = game.SendCommand.bind(game);
+        quest.endWait = game.EndWait.bind(game);
+        quest.setQuestionResponse = game.SetQuestionResponse.bind(game);
+        quest.setMenuResponse = game.SetMenuResponse.bind(game);
+        quest.save = game.SaveGame.bind(game);
+        quest.tick = game.Tick.bind(game);
+        game.Initialise(onSuccess, onFailure);
+    };
+    
+	var launchV6 = function (url) {
+        $.get(url, function (data) {
+            quest.sendCommand = asl6.sendCommand;
+            asl6.load(data);
+            asl6.begin();
+        });
 	};
-	
-	window.gridApi = window.gridApi || {};
-	window.gridApi.onLoad = function () {
-		var id = $_GET['id'];
+    
+    var launchFilename = function (filename) {
+        var extRegex = /\.[0-9a-z]+$/i;
+        var extMatch = extRegex.exec(filename);
+        if (!extMatch) return;
+        var ext = extMatch[0];
+        if (ext == '.aslx') {
+            launchV6(filename);
+        }
+        else if (ext == '.asl' || ext == '.cas') {
+            launchV4(filename);
+        }
+    };
+    
+    var onLoadWeb = function () {
+        var id = $_GET['id'];
 		var resume = $_GET['resume'];
 		
-		// Local testing only =========
-		
-		var filename = $_GET['file'] || 'test.aslx';
+		var filename = $_GET['file'];
+        
 		if (filename) {
-			$.get(filename, function (data) {
-				launchV6(data);
-				return;
-			});
+            launchFilename(filename);
+            return;
 		}
-		
-		// End local testing only =====
 		
 		if (!id) return;
 		
@@ -94,27 +120,11 @@ requirejs(['asl6', 'ui'], function (asl6, ui) {
 				checkCanSave();
 				
 				if (result.ASLVersion >= 500) {
-					$.get(result.PlayUrl, function (data) {
-						// TODO: Pass result.ResourceRoot
-						launchV6(data);
-					});
+                    // TODO: Pass result.ResourceRoot
+					launchV6(result.PlayUrl);
 				}
 				else {
-					var file = result.PlayUrl;
-					var game = new LegacyGame(file, file, resumeData, fileFetcher, binaryFileFetcher, result.ResourceRoot);
-					var onSuccess = function () {
-						game.Begin();
-					};
-					var onFailure = function () {
-						console.log("fail");
-					};
-					quest.sendCommand = game.SendCommand.bind(game);
-					quest.endWait = game.EndWait.bind(game);
-					quest.setQuestionResponse = game.SetQuestionResponse.bind(game);
-					quest.setMenuResponse = game.SetMenuResponse.bind(game);
-					quest.save = game.SaveGame.bind(game);
-					quest.tick = game.Tick.bind(game);
-					game.Initialise(onSuccess, onFailure);
+                    launchV4(result.PlayUrl, result.ResourceRoot, resumeData);
 				}
 			});
 		};
@@ -139,6 +149,23 @@ requirejs(['asl6', 'ui'], function (asl6, ui) {
 				}
 			});
 		}
+    };
+    
+    var onLoadDesktop = function () {
+        var remote = require('electron').remote;
+        var openFile = remote.getCurrentWindow().openFile;
+        launchFilename(openFile);
+    };
+	
+	window.gridApi = window.gridApi || {};
+	window.gridApi.onLoad = function () {
+        if (window.process) {
+            // desktop Quest Player
+            onLoadDesktop();
+        }
+        else {
+            onLoadWeb(); 
+        }
 	};
 	
 	// TODO: Game session logging for ActiveLit
