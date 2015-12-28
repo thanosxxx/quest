@@ -185,7 +185,7 @@ Public Class Main
         Dim assembly = System.Reflection.Assembly.GetEntryAssembly()
         Dim path = IO.Path.GetDirectoryName(assembly.Location)
         Dim questRunner = IO.Path.Combine(path, "QuestPlayer.exe")
-        Process.Start(questRunner)
+        Process.Start(questRunner, String.Format("""" + filename + """"))
     End Sub
 
     Private Sub ctlEditor_PlayWalkthrough(filename As String, walkthrough As String, record As Boolean) Handles ctlEditor.PlayWalkthrough
