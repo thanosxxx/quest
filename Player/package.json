@@ -4,7 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "electron .",
+    "web": "node server.js",
     "package": "node node_modules/requirejs/bin/r.js -o build.js"
   },
   "license": "MIT",
