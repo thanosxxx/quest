@@ -12,13 +12,16 @@ define(function () {
 	
 	var set = function (elementName, attribute, value) {
 		var element = getElement(elementName);
-		element[attribute] = value;
+		element.attributes[attribute] = value;
 	};
 	
 	var get = function (elementName, attribute) {
 		var element = getElement(elementName);
-		var result = element[attribute]
-		if (typeof result === 'undefined') result = null;
+		var result = element.attributes[attribute];
+		if (typeof result === 'undefined') {
+            // TODO: Check the attributes of inherited types
+            result = null;
+        }
 		return result;
 	};
 	
@@ -26,9 +29,12 @@ define(function () {
 		return elementName in elements;
 	};
 	
-	var create = function (elementName) {
+	var create = function (elementName, elementType) {
 		elements[elementName] = {
-			name: elementName	
+			name: elementName,
+            elementType: elementType,
+            attributes: {},
+            types: []
 		};
 	};
 	
