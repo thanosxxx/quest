@@ -202,7 +202,7 @@ define(['state'], function (state) {
                             if (result.type !== 'element') {
                                 throw 'Expected element, got ' + result;
                             }
-                            expressionFrame.complete(state.get(result.name, tree.property.name));
+                            expressionFrame.complete(state.get(state.getElement(result.name), tree.property.name));
                         }
                     });
                     evaluateNext();

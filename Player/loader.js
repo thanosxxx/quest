@@ -18,7 +18,7 @@ define(['state', 'scripts'], function (state, scripts) {
     
     var loaders = {
         'game': function (node) {
-            state.create('game', 'object');
+            state.create('game', 'object', 'game');
             var name = getXmlAttribute(node, 'name');
             state.set('game', 'name', name);
             loadElementAttributes('game', node.childNodes);

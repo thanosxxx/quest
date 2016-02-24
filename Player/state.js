@@ -17,26 +17,52 @@ define(function () {
 		element.attributes[attribute] = value;
 	};
 	
-	var get = function (elementName, attribute) {
-		var element = getElement(elementName);
+	var get = function (element, attribute) {
 		var result = element.attributes[attribute];
 		if (typeof result === 'undefined') {
-            // TODO: Check the attributes of inherited types
-            result = null;
+            for (var idx in element.inheritedTypes) {
+                var inheritedTypeElement = getElement(element.inheritedTypes[idx]);
+                if (attributeExists(inheritedTypeElement, attribute)) {
+                    result = get(inheritedTypeElement, attribute);
+                    break;
+                }
+            }
+            
+            if (typeof result === 'undefined') {
+                result = null;
+            }
         }
+        
+        // TODO: Check for listextend
 		return result;
 	};
+    
+    var attributeExists = function (element, attribute) {
+        if (attribute in element.attributes) return true;
+        for (var idx in element.inheritedTypes) {
+            var inheritedTypeElement = getElement(element.inheritedTypes[idx]);
+            return attributeExists(inheritedTypeElement, attribute);
+        }
+        // TODO: Optional includeExtendableFields parameter to check for listexend,
+        // as per WorldModel.Fields.Exists
+        return false;
+    }
 	
 	var isElement = function (elementName) {
 		return elementName in elements;
 	};
 	
-	var create = function (elementName, elementType) {
+	var create = function (elementName, elementType, elementSubType) {
+        var inheritedTypes = [];
+        if (elementType == 'object') {
+            if (!elementSubType) throw 'Object must have a subtype';
+            inheritedTypes.push('default' + elementSubType);
+        }
 		elements[elementName] = {
 			name: elementName,
             elementType: elementType,
             attributes: {},
-            types: []
+            inheritedTypes: inheritedTypes
 		};
         if (!elementsOfType[elementType]) elementsOfType[elementType] = {};
         elementsOfType[elementType][elementName] = elements[elementName];
@@ -72,6 +98,7 @@ define(function () {
 		set: set,
 		get: get,
 		isElement: isElement,
+        getElement: getElement,
 		create: create,
 		addFunction: addFunction,
 		functionExists: functionExists,

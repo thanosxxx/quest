@@ -2,7 +2,13 @@
     <game name="Test Game">
         <testattr>Test attribute value</testattr>
         <testattr2>Test another attribute value</testattr2>
+        <overrideattr>This is the overridden attribute value</overrideattr>
     </game>
+    
+    <type name="defaultgame">
+        <inheritedattr>An inherited attribute value</inheritedattr>
+        <overrideattr>This will be overridden so this value should NOT appear</overrideattr>
+    </type>
 
     <function name="ScopeInventory" type="objectlist">
         result = NewObjectList()
@@ -73,6 +79,8 @@
         msg ("Test attributes...")
         msg ("game.testattr = " + game.testattr)
         msg ("game.testattr2 = " + game.testattr2)
+        msg ("game.inheritedattr = " + game.inheritedattr) 
+        msg ("game.overrideattr = " + game.overrideattr) 
     </function>
     
     <function name="testfn" parameters="arg1, arg2" type="int">
