@@ -1,5 +1,7 @@
 define(function () {
 	var elements = {};
+    var elementsOfType = {};
+    // TODO: Functions are just another type of element?
 	var functions = {};
 	
 	var getElement = function (elementName) {
@@ -36,6 +38,8 @@ define(function () {
             attributes: {},
             types: []
 		};
+        if (!elementsOfType[elementType]) elementsOfType[elementType] = {};
+        elementsOfType[elementType][elementName] = elements[elementName];
 	};
 	
 	var addFunction = function (functionName, script, parameters) {
