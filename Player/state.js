@@ -12,8 +12,7 @@ define(function () {
 		return element;	
 	};
 	
-	var set = function (elementName, attribute, value) {
-		var element = getElement(elementName);
+	var set = function (element, attribute, value) {
 		element.attributes[attribute] = value;
 	};
 	
@@ -37,6 +36,11 @@ define(function () {
 		return result;
 	};
     
+    var addInheritedType = function (element, typeName) {
+        // TODO: Check for circular inheritance
+        element.inheritedTypes.splice(0, 0, typeName);
+    };
+    
     var attributeExists = function (element, attribute) {
         if (attribute in element.attributes) return true;
         for (var idx in element.inheritedTypes) {
@@ -46,7 +50,7 @@ define(function () {
         // TODO: Optional includeExtendableFields parameter to check for listexend,
         // as per WorldModel.Fields.Exists
         return false;
-    }
+    };
 	
 	var isElement = function (elementName) {
 		return elementName in elements;
@@ -58,14 +62,16 @@ define(function () {
             if (!elementSubType) throw 'Object must have a subtype';
             inheritedTypes.push('default' + elementSubType);
         }
-		elements[elementName] = {
+		var element = {
 			name: elementName,
             elementType: elementType,
             attributes: {},
             inheritedTypes: inheritedTypes
 		};
+        elements[elementName] = element;
         if (!elementsOfType[elementType]) elementsOfType[elementType] = {};
-        elementsOfType[elementType][elementName] = elements[elementName];
+        elementsOfType[elementType][elementName] = element;
+        return element;
 	};
 	
 	var addFunction = function (functionName, script, parameters) {
@@ -97,6 +103,7 @@ define(function () {
 	return {
 		set: set,
 		get: get,
+        addInheritedType: addInheritedType,
 		isElement: isElement,
         getElement: getElement,
 		create: create,

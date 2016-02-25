@@ -9,19 +9,26 @@ define(['state', 'scripts'], function (state, scripts) {
     
     var loadElementAttributes = function (element, nodes) {
         for (var i = 0; i < nodes.length; i++) {
-            if (nodes[i].nodeType !== 1) continue;
-            var attributeName = nodes[i].nodeName;
-            var attributeValue = nodes[i].textContent; 
-            state.set(element, attributeName, attributeValue);
+            var node = nodes[i];
+            if (node.nodeType !== 1) continue;
+            var attributeName = node.nodeName;
+            if (attributeName == 'inherit') {
+                var name = getXmlAttribute(node, 'name');
+                state.addInheritedType(element, name);
+            }
+            else {
+                var attributeValue = node.textContent; 
+                state.set(element, attributeName, attributeValue);
+            }
         }
     };
     
     var loaders = {
         'game': function (node) {
-            state.create('game', 'object', 'game');
+            var element = state.create('game', 'object', 'game');
             var name = getXmlAttribute(node, 'name');
-            state.set('game', 'name', name);
-            loadElementAttributes('game', node.childNodes);
+            state.set(element, 'name', name);
+            loadElementAttributes(element, node.childNodes);
         },
         'function': function (node) {
             var paramList;
@@ -35,8 +42,8 @@ define(['state', 'scripts'], function (state, scripts) {
         },
         'type': function (node) {
             var name = getXmlAttribute(node, 'name');
-            state.create(name, 'type');
-            loadElementAttributes(name, node.childNodes);
+            var element = state.create(name, 'type');
+            loadElementAttributes(element, node.childNodes);
         }
     };
     
