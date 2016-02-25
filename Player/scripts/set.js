@@ -7,7 +7,7 @@ define(['scriptrunner', 'state'], function (scriptrunner, state) {
                         if (element.type !== 'element') {
                             throw 'Expected element, got ' + element;
                         }
-                        state.set(element.name, ctx.parameters.variable, result);
+                        state.set(state.getElement(element.name), ctx.parameters.variable, result);
                         ctx.complete();
                     });
                 }
