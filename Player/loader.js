@@ -7,6 +7,22 @@ define(['state', 'scripts'], function (state, scripts) {
         return attribute.value;
     };
     
+    var attributeLoaders = {
+        'string': function (node, element, attributeName) {
+            var attributeValue = node.textContent; 
+            state.set(element, attributeName, attributeValue);
+        },
+        'stringlist': function (node, element, attributeName) {
+            var list = [];
+            for (var i = 0; i < node.childNodes.length; i++) {
+                var childNode = node.childNodes[i];
+                if (childNode.nodeName != 'value') continue;
+                list.push(childNode.textContent);
+            }
+            state.set(element, attributeName, list);
+        }
+    };
+    
     var loadElementAttributes = function (element, nodes) {
         for (var i = 0; i < nodes.length; i++) {
             var node = nodes[i];
@@ -17,13 +33,21 @@ define(['state', 'scripts'], function (state, scripts) {
                 state.addInheritedType(element, name);
             }
             else {
-                var attributeValue = node.textContent; 
-                state.set(element, attributeName, attributeValue);
+                var attributeType = getXmlAttribute(node, 'type');
+                // TODO: Default is boolean if element has no value
+                if (!attributeType) attributeType = 'string';
+                var loader = attributeLoaders[attributeType];
+                if (loader) {
+                    loader(node, element, attributeName);
+                }
+                else {
+                    console.log('no attribute loader for type ' + attributeType);
+                }
             }
         }
     };
     
-    var loaders = {
+    var elementLoaders = {
         'game': function (node) {
             var element = state.create('game', 'object', 'game');
             var name = getXmlAttribute(node, 'name');
@@ -72,7 +96,7 @@ define(['state', 'scripts'], function (state, scripts) {
         
         for (var i = 1; i < asl.childNodes.length; i++) {
             if (asl.childNodes[i].nodeType !== 1) continue;
-            var loader = loaders[asl.childNodes[i].nodeName];
+            var loader = elementLoaders[asl.childNodes[i].nodeName];
             if (loader) {
                 loader(asl.childNodes[i]);
             }
