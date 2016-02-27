@@ -32,6 +32,10 @@ define(['state', 'scripts'], function (state, scripts) {
                 var name = getXmlAttribute(node, 'name');
                 state.addInheritedType(element, name);
             }
+            else if (attributeName == 'object') {
+                var child = elementLoaders.object(node);
+                state.set(child, 'parent', element);
+            }
             else {
                 var attributeType = getXmlAttribute(node, 'type');
                 // TODO: Default is boolean if element has no value
@@ -68,6 +72,12 @@ define(['state', 'scripts'], function (state, scripts) {
             var name = getXmlAttribute(node, 'name');
             var element = state.create(name, 'type');
             loadElementAttributes(element, node.childNodes);
+        },
+        'object': function (node) {
+            var name = getXmlAttribute(node, 'name');
+            var element = state.create(name, 'object', 'object');
+            loadElementAttributes(element, node.childNodes);
+            return element;
         }
     };
     
