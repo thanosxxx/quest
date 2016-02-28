@@ -271,17 +271,17 @@ define(['state'], function (state) {
     
     var functions = {
         // String Functions
-        'Left': function (args, complete) {
+        'Left': function (args) {
             var input = args[0];
             var length = args[1];
             return input.substring(0, length);
         },
-        'Right': function (args, complete) {
+        'Right': function (args) {
             var input = args[0];
             var length = args[1];
             return input.substring(input.length - length - 1);
         },
-        'Mid': function (args, complete) {
+        'Mid': function (args) {
             var input = args[0];
             var start = args[1];
             if (args.length > 2) {
@@ -290,24 +290,24 @@ define(['state'], function (state) {
             }
             return input.substr(start - 1);
         },
-        'UCase': function (args, complete) {
+        'UCase': function (args) {
             var input = args[0];
             return input.toUpperCase();
         },
-        'LCase': function (args, complete) {
+        'LCase': function (args) {
             var input = args[0];
             return input.toLowerCase();
         },
-        'LengthOf': function (args, complete) {
+        'LengthOf': function (args) {
             var input = args[0];
             if (typeof input === 'undefined' || input === null) return 0;
             return input.length;
         },
-        'CapFirst': function (args, complete) {
+        'CapFirst': function (args) {
             var input = args[0];
             return input.substring(0, 1).toUpperCase() + input.substring(1);
         },
-        'Instr': function (args, complete) {
+        'Instr': function (args) {
             var input, search;
             if (args.length > 2) {
                 var start = args[0];
@@ -319,7 +319,7 @@ define(['state'], function (state) {
             search = args[1];
             return input.indexOf(search) + 1;
         },
-        'InstrRev': function (args, complete) {
+        'InstrRev': function (args) {
             var input, search;
             if (args.length > 2) {
                 var start = args[0];
@@ -331,61 +331,66 @@ define(['state'], function (state) {
             search = args[1];
             return input.lastIndexOf(search) + 1;
         },
-        'StartsWith': function (args, complete) {
+        'StartsWith': function (args) {
             var input = args[0];
             var search = args[1];
             return input.indexOf(search) === 0;
         },
-        'EndsWith': function (args, complete) {
+        'EndsWith': function (args) {
             var input = args[0];
             var search = args[1];
             return input.indexOf(search) === input.length - search.length;
         },
-        'Split': function (args, complete) {
+        'Split': function (args) {
             var input = args[0];
             var splitChar = args[1];
             return input.split(splitChar);
         },
-        'Join': function (args, complete) {
+        'Join': function (args) {
             var input = args[0];
             var joinChar = args[1];
             return input.join(joinChar);
         },
-        'IsNumeric': function (args, complete) {
+        'IsNumeric': function (args) {
             var input = args[0];
             return !isNaN(parseFloat(input)) && isFinite(input);
         },
-        'Replace': function (args, complete) {
+        'Replace': function (args) {
             var input = args[0];
             var oldString = args[1];
             var newString = args[2];
             return input.split(oldString).join(newString);
         },
-        'Trim': function (args, complete) {
+        'Trim': function (args) {
             var input = args[0];
             return input.trim();
         },
-        'LTrim': function (args, complete) {
+        'LTrim': function (args) {
             var input = args[0];
             return input.replace(/^\s+/,"");
         },
-        'RTrim': function (args, complete) {
+        'RTrim': function (args) {
             var input = args[0];
             return input.replace(/\s+$/,"");
         },
-        'Asc': function (args, complete) {
+        'Asc': function (args) {
             var input = args[0];
             return input.charCodeAt(0);
         },
-        'Chr': function (args, complete) {
+        'Chr': function (args) {
             var input = args[0];
             return String.fromCharCode(input);
         },
         // ExpressionOwner functions
-        'HasString': function (args, complete) {
+        'HasString': function (args) {
             var element = args[0];
             var attribute = args[1];
             return state.hasAttributeOfType(element, attribute, 'string');
+        },
+        'HasInt': function (args) {
+            var element = args[0];
+            var attribute = args[1];
+            return state.hasAttributeOfType(element, attribute, 'int');
         }
     };
     
@@ -418,6 +423,7 @@ define(['state'], function (state) {
                 throw 'Unrecognised function ' + name;
             }
             fn(args, complete);
+            return;
         }
         
         complete(fn(args));

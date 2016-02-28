@@ -55,12 +55,18 @@ define(function () {
     var hasAttributeOfType = function (element, attribute, type) {
         if (!attributeExists(element, attribute)) return false;
         var value = get(element, attribute);
-        return (typeOf(value) == type);
+        var actualType = typeOf(value);
+        if (actualType == type) return true;
+        if (actualType == 'int' && type == 'double') return true;
+        return false;
     };
     
     var typeOf = function (value) {
         if (typeof value === 'string') return 'string';
-        // TODO: Other types. Need to distinguish between ints and doubles.
+        if (typeof value === 'number') {
+            if (value % 1 === 0) return 'int';
+            return 'double';
+        }
         return null;
     };
 	
