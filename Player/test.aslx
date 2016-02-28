@@ -79,6 +79,11 @@
             }
             msg ("done")
         }
+        else if (command = "hasstring") {
+            msg ("testattr " + HasString(game, "testattr"))
+            msg ("madeupattr " + HasString(game, "madeupattr"))
+            msg ("compassdirections " + HasString(game, "compassdirections"))
+        }
         else {
             msg (command)
         }

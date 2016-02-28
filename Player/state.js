@@ -51,6 +51,18 @@ define(function () {
         // as per WorldModel.Fields.Exists
         return false;
     };
+    
+    var hasAttributeOfType = function (element, attribute, type) {
+        if (!attributeExists(element, attribute)) return false;
+        var value = get(element, attribute);
+        return (typeOf(value) == type);
+    };
+    
+    var typeOf = function (value) {
+        if (typeof value === 'string') return 'string';
+        // TODO: Other types. Need to distinguish between ints and doubles.
+        return null;
+    };
 	
 	var isElement = function (elementName) {
 		return elementName in elements;
@@ -64,6 +76,7 @@ define(function () {
         }
 		var element = {
 			name: elementName,
+            type: 'element',
             elementType: elementType,
             attributes: {},
             inheritedTypes: inheritedTypes
@@ -104,6 +117,7 @@ define(function () {
 		set: set,
 		get: get,
         addInheritedType: addInheritedType,
+        hasAttributeOfType: hasAttributeOfType,
 		isElement: isElement,
         getElement: getElement,
 		create: create,

@@ -138,10 +138,7 @@ define(['state'], function (state) {
                         expressionFrame.complete(locals[tree.name]);                
                     }
                     else if (state.isElement(tree.name)) {
-                        expressionFrame.complete({
-                            'type': 'element',
-                            'name': tree.name
-                        });
+                        expressionFrame.complete(state.getElement(tree.name));
                     }
                     else {
                         throw 'Unknown variable ' + tree.name;
@@ -383,6 +380,12 @@ define(['state'], function (state) {
         'Chr': function (args, complete) {
             var input = args[0];
             return String.fromCharCode(input);
+        },
+        // ExpressionOwner functions
+        'HasString': function (args, complete) {
+            var element = args[0];
+            var attribute = args[1];
+            return state.hasAttributeOfType(element, attribute, 'string');
         }
     };
     
@@ -412,11 +415,7 @@ define(['state'], function (state) {
         if (!fn) {
             fn = asyncFunctions[name];
             if (!fn) {
-                // TODO: Throw
-                //throw 'Unrecognised function ' + name;
-                console.log('Unrecognised function ' + name);
-                complete();
-                return;
+                throw 'Unrecognised function ' + name;
             }
             fn(args, complete);
         }
