@@ -11,6 +11,10 @@ define(function () {
 		}
 		return element;	
 	};
+    
+    var tryGetElement = function (elementName) {
+        return elements[elementName];
+    };
 	
 	var set = function (element, attribute, value) {
 		element.attributes[attribute] = value;
@@ -126,6 +130,7 @@ define(function () {
         hasAttributeOfType: hasAttributeOfType,
 		isElement: isElement,
         getElement: getElement,
+        tryGetElement: tryGetElement,
 		create: create,
 		addFunction: addFunction,
 		functionExists: functionExists,

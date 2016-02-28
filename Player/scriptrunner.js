@@ -391,6 +391,11 @@ define(['state'], function (state) {
             var element = args[0];
             var attribute = args[1];
             return state.hasAttributeOfType(element, attribute, 'int');
+        },
+        'GetObject': function (args) {
+            var name = args[0];
+            return state.tryGetElement(name);
+            
         }
     };
     
