@@ -420,6 +420,12 @@ define(['state'], function (state) {
         },
         'NewDictionary': function () {
             return state.newAttribute('dictionary');
+        },
+        'AllCommands': function () {
+            var commands = state.getElements('object', 'command');
+            var result = state.newAttribute('objectlist');
+            result.value = commands;
+            return result;
         }
     };
     

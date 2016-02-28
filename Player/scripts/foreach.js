@@ -21,8 +21,9 @@ define(['require', 'scriptrunner', 'scriptparser', 'expressions'], function (req
             // TODO: "return" breaks loop
             // TODO: Handle types other than stringlist
             scriptrunner.evaluateExpression(ctx.parameters.list, function (listResult) {
-                if (!listResult.type || listResult.type != 'stringlist') {
-                    throw 'Unexpected "foreach" list type';
+                if (!listResult.type || 
+                    (listResult.type != 'stringlist' && listResult.type != 'objectlist')) {
+                    throw 'Unexpected "foreach" list type: ' + listResult.type;
                 }
                 
                 if (listResult.value.length == 0) {

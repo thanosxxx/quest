@@ -89,6 +89,7 @@ define(function () {
             if (value % 1 === 0) return 'int';
             return 'double';
         }
+        // TODO: Other types
         return null;
     };
 	
@@ -106,6 +107,7 @@ define(function () {
 			name: elementName,
             type: 'element',
             elementType: elementType,
+            elementSubType: elementSubType,
             attributes: {},
             inheritedTypes: inheritedTypes
 		};
@@ -114,6 +116,18 @@ define(function () {
         elementsOfType[elementType][elementName] = element;
         return element;
 	};
+    
+    var getElements = function (elementType, elementSubType) {
+        var elements = elementsOfType[elementType];
+        var result = [];
+        for (var key in elements) {
+            var element = elements[key];
+            if (!elementSubType || element.elementSubType == elementSubType) {
+                result.push(element);
+            }
+        }
+        return result;
+    };
 	
 	var addFunction = function (functionName, script, parameters) {
 		functions[functionName] = {
@@ -151,6 +165,7 @@ define(function () {
         getElement: getElement,
         tryGetElement: tryGetElement,
 		create: create,
+        getElements: getElements,
 		addFunction: addFunction,
 		functionExists: functionExists,
 		getFunction: getFunction,

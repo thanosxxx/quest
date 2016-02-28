@@ -78,6 +78,12 @@ define(['state', 'scripts'], function (state, scripts) {
             var element = state.create(name, 'object', 'object');
             loadElementAttributes(element, node.childNodes);
             return element;
+        },
+        'command': function (node) {
+            var name = getXmlAttribute(node, 'name');
+            var element = state.create(name, 'object', 'command');
+            loadElementAttributes(element, node.childNodes);
+            return element;
         }
     };
     
