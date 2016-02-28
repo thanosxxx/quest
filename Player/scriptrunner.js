@@ -349,7 +349,11 @@ define(['state'], function (state) {
         'Join': function (args) {
             var input = args[0];
             var joinChar = args[1];
-            return input.join(joinChar);
+            // TODO: Handle other types
+            if (!input.type || input.type != 'stringlist') {
+                throw "Unhandled type passed to Join";
+            }
+            return input.value.join(joinChar);
         },
         'IsNumeric': function (args) {
             var input = args[0];
@@ -395,7 +399,9 @@ define(['state'], function (state) {
         'GetObject': function (args) {
             var name = args[0];
             return state.tryGetElement(name);
-            
+        },
+        'NewStringList': function () {
+            return state.newAttribute('stringlist');
         }
     };
     

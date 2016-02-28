@@ -13,11 +13,11 @@ define(['state', 'scripts'], function (state, scripts) {
             state.set(element, attributeName, attributeValue);
         },
         'stringlist': function (node, element, attributeName) {
-            var list = [];
+            var list = state.newAttribute('stringlist');
             for (var i = 0; i < node.childNodes.length; i++) {
                 var childNode = node.childNodes[i];
                 if (childNode.nodeName != 'value') continue;
-                list.push(childNode.textContent);
+                list.value.push(childNode.textContent);
             }
             state.set(element, attributeName, list);
         }

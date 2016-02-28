@@ -3,6 +3,19 @@ define(function () {
     var elementsOfType = {};
     // TODO: Functions are just another type of element?
 	var functions = {};
+    
+    var attributeFactories = {
+        'stringlist': function () {
+            return {
+                value: [],
+                type: 'stringlist'
+            };
+        }
+    };
+    
+    var newAttribute = function (type) {
+        return attributeFactories[type]();
+    };
 	
 	var getElement = function (elementName) {
 		var element = elements[elementName];
@@ -124,7 +137,8 @@ define(function () {
 	};
 	
 	return {
-		set: set,
+		newAttribute: newAttribute,
+        set: set,
 		get: get,
         addInheritedType: addInheritedType,
         hasAttributeOfType: hasAttributeOfType,

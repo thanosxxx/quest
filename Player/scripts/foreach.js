@@ -19,22 +19,27 @@ define(['require', 'scriptrunner', 'scriptparser', 'expressions'], function (req
         execute: function (ctx) {
             // TODO: Pre Quest 5.3 allows foreach over a string to get each character
             // TODO: "return" breaks loop
+            // TODO: Handle types other than stringlist
             scriptrunner.evaluateExpression(ctx.parameters.list, function (listResult) {
-                if (listResult.length == 0) {
+                if (!listResult.type || listResult.type != 'stringlist') {
+                    throw 'Unexpected "foreach" list type';
+                }
+                
+                if (listResult.value.length == 0) {
                     ctx.complete;
                     return;
                 }
                 
-                ctx.locals[ctx.parameters.variable] = listResult[0];
+                ctx.locals[ctx.parameters.variable] = listResult.value[0];
                 var index = 0;
                 
                 var runLoop = function () {
-                    if (index < listResult.length) {
+                    if (index < listResult.value.length) {
                         var script = [].concat(ctx.parameters.loopScript);
                         script.push({
                             command: {
                                 execute: function () {
-                                    ctx.locals[ctx.parameters.variable] = listResult[index];
+                                    ctx.locals[ctx.parameters.variable] = listResult.value[index];
                                     index++;
                                     if (index % 1000 != 0) {
                                         runLoop();
