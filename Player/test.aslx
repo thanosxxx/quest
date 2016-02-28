@@ -72,6 +72,13 @@
                 msg (i)
             }
         }
+        else if (command = "foreach") {
+            msg ("running foreach...")
+            foreach (dir, game.compassdirections) {
+                msg (dir)
+            }
+            msg ("done")
+        }
         else {
             msg (command)
         }
