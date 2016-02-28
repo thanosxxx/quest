@@ -4,17 +4,22 @@ define(function () {
     // TODO: Functions are just another type of element?
 	var functions = {};
     
-    var attributeFactories = {
-        'stringlist': function () {
+    var newAttribute = function (type) {
+        if (type == 'stringlist' || type == 'objectlist' || type == 'list') {
             return {
                 value: [],
-                type: 'stringlist'
+                type: type
             };
         }
-    };
-    
-    var newAttribute = function (type) {
-        return attributeFactories[type]();
+        
+        if (type == 'stringdictionary' || type == 'objectdictionary' || type == 'scriptdictionary' || type == 'dictionary') {
+            return {
+                value: {},
+                type: type
+            };
+        }
+        
+        throw 'Unknown attribute type: ' + type;
     };
 	
 	var getElement = function (elementName) {

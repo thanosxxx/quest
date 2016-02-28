@@ -402,6 +402,24 @@ define(['state'], function (state) {
         },
         'NewStringList': function () {
             return state.newAttribute('stringlist');
+        },
+        'NewObjectList': function () {
+            return state.newAttribute('objectlist');
+        },
+        'NewList': function () {
+            return state.newAttribute('list');
+        },
+        'NewStringDictionary': function () {
+            return state.newAttribute('stringdictionary');
+        },
+        'NewObjectDictionary': function () {
+            return state.newAttribute('objectdictionary');
+        },
+        'NewScriptDictionary': function () {
+            return state.newAttribute('scriptdictionary');
+        },
+        'NewDictionary': function () {
+            return state.newAttribute('dictionary');
         }
     };
     
