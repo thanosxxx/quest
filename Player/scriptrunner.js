@@ -391,10 +391,30 @@ define(['state'], function (state) {
             var attribute = args[1];
             return state.hasAttributeOfType(element, attribute, 'string');
         },
+        'HasBoolean': function (args) {
+            var element = args[0];
+            var attribute = args[1];
+            return state.hasAttributeOfType(element, attribute, 'boolean');
+        },
         'HasInt': function (args) {
             var element = args[0];
             var attribute = args[1];
             return state.hasAttributeOfType(element, attribute, 'int');
+        },
+        'HasDouble': function (args) {
+            var element = args[0];
+            var attribute = args[1];
+            return state.hasAttributeOfType(element, attribute, 'double');
+        },
+        'HasScript': function (args) {
+            var element = args[0];
+            var attribute = args[1];
+            return state.hasAttributeOfType(element, attribute, 'script');
+        },
+        'HasObject': function (args) {
+            var element = args[0];
+            var attribute = args[1];
+            return state.hasAttributeOfType(element, attribute, 'object');
         },
         'GetObject': function (args) {
             var name = args[0];
