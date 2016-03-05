@@ -20,6 +20,18 @@ define(['state', 'scripts'], function (state, scripts) {
                 list.value.push(childNode.textContent);
             }
             state.set(element, attributeName, list);
+        },
+        'boolean': function (node, element, attributeName) {
+            var attributeValue = node.textContent;
+            if (attributeValue == '' || attributeValue == 'true') {
+                state.set(element, attributeName, true);
+            }
+            else if (attributeValue == 'false') {
+                state.set(element, attributeName, false);
+            }
+            else {
+                throw 'Invalid boolean "' + element.name + '" = "' + attributeValue + '"';
+            }
         }
     };
     
@@ -38,8 +50,15 @@ define(['state', 'scripts'], function (state, scripts) {
             }
             else {
                 var attributeType = getXmlAttribute(node, 'type');
-                // TODO: Default is boolean if element has no value
-                if (!attributeType) attributeType = 'string';
+                if (!attributeType) {
+                    if (node.textContent.length == 0) {
+                        attributeType = 'boolean';
+                    }
+                    else {
+                        attributeType = 'string';
+                    }
+                    
+                }
                 var loader = attributeLoaders[attributeType];
                 if (loader) {
                     loader(node, element, attributeName);
