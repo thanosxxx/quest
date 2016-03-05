@@ -91,13 +91,14 @@ define(['state'], function (state) {
             throw 'Not an expression: ' + expr;
         }
         var frame = callstack[callstack.length - 1];
-        frame.expressionStack = [{
+        if (!frame.expressionStack) frame.expressionStack = [];
+        frame.expressionStack.push({
            expr: expr.expr,
            tree: expr.tree,
            complete: function (result) {
                 complete(result);
            }
-        }];
+        });
         
         evaluateNext();
     };
@@ -124,9 +125,13 @@ define(['state'], function (state) {
     
     var evaluateNext = function () {
         var frame = callstack[callstack.length - 1];
-        var expressionFrame = frame.expressionStack[frame.expressionStack.length - 1];
+        var expressionFrame = frame.expressionStack.pop();
+        if (!expressionFrame) {
+            throw 'Expression has already been evaluated';
+        }
         var tree = expressionFrame.tree;
         if (expressionFrame.expr) lastExpr = expressionFrame.expr;
+        
         try {
             switch (tree.type) {
                 case 'Literal':
