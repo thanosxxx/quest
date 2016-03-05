@@ -30,9 +30,13 @@ define(['state'], function (state) {
         var parentFrame = callstack[parentFrameIndex];
         var frame = callstack[callstack.length - 1];
         
-        if (parentFrame.finished) {
+        var popCallstack = function () {
             var framesToRemove = callstack.length - parentFrameIndex;
             callstack.splice(-framesToRemove);
+        };
+        
+        if (parentFrame.finished) {
+            popCallstack();
             executeNext();
             return;
         }
@@ -51,6 +55,7 @@ define(['state'], function (state) {
                 locals: parentFrame.locals,
                 onReturn: function (result) {
                     parentFrame.finished = true;
+                    popCallstack();
                     parentFrame.onReturn(result);
                 },
                 complete: function () {

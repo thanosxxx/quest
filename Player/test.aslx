@@ -84,6 +84,9 @@
             msg ("madeupattr " + HasString(game, "madeupattr"))
             msg ("compassdirections " + HasString(game, "compassdirections"))
         }
+        else if (command = "a") {
+            msg (a())
+        }
         else {
             msg (command)
         }
@@ -134,5 +137,29 @@
         msg ("running script...")
         invoke (script)
         msg ("done invoke")
+    </function>
+    
+    <function name="a" parameters="arg" type="string">
+        return ("a" + b() + e())
+    </function>
+    
+    <function name="b" type="string">
+        return ("b" + c() + d())
+    </function>
+    
+    <function name="c" type="string">
+        return ("c")
+    </function>
+    
+    <function name="d" type="string">
+        return ("d")
+    </function>
+    
+    <function name="e" type="string">
+        return ("e" + f())
+    </function>
+    
+    <function name="f" type="string">
+        return ("f")
     </function>
 </asl>
