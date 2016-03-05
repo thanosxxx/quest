@@ -147,6 +147,23 @@ define(function () {
 	var getFunctionDefinition = function (functionName) {
 		return functions[functionName];
 	};
+    
+    var getDirectChildren = function (parent, elementType, elementSubType) {
+        var allElements = getElements(elementType, elementSubType);
+        return allElements.filter(function (element) {
+            return element.attributes.parent == parent;
+        });
+    };
+    
+    var getAllChildren = function (parent, elementType, elementSubType) {
+        var directChildren = getDirectChildren(parent, elementType, elementSubType);
+        var result = [];
+        for (var idx in directChildren) {
+            var child = directChildren[idx];
+            result = result.concat(child, getAllChildren(child, elementType, elementSubType));
+        }
+        return result;
+    }
 	
 	var dump = function () {
 		console.log("Elements:");
@@ -170,6 +187,8 @@ define(function () {
 		functionExists: functionExists,
 		getFunction: getFunction,
 		getFunctionDefinition: getFunctionDefinition,
+        getDirectChildren: getDirectChildren,
+        getAllChildren: getAllChildren,
 		dump: dump
 	};
 });

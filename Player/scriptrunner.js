@@ -446,6 +446,12 @@ define(['state'], function (state) {
             var result = state.newAttribute('objectlist');
             result.value = commands;
             return result;
+        },
+        'GetAllChildObjects': function (args) {
+            var element = args[0];
+            var result = state.newAttribute('objectlist');
+            result.value = state.getAllChildren(element, 'object', 'object');
+            return result;
         }
     };
     
