@@ -9,8 +9,6 @@ define(['require', 'scriptrunner', 'scriptparser', 'expressions'], function (req
             };
         },
         execute: function (ctx) {
-            console.log('run on ready...');
-            console.log(ctx);
             // TODO: Implement callbacks as per WorldModel.AddOnReady.
             // i.e. if there are any Menu/Wait/Question/GetInput/callbacks outstanding,
             // add ctx.parameters.script to the list of onready callbacks. If there
