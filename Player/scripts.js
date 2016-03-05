@@ -14,7 +14,8 @@ define([
     'scripts/switch',
     'scripts/for',
     'scripts/js',
-    'scripts/foreach'
+    'scripts/foreach',
+    'scripts/onready'
     ],
 function (state, ui, expressions, scriptParser, scriptRunner) {
     
@@ -29,7 +30,8 @@ function (state, ui, expressions, scriptParser, scriptRunner) {
         'switch': requirejs('scripts/switch'),
         'for': requirejs('scripts/for'),
         'JS.': requirejs('scripts/js'),
-        'foreach': requirejs('scripts/foreach')
+        'foreach': requirejs('scripts/foreach'),
+        'on ready': requirejs('scripts/onready')
     };
     
     var getSetScript = function (line) {
