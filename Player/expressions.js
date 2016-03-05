@@ -10,7 +10,7 @@ define(['jsep'], function (jsep) {
     jsep.removeBinaryOp('===');
     jsep.removeBinaryOp('!==');
     jsep.addBinaryOp('=', 6);
-    jsep.addBinaryOp('<>');
+    jsep.addBinaryOp('<>', 6);
     
     jsep.addBinaryOp('^', 10);
     
