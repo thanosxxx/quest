@@ -1,4 +1,4 @@
-define(['state', 'functions'], function (state, functions) {
+define(['state', 'functions', 'ui'], function (state, functions, ui) {
 	var callstack = [];
     
     var getCallstack = function () {
@@ -234,6 +234,7 @@ define(['state', 'functions'], function (state, functions) {
             if (lastExpr) {
                 console.log('Error evaluating expression: ' + lastExpr);
                 console.log(e);
+                ui.print('<span style="color:red"><b>Script error:</b> ' + e + '</span>');
                 lastExpr = null;
             }
             

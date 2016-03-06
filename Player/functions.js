@@ -186,8 +186,8 @@ define(['state'], function (state) {
             return state.hasAttribute(element, attribute);
         },
         'GetAttributeNames': function (args) {
-            var element = args[0];
-            var includeInheritedAttributes = args[1];
+            var element = getParameter(args[0], 'GetAttributeNames', 'element');
+            var includeInheritedAttributes = getParameter(args[1], 'GetAttributeNames', 'boolean');
             var result = state.newAttribute('stringlist');
             result.value = state.attributeNames(element, includeInheritedAttributes);
             return result;
@@ -253,6 +253,14 @@ define(['state'], function (state) {
         if (list.type != 'list' && list.type != 'stringlist' && list.type != 'objectlist') {
             throw 'Value is not a list type';
         }
+    };
+    
+    var getParameter = function (parameter, caller, type) {
+        var actualType = state.typeOf(parameter);
+        if (actualType !== type) {
+            throw caller + ' function expected ' + type + ' parameter but was passed ' + actualType;
+        }
+        return parameter;
     };
     
     return {

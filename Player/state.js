@@ -101,12 +101,13 @@ define(function () {
     
     var typeOf = function (value) {
         if (typeof value === 'string') return 'string';
+        if (typeof value === 'boolean') return 'boolean';
         if (typeof value === 'number') {
             if (value % 1 === 0) return 'int';
             return 'double';
         }
-        // TODO: Other types
-        return null;
+        if (value.type) return value.type;
+        throw 'Unknown type';
     };
     
     var attributeNames = function (element, includeInheritedAttributes) {
@@ -216,6 +217,7 @@ define(function () {
         hasAttribute: hasAttribute,
         hasAttributeOfType: hasAttributeOfType,
         getAttributeOfType: getAttributeOfType,
+        typeOf: typeOf,
         attributeNames: attributeNames,
 		isElement: isElement,
         getElement: getElement,
