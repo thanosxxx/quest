@@ -180,6 +180,11 @@ define(['state'], function (state) {
             var name = args[0];
             return state.tryGetElement(name);
         },
+        'HasAttribute': function (args) {
+            var element = args[0];
+            var attribute = args[1];
+            return state.hasAttribute(element, attribute);
+        },
         'Contains': function (args) {
             var parent = args[0];
             var element = args[1];

@@ -43,7 +43,7 @@ define(function () {
 		if (typeof result === 'undefined') {
             for (var idx in element.inheritedTypes) {
                 var inheritedTypeElement = getElement(element.inheritedTypes[idx]);
-                if (attributeExists(inheritedTypeElement, attribute)) {
+                if (hasAttribute(inheritedTypeElement, attribute)) {
                     result = get(inheritedTypeElement, attribute);
                     break;
                 }
@@ -63,11 +63,11 @@ define(function () {
         element.inheritedTypes.splice(0, 0, typeName);
     };
     
-    var attributeExists = function (element, attribute) {
+    var hasAttribute = function (element, attribute) {
         if (attribute in element.attributes) return true;
         for (var idx in element.inheritedTypes) {
             var inheritedTypeElement = getElement(element.inheritedTypes[idx]);
-            return attributeExists(inheritedTypeElement, attribute);
+            return hasAttribute(inheritedTypeElement, attribute);
         }
         // TODO: Optional includeExtendableFields parameter to check for listexend,
         // as per WorldModel.Fields.Exists
@@ -75,13 +75,13 @@ define(function () {
     };
     
     var hasAttributeOfType = function (element, attribute, type) {
-        if (!attributeExists(element, attribute)) return false;
+        if (!hasAttribute(element, attribute)) return false;
         var value = get(element, attribute);
         return isValueOfType(value, type);
     };
     
     var getAttributeOfType = function (element, attribute, type) {
-        if (!attributeExists(element, attribute)) return defaultValue(type);
+        if (!hasAttribute(element, attribute)) return defaultValue(type);
         var value = get(element, attribute);
         if (isValueOfType(value, type)) return value;
         return defaultValue(type);
@@ -199,6 +199,7 @@ define(function () {
         set: set,
 		get: get,
         addInheritedType: addInheritedType,
+        hasAttribute: hasAttribute,
         hasAttributeOfType: hasAttributeOfType,
         getAttributeOfType: getAttributeOfType,
 		isElement: isElement,
