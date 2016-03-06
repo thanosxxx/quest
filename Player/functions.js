@@ -292,6 +292,9 @@ define(['state'], function (state) {
                 return 'true';
             }
             return null;
+        },
+        'ToString': function (args) {
+            return '' + args[0];
         }
     };
     
