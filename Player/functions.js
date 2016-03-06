@@ -206,6 +206,12 @@ define(['state'], function (state) {
         'NewDictionary': function () {
             return state.newAttribute('dictionary');
         },
+        'ListContains': function (args) {
+            var list = args[0];
+            var item = args[1];
+            checkIsList(list);
+            return list.value.indexOf(item) !== -1;
+        },
         'AllCommands': function () {
             var commands = state.getElements('object', 'command');
             var result = state.newAttribute('objectlist');
@@ -215,9 +221,7 @@ define(['state'], function (state) {
         'ListCombine': function (args) {
             var list1 = args[0];
             var list2 = args[1];
-            if (list1.type != 'list' && list1.type != 'stringlist' && list1.type != 'objectlist') {
-                throw 'Invalid type passed to ListCombine';
-            }
+            checkIsList(list1);
             if (list1.type != list2.type) {
                 throw 'Mismatched list types passed to ListCombine';
             }
@@ -230,6 +234,12 @@ define(['state'], function (state) {
             var result = state.newAttribute('objectlist');
             result.value = state.getAllChildren(element, 'object', 'object');
             return result;
+        }
+    };
+    
+    var checkIsList = function (list) {
+        if (list.type != 'list' && list.type != 'stringlist' && list.type != 'objectlist') {
+            throw 'Value is not a list type';
         }
     };
     
