@@ -27,7 +27,7 @@ define(['require', 'scriptrunner', 'scriptparser', 'expressions'], function (req
                 }
                 
                 if (listResult.value.length == 0) {
-                    ctx.complete;
+                    ctx.complete();
                     return;
                 }
                 
