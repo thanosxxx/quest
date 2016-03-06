@@ -32,6 +32,13 @@ define(['state', 'scripts'], function (state, scripts) {
             else {
                 throw 'Invalid boolean "' + element.name + '" = "' + attributeValue + '"';
             }
+        },
+        'script': function (node, element, attributeName) {
+            var script = scripts.parseScript(node.textContent);
+            state.set(element, attributeName, {
+                type: 'script',
+                script: script
+            });
         }
     };
     
