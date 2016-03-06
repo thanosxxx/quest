@@ -14,11 +14,13 @@ define(['state'], function (state) {
         'Left': function (args) {
             var input = args[0];
             var length = args[1];
+            if (input == null) return '';
             return input.substring(0, length);
         },
         'Right': function (args) {
             var input = args[0];
             var length = args[1];
+            if (input == null) return '';
             return input.substring(input.length - length - 1);
         },
         'Mid': function (args) {
