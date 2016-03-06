@@ -65,6 +65,9 @@ define(['state', 'scripts'], function (state, scripts) {
                 state.set(child, 'parent', element);
             }
             else {
+                if (attributeName == 'attr') {
+                    attributeName = getXmlAttribute(node, 'name');
+                }
                 var attributeType = getXmlAttribute(node, 'type');
                 if (!attributeType) {
                     var key = (element.elementSubType || element.elementType) + '~' + attributeName;
