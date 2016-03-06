@@ -12,6 +12,14 @@ define(['state', 'scripts'], function (state, scripts) {
             var attributeValue = node.textContent; 
             state.set(element, attributeName, attributeValue);
         },
+        'int': function (node, element, attributeName) {
+            var attributeValue = node.textContent; 
+            state.set(element, attributeName, parseInt(attributeValue, 10));
+        },
+        'double': function (node, element, attributeName) {
+            var attributeValue = node.textContent; 
+            state.set(element, attributeName, parseFloat(attributeValue));
+        },
         'stringlist': function (node, element, attributeName) {
             var list = state.newAttribute('stringlist');
             for (var i = 0; i < node.childNodes.length; i++) {
