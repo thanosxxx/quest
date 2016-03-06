@@ -163,7 +163,7 @@ define(function () {
             result = result.concat(child, getAllChildren(child, elementType, elementSubType));
         }
         return result;
-    }
+    };
     
     var contains = function (parent, element) {
         if (!element.attributes.parent) return false;

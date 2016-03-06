@@ -23,7 +23,7 @@ define(['state', 'scripts'], function (state, scripts) {
         },
         'boolean': function (node, element, attributeName) {
             var attributeValue = node.textContent;
-            if (attributeValue == '' || attributeValue == 'true') {
+            if (attributeValue === '' || attributeValue == 'true') {
                 state.set(element, attributeName, true);
             }
             else if (attributeValue == 'false') {
@@ -51,7 +51,7 @@ define(['state', 'scripts'], function (state, scripts) {
             else {
                 var attributeType = getXmlAttribute(node, 'type');
                 if (!attributeType) {
-                    if (node.textContent.length == 0) {
+                    if (node.textContent.length === 0) {
                         attributeType = 'boolean';
                     }
                     else {
@@ -110,7 +110,8 @@ define(['state', 'scripts'], function (state, scripts) {
         var parser = new DOMParser();
         var doc = parser.parseFromString(data, 'application/xml');
         var firstNode = 0;
-        for (var i = 0; i < doc.childNodes.length; i++) {
+        var i;
+        for (i = 0; i < doc.childNodes.length; i++) {
             if (doc.childNodes[i].nodeType === 1) {
                 firstNode = i;
                 break;
@@ -120,7 +121,7 @@ define(['state', 'scripts'], function (state, scripts) {
         if (asl.nodeName !== 'asl') {
             throw 'File must begin with an ASL element';
         }
-        var versionAttribute = asl.attributes['version'];
+        var versionAttribute = asl.attributes.version;
         if (!versionAttribute) {
             throw 'No ASL version number found';
         }
@@ -129,7 +130,7 @@ define(['state', 'scripts'], function (state, scripts) {
             throw 'Unrecognised ASL version number';
         }
         
-        for (var i = 1; i < asl.childNodes.length; i++) {
+        for (i = 1; i < asl.childNodes.length; i++) {
             if (asl.childNodes[i].nodeType !== 1) continue;
             var loader = elementLoaders[asl.childNodes[i].nodeName];
             if (loader) {

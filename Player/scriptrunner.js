@@ -512,5 +512,5 @@ define(['state'], function (state) {
         getCallstack: getCallstack,
         executeNext: executeNext,
         callFunction: callFunction
-    }
+    };
 });
