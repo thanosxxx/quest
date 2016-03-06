@@ -1,5 +1,6 @@
 define(['state', 'scripts'], function (state, scripts) {   
     var allowedVersions = [500, 510, 520, 530, 540, 550];
+    var impliedTypes = {};
     
     var getXmlAttribute = function (node, attributeName) {
         var attribute = node.attributes[attributeName];
@@ -66,13 +67,17 @@ define(['state', 'scripts'], function (state, scripts) {
             else {
                 var attributeType = getXmlAttribute(node, 'type');
                 if (!attributeType) {
-                    if (node.textContent.length === 0) {
-                        attributeType = 'boolean';
-                    }
-                    else {
-                        attributeType = 'string';
-                    }
+                    var key = (element.elementSubType || element.elementType) + '~' + attributeName;
+                    attributeType = impliedTypes[key];
                     
+                    if (!attributeType) {
+                        if (node.textContent.length === 0) {
+                            attributeType = 'boolean';
+                        }
+                        else {
+                            attributeType = 'string';
+                        }
+                    }
                 }
                 var loader = attributeLoaders[attributeType];
                 if (loader) {
@@ -118,6 +123,12 @@ define(['state', 'scripts'], function (state, scripts) {
             var element = state.create(name, 'object', 'command');
             loadElementAttributes(element, node.childNodes);
             return element;
+        },
+        'implied': function (node) {
+            var element = getXmlAttribute(node, 'element');
+            var attribute = getXmlAttribute(node, 'property');
+            var type = getXmlAttribute(node, 'type');
+            impliedTypes[element + '~' + attribute] = type;
         }
     };
     
