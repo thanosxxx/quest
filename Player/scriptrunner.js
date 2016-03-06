@@ -462,6 +462,19 @@ define(['state'], function (state) {
             result.value = commands;
             return result;
         },
+        'ListCombine': function (args) {
+            var list1 = args[0];
+            var list2 = args[1];
+            if (list1.type != 'list' && list1.type != 'stringlist' && list1.type != 'objectlist') {
+                throw 'Invalid type passed to ListCombine';
+            }
+            if (list1.type != list2.type) {
+                throw 'Mismatched list types passed to ListCombine';
+            }
+            var result = state.newAttribute(list1.type);
+            result.value = list1.value.concat(list2.value);
+            return result;
+        },
         'GetAllChildObjects': function (args) {
             var element = args[0];
             var result = state.newAttribute('objectlist');
