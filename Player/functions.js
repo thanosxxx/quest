@@ -224,6 +224,24 @@ define(['state'], function (state) {
             checkIsList(list);
             return list.value.indexOf(item) !== -1;
         },
+        'AllObjects': function () {
+            var objects = state.getElements('object', 'object');
+            var result = state.newAttribute('objectlist');
+            result.value = objects;
+            return result;
+        },
+        'AllExits': function () {
+            var exits = state.getElements('object', 'exit');
+            var result = state.newAttribute('objectlist');
+            result.value = exits;
+            return result;
+        },
+        'AllTurnScripts': function () {
+            var turnScripts = state.getElements('object', 'turnscript');
+            var result = state.newAttribute('objectlist');
+            result.value = turnScripts;
+            return result;
+        },
         'AllCommands': function () {
             var commands = state.getElements('object', 'command');
             var result = state.newAttribute('objectlist');
