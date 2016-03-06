@@ -128,6 +128,10 @@ define(['state'], function (state) {
             return String.fromCharCode(input);
         },
         // ExpressionOwner functions
+        'Template': function (args) {
+            var name = getParameter(args[0], 'Template', 'string');
+            return state.getTemplate(name).attributes.text;
+        },
         'HasString': function (args) {
             var element = args[0];
             var attribute = args[1];

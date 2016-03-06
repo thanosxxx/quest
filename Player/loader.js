@@ -132,6 +132,16 @@ define(['state', 'scripts'], function (state, scripts) {
             var attribute = getXmlAttribute(node, 'property');
             var type = getXmlAttribute(node, 'type');
             impliedTypes[element + '~' + attribute] = type;
+        },
+        'template': function (node) {
+            var name = getXmlAttribute(node, 'name');
+            var templateType = getXmlAttribute(node, 'templatetype');
+            // TODO: Template overrides - see Templates.cs (AddTemplate)
+            var elementName = state.getUniqueId('template');
+            var template = state.create(elementName, 'template');
+            state.set(template, 'templatename', name);
+            state.set(template, 'text', node.textContent);
+            state.addTemplate(template);
         }
     };
     

@@ -1,6 +1,7 @@
 define(function () {
 	var elements = {};
     var elementsOfType = {};
+    var templateLookup = {};
     
     var newAttribute = function (type) {
         if (type == 'stringlist' || type == 'objectlist' || type == 'list') {
@@ -150,6 +151,14 @@ define(function () {
         return element;
 	};
     
+    var addTemplate = function (element) {
+        templateLookup[element.attributes.templatename] = element;
+    }
+    
+    var getTemplate = function (name) {
+        return templateLookup[name];
+    }
+    
     var getElements = function (elementType, elementSubType) {
         var elements = elementsOfType[elementType];
         var result = [];
@@ -204,6 +213,20 @@ define(function () {
         if (element.attributes.parent == parent) return true;
         return contains(parent, element.attributes.parent);
     };
+    
+    var nextUniqueId = {};
+    
+    var getUniqueId = function (prefix) {
+        prefix = prefix || 'k';
+        if (!(prefix in nextUniqueId)) {
+            nextUniqueId[prefix] = 0;
+        }
+        var newId;
+        do {
+            newId = prefix + nextUniqueId[prefix]++;
+        } while (isElement(newId));
+        return newId;
+    };
 	
 	var dump = function () {
 		console.log("Elements:");
@@ -224,6 +247,8 @@ define(function () {
         getElement: getElement,
         tryGetElement: tryGetElement,
 		create: create,
+        addTemplate: addTemplate,
+        getTemplate: getTemplate,
         getElements: getElements,
 		addFunction: addFunction,
 		functionExists: functionExists,
@@ -232,6 +257,7 @@ define(function () {
         getDirectChildren: getDirectChildren,
         getAllChildren: getAllChildren,
         contains: contains,
+        getUniqueId: getUniqueId,
 		dump: dump
 	};
 });
