@@ -15,7 +15,8 @@ define([
     'scripts/for',
     'scripts/js',
     'scripts/foreach',
-    'scripts/onready'
+    'scripts/onready',
+    'scripts/listadd'
     ],
 function (state, ui, expressions, scriptParser, scriptRunner) {
     
@@ -31,7 +32,8 @@ function (state, ui, expressions, scriptParser, scriptRunner) {
         'for': requirejs('scripts/for'),
         'JS.': requirejs('scripts/js'),
         'foreach': requirejs('scripts/foreach'),
-        'on ready': requirejs('scripts/onready')
+        'on ready': requirejs('scripts/onready'),
+        'list add': requirejs('scripts/listadd')
     };
     
     var getSetScript = function (line) {
