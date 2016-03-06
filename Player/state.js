@@ -1,8 +1,6 @@
 define(function () {
 	var elements = {};
     var elementsOfType = {};
-    // TODO: Functions are just another type of element?
-	var functions = {};
     
     var newAttribute = function (type) {
         if (type == 'stringlist' || type == 'objectlist' || type == 'list') {
@@ -165,22 +163,23 @@ define(function () {
     };
 	
 	var addFunction = function (functionName, script, parameters) {
-		functions[functionName] = {
+        var fn = create(functionName, 'function');
+        fn.attributes = {
 			script: script,
 			parameters: parameters
 		};
 	};
 	
 	var functionExists = function (functionName) {
-		return functionName in functions;
+		return functionName in elementsOfType['function'];
 	};
 	
 	var getFunction = function (functionName) {
-		return functions[functionName].script;
+		return elementsOfType['function'][functionName].attributes.script;
 	};
 	
 	var getFunctionDefinition = function (functionName) {
-		return functions[functionName];
+		return elementsOfType['function'][functionName].attributes;
 	};
     
     var getDirectChildren = function (parent, elementType, elementSubType) {
@@ -209,8 +208,6 @@ define(function () {
 	var dump = function () {
 		console.log("Elements:");
 		console.log(elements);
-		console.log("Functions:");
-		console.log(functions);
 	};
 	
 	return {
