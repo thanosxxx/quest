@@ -139,7 +139,11 @@ define(function () {
             type: 'element',
             elementType: elementType,
             elementSubType: elementSubType,
-            attributes: {},
+            attributes: {
+                name: elementName,
+                elementtype: elementType,
+                type: elementSubType
+            },
             inheritedTypes: inheritedTypes
 		};
         elements[elementName] = element;
