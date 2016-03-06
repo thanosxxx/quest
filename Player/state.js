@@ -77,10 +77,26 @@ define(function () {
     var hasAttributeOfType = function (element, attribute, type) {
         if (!attributeExists(element, attribute)) return false;
         var value = get(element, attribute);
+        return isValueOfType(value, type);
+    };
+    
+    var getAttributeOfType = function (element, attribute, type) {
+        if (!attributeExists(element, attribute)) return defaultValue(type);
+        var value = get(element, attribute);
+        if (isValueOfType(value, type)) return value;
+        return defaultValue(type);
+    };
+    
+    var isValueOfType = function (value, type) {
         var actualType = typeOf(value);
         if (actualType == type) return true;
         if (actualType == 'int' && type == 'double') return true;
         return false;
+    };
+    
+    var defaultValue = function (type) {
+        if (type === 'boolean') return false;
+        return null;
     };
     
     var typeOf = function (value) {
@@ -184,6 +200,7 @@ define(function () {
 		get: get,
         addInheritedType: addInheritedType,
         hasAttributeOfType: hasAttributeOfType,
+        getAttributeOfType: getAttributeOfType,
 		isElement: isElement,
         getElement: getElement,
         tryGetElement: tryGetElement,

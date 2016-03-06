@@ -83,6 +83,11 @@
             msg ("testattr " + HasString(game, "testattr"))
             msg ("madeupattr " + HasString(game, "madeupattr"))
             msg ("compassdirections " + HasString(game, "compassdirections"))
+            msg ("Get values...")
+            msg ("testattr " + GetString(game, "testattr"))
+            msg ("madeupattr " + GetString(game, "madeupattr"))
+            msg ("compassdirections " + GetString(game, "compassdirections"))
+            msg ("compassdirections as boolean " + GetBoolean(game, "compassdirections"))
         }
         else if (command = "a") {
             msg (a())
