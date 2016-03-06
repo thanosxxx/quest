@@ -275,6 +275,13 @@ define(['state'], function (state) {
         'SafeXML': function (args) {
             var input = getParameter(args[0], 'SafeXML', 'string');
             return input.replace(/&/g, '&amp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;');
+        },
+        'GetUIOption': function (args) {
+            var option = getParameter(args[0], 'GetUIOption', 'string');
+            if (option == 'UseGameColours' || option == 'UseGameFont') {
+                return 'true';
+            }
+            return null;
         }
     };
     
