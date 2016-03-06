@@ -133,62 +133,62 @@ define(['state'], function (state) {
             return state.getTemplate(name).attributes.text;
         },
         'HasString': function (args) {
-            var element = args[0];
-            var attribute = args[1];
+            var element = getParameter(args[0], 'HasString', 'element');
+            var attribute = getParameter(args[1], 'HasString', 'string');
             return state.hasAttributeOfType(element, attribute, 'string');
         },
         'GetString': function (args) {
-            var element = args[0];
-            var attribute = args[1];
+            var element = getParameter(args[0], 'GetString', 'element');
+            var attribute = getParameter(args[1], 'GetString', 'string');
             return state.getAttributeOfType(element, attribute, 'string');
         },
         'HasBoolean': function (args) {
-            var element = args[0];
-            var attribute = args[1];
+            var element = getParameter(args[0], 'HasBoolean', 'element');
+            var attribute = getParameter(args[1], 'HasBoolean', 'string');
             return state.hasAttributeOfType(element, attribute, 'boolean');
         },
         'GetBoolean': function (args) {
-            var element = args[0];
-            var attribute = args[1];
+            var element = getParameter(args[0], 'GetBoolean', 'element');
+            var attribute = getParameter(args[1], 'GetBoolean', 'string');
             return state.getAttributeOfType(element, attribute, 'boolean');
         },
         'HasInt': function (args) {
-            var element = args[0];
-            var attribute = args[1];
+            var element = getParameter(args[0], 'HasInt', 'element');
+            var attribute = getParameter(args[1], 'HasInt', 'string');
             return state.hasAttributeOfType(element, attribute, 'int');
         },
         'GetInt': function (args) {
-            var element = args[0];
-            var attribute = args[1];
+            var element = getParameter(args[0], 'GetInt', 'element');
+            var attribute = getParameter(args[1], 'GetInt', 'string');
             return state.getAttributeOfType(element, attribute, 'int');
         },
         'HasDouble': function (args) {
-            var element = args[0];
-            var attribute = args[1];
+            var element = getParameter(args[0], 'HasString', 'element');
+            var attribute = getParameter(args[1], 'HasString', 'string');
             return state.hasAttributeOfType(element, attribute, 'double');
         },
         'GetDouble': function (args) {
-            var element = args[0];
-            var attribute = args[1];
+            var element = getParameter(args[0], 'HasDouble', 'element');
+            var attribute = getParameter(args[1], 'HasDouble', 'string');
             return state.getAttributeOfType(element, attribute, 'double');
         },
         'HasScript': function (args) {
-            var element = args[0];
-            var attribute = args[1];
+            var element = getParameter(args[0], 'HasScript', 'element');
+            var attribute = getParameter(args[1], 'HasScript', 'string');
             return state.hasAttributeOfType(element, attribute, 'script');
         },
         'HasObject': function (args) {
-            var element = args[0];
-            var attribute = args[1];
+            var element = getParameter(args[0], 'HasObject', 'element');
+            var attribute = getParameter(args[1], 'HasObject', 'string');
             return state.hasAttributeOfType(element, attribute, 'object');
         },
         'GetObject': function (args) {
-            var name = args[0];
+            var name = getParameter(args[0], 'GetObject', 'string');
             return state.tryGetElement(name);
         },
         'HasAttribute': function (args) {
-            var element = args[0];
-            var attribute = args[1];
+            var element = getParameter(args[0], 'HasAttribute', 'element');
+            var attribute = getParameter(args[1], 'HasAttribute', 'string');
             return state.hasAttribute(element, attribute);
         },
         'GetAttributeNames': function (args) {
@@ -199,8 +199,8 @@ define(['state'], function (state) {
             return result;
         },
         'Contains': function (args) {
-            var parent = args[0];
-            var element = args[1];
+            var parent = getParameter(args[0], 'Contains', 'element');
+            var element = getParameter(args[1], 'Contains', 'element');
             return state.contains(parent, element);
         },
         'NewStringList': function () {
@@ -271,7 +271,7 @@ define(['state'], function (state) {
             return result;
         },
         'GetAllChildObjects': function (args) {
-            var element = args[0];
+            var element = getParameter(args[0], 'GetAllChildObjects', 'element');
             var result = state.newAttribute('objectlist');
             result.value = state.getAllChildren(element, 'object', 'object');
             return result;
