@@ -248,6 +248,11 @@ define(['state'], function (state) {
             result.value = commands;
             return result;
         },
+        'ListCount': function (args) {
+            var list = args[0];
+            checkIsList(list);
+            return list.value.length;
+        },
         'ListCombine': function (args) {
             var list1 = args[0];
             var list2 = args[1];
