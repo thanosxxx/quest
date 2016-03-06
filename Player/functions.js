@@ -185,6 +185,13 @@ define(['state'], function (state) {
             var attribute = args[1];
             return state.hasAttribute(element, attribute);
         },
+        'GetAttributeNames': function (args) {
+            var element = args[0];
+            var includeInheritedAttributes = args[1];
+            var result = state.newAttribute('stringlist');
+            result.value = state.attributeNames(element, includeInheritedAttributes);
+            return result;
+        },
         'Contains': function (args) {
             var parent = args[0];
             var element = args[1];

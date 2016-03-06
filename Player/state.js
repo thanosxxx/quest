@@ -108,6 +108,20 @@ define(function () {
         // TODO: Other types
         return null;
     };
+    
+    var attributeNames = function (element, includeInheritedAttributes) {
+        var result = Object.keys(element.attributes);
+        if (includeInheritedAttributes) {
+            for (var idx in element.inheritedTypes) {
+                var inheritedTypeElement = getElement(element.inheritedTypes[idx]);
+                var additionalAttributes = attributeNames(inheritedTypeElement);
+                result = result.concat(additionalAttributes.filter(function (a) {
+                    return result.indexOf(a) === -1;
+                }));
+            }
+        }
+        return result;
+    };
 	
 	var isElement = function (elementName) {
 		return elementName in elements;
@@ -202,6 +216,7 @@ define(function () {
         hasAttribute: hasAttribute,
         hasAttributeOfType: hasAttributeOfType,
         getAttributeOfType: getAttributeOfType,
+        attributeNames: attributeNames,
 		isElement: isElement,
         getElement: getElement,
         tryGetElement: tryGetElement,

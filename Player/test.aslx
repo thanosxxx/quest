@@ -92,6 +92,9 @@
         else if (command = "a") {
             msg (a())
         }
+        else if (command = "attrs") {
+            msg (Join(GetAttributeNames(game, true), ","))
+        }
         else {
             msg (command)
         }
