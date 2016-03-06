@@ -164,6 +164,12 @@ define(function () {
         }
         return result;
     }
+    
+    var contains = function (parent, element) {
+        if (!element.attributes.parent) return false;
+        if (element.attributes.parent == parent) return true;
+        return contains(parent, element.attributes.parent);
+    };
 	
 	var dump = function () {
 		console.log("Elements:");
@@ -189,6 +195,7 @@ define(function () {
 		getFunctionDefinition: getFunctionDefinition,
         getDirectChildren: getDirectChildren,
         getAllChildren: getAllChildren,
+        contains: contains,
 		dump: dump
 	};
 });

@@ -430,6 +430,11 @@ define(['state'], function (state) {
             var name = args[0];
             return state.tryGetElement(name);
         },
+        'Contains': function (args) {
+            var parent = args[0];
+            var element = args[1];
+            return state.contains(parent, element);
+        },
         'NewStringList': function () {
             return state.newAttribute('stringlist');
         },
