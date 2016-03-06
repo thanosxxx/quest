@@ -292,6 +292,14 @@ define(['state', 'functions', 'ui'], function (state, functions, ui) {
             return;
         }
         
+        if (name == 'IsDefined') {
+            var frame = callstack[callstack.length - 1];
+            var result = false;
+            if (frame.locals) result = args[0] in frame.locals;
+            complete(result);
+            return;
+        }
+        
         fn = functions.functions[name];
         if (!fn) {
             fn = functions.asyncFunctions[name];
