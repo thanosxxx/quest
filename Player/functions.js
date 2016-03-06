@@ -276,6 +276,12 @@ define(['state'], function (state) {
             result.value = state.getAllChildren(element, 'object', 'object');
             return result;
         },
+        'GetDirectChildren': function (args) {
+            var element = getParameter(args[0], 'GetAllChildObjects', 'element');
+            var result = state.newAttribute('objectlist');
+            result.value = state.getDirectChildren(element, 'object', 'object');
+            return result;
+        },
         'SafeXML': function (args) {
             var input = getParameter(args[0], 'SafeXML', 'string');
             return input.replace(/&/g, '&amp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;');
