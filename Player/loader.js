@@ -48,6 +48,27 @@ define(['state', 'scripts'], function (state, scripts) {
                 type: 'script',
                 script: script
             });
+        },
+        'simplepattern': function (node, element, attributeName) {
+            var value = node.textContent
+                .replace(/\(/g, '\\(')
+                .replace(/\)/g, '\\)')
+                .replace(/\./g, '\\.')
+                .replace(/\?/g, '\\?')
+                .replace(/#([A-Za-z]\w+)#/g, function (match, group1) {
+                    return '(?<' + group1 + '>.*)';
+                });
+            
+            if (value.indexOf('#') !== -1)
+            {
+                throw 'Invalid command pattern ' + element.attributes.name + '.' + attributeName + ' = ' + node.textContent;
+            }
+            
+            var patterns = value.split(/\s*;\s*/).map(function (pattern) {
+                return '^' + pattern + '$';
+            }).join('|');
+            
+            state.set(element, attributeName, patterns);
         }
     };
     
@@ -60,8 +81,8 @@ define(['state', 'scripts'], function (state, scripts) {
                 var name = getXmlAttribute(node, 'name');
                 state.addInheritedType(element, name);
             }
-            else if (attributeName == 'object') {
-                var child = elementLoaders.object(node);
+            else if (attributeName == 'object' || attributeName == 'command') {
+                var child = elementLoaders[attributeName](node);
                 state.set(child, 'parent', element);
             }
             else {
@@ -123,6 +144,7 @@ define(['state', 'scripts'], function (state, scripts) {
         },
         'command': function (node) {
             var name = getXmlAttribute(node, 'name');
+            if (name == null) name = state.getUniqueId();
             var element = state.create(name, 'object', 'command');
             loadElementAttributes(element, node.childNodes);
             return element;

@@ -219,7 +219,7 @@ define(function () {
     var getUniqueId = function (prefix) {
         prefix = prefix || 'k';
         if (!(prefix in nextUniqueId)) {
-            nextUniqueId[prefix] = 0;
+            nextUniqueId[prefix] = 1;
         }
         var newId;
         do {
