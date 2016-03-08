@@ -324,10 +324,15 @@ define(['state', 'xregexp'], function (state, xregexp) {
     var regexCache = {};
     
     var getRegex = function (regex, cacheId) {
-        var result = regexCache[cacheId];
-        if (result) return result;
+        var result;
+        if (cacheId) {
+            result = regexCache[cacheId];
+            if (result) return result;
+        }
         result = xregexp(regex, 'i');
-        regexCache[cacheId] = result;
+        if (cacheId) {
+            regexCache[cacheId] = result;
+        }
         return result;
     }
     
