@@ -1,4 +1,4 @@
-define(['state'], function (state) {
+define(['state', 'xregexp'], function (state, xregexp) {
     var asyncFunctions = {
         'GetInput': function (args, complete) {
             // TODO: Override input handler
@@ -295,6 +295,14 @@ define(['state'], function (state) {
         },
         'ToString': function (args) {
             return '' + args[0];
+        },
+        'IsRegexMatch': function (args) {
+            var pattern = getParameter(args[0], 'IsRegexMatch', 'string');
+            var input = getParameter(args[1], 'IsRegexMatch', 'string');
+            var cacheId = getParameter(args[2], 'IsRegexMatch', 'string', true);
+            var regex = getRegex(pattern, cacheId);
+            var result = regex.test(input);
+            return result;
         }
     };
     
@@ -304,13 +312,24 @@ define(['state'], function (state) {
         }
     };
     
-    var getParameter = function (parameter, caller, type) {
+    var getParameter = function (parameter, caller, type, allowNull) {
+        if (allowNull && parameter == null) return null;
         var actualType = state.typeOf(parameter);
         if (actualType !== type) {
             throw caller + ' function expected ' + type + ' parameter but was passed ' + actualType;
         }
         return parameter;
     };
+    
+    var regexCache = {};
+    
+    var getRegex = function (regex, cacheId) {
+        var result = regexCache[cacheId];
+        if (result) return result;
+        result = xregexp(regex, 'i');
+        regexCache[cacheId] = result;
+        return result;
+    }
     
     return {
         asyncFunctions: asyncFunctions,

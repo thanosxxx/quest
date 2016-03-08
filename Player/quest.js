@@ -4,12 +4,16 @@
 
 requirejs.config({
 	paths: {
-		'jsep': 'jsep.min'
+		'jsep': 'jsep.min',
+        'xregexp': 'lib/xregexp-all'
 	},
 	shim: {
 		'jsep': {
 			exports: 'jsep'
-		}
+		},
+        'xregexp': {
+            exports: 'XRegExp'
+        }
 	}
 });
 
