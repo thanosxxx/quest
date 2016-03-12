@@ -3,13 +3,14 @@ var sourcemaps = require('gulp-sourcemaps');
 var ts = require('gulp-typescript');  
 var babel = require('gulp-babel');
 var uglify = require('gulp-uglify');
-var tsProject = ts.createProject('./tsconfig.json');
 
 gulp.task('asl4', function () {
+    var tsProject = ts.createProject('asl4/tsconfig.json');
+    
     gulp.src('./node_modules/gulp-babel/node_modules/babel-core/browser-polyfill.min.js')
         .pipe(gulp.dest('.'));
       
-    return gulp.src('asl4.ts')
+    return gulp.src('asl4/asl4.ts')
         .pipe(sourcemaps.init())
         .pipe(ts(tsProject))
         .pipe(babel())
