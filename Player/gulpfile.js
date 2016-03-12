@@ -31,11 +31,6 @@ gulp.task('lib', function () {
         .pipe(gulp.dest('dist/lib'));
 });
 
-gulp.task('scripts', function () {
-    return gulp.src('scripts/**/*')
-        .pipe(gulp.dest('dist/scripts'));
-});
-
 gulp.task('ui', function () {
     return gulp.src('ui/**/*')
         .pipe(gulp.dest('dist/ui'));
@@ -47,8 +42,9 @@ gulp.task('files', function () {
         '*.asl',
         '*.aslx',
         '*.cas',
-        '*.js'
+        'asl4.js',
+        'browser-polyfill.min.js'
     ]).pipe(gulp.dest('dist'));
 });
 
-gulp.task('default', ['lib', 'scripts', 'ui', 'files']);
+gulp.task('default', ['lib', 'ui', 'files']);
