@@ -13,6 +13,9 @@ function startServer(dir, port) {
     server.listen(port);
 }
 
+var path = require('path');
+var subdir = process.argv[2] || '';
+
 var port = 8282;
-startServer(__dirname, port);
+startServer(path.join(__dirname, subdir), port);
 console.log('Started http://localhost:' + port + '/'); 

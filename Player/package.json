@@ -6,6 +6,7 @@
   "scripts": {
     "start": "electron .",
     "web": "node server.js",
+    "web-dist": "node server.js dist",
     "package": "node node_modules/requirejs/bin/r.js -o build.js"
   },
   "license": "MIT",
