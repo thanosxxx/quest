@@ -1,7 +1,10 @@
-define(['require', 'scriptrunner', 'scriptparser', 'expressions'], function (require, scriptrunner, scriptParser, expressions) {
-    return {
+//define(['require', 'scriptrunner', 'scriptparser', 'expressions'], function (require, scriptrunner, scriptParser, expressions) {
+    var scriptrunner = require('../scriptrunner.js');
+    var scriptParser = require('../scriptparser.js');
+    var expressions = require('../expressions.js');
+    module.exports = {
         create: function (line) {
-            var scripts = require('scripts');
+            var scripts = require('../scripts.js');
             var parameters = scriptParser.getParameterInternal(line, '(', ')');
             var thenScript = scripts.parseScript(parameters.after);
 
@@ -62,4 +65,4 @@ define(['require', 'scriptrunner', 'scriptparser', 'expressions'], function (req
             });
         }
     };
-});
+//});

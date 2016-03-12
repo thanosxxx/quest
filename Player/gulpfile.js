@@ -3,6 +3,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var ts = require('gulp-typescript');  
 var babel = require('gulp-babel');
 var uglify = require('gulp-uglify');
+var webpack = require('webpack-stream');
 
 gulp.task('asl4', function () {
     var tsProject = ts.createProject('asl4/tsconfig.json');
@@ -17,6 +18,12 @@ gulp.task('asl4', function () {
         //.pipe(uglify())
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('.'));
+});
+
+gulp.task('webpack', function() {
+  return gulp.src('quest.js')
+    .pipe(webpack(require('./webpack.config.js')))
+    .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('lib', function () {

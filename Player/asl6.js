@@ -1,4 +1,7 @@
-define(['state', 'loader', 'scripts'], function (state, loader, scripts) {
+//define(['state', 'loader', 'scripts'], function (state, loader, scripts) {
+    var state = require('./state.js');
+    var loader = require('./loader.js');
+    var scripts = require('./scripts.js');
     var begin = function () {
         // Based on WorldModel.Begin
         
@@ -41,9 +44,13 @@ define(['state', 'loader', 'scripts'], function (state, loader, scripts) {
         loader.load(data);
     };
     
-    return {
-        begin: begin,
-        sendCommand: sendCommand,
-        load: load
-    };
-});
+    exports.begin = begin;
+    exports.sendCommand = sendCommand;
+    exports.load = load;
+    
+    // return {
+    //     begin: begin,
+    //     sendCommand: sendCommand,
+    //     load: load
+    // };
+//});

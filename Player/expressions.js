@@ -1,4 +1,5 @@
-define(['jsep'], function (jsep) {
+//define(['jsep'], function (jsep) {
+    var jsep = require('./jsep.min.js');
     jsep.removeUnaryOp('~');
     jsep.addUnaryOp('not');
         
@@ -29,7 +30,9 @@ define(['jsep'], function (jsep) {
         };
     };
     
-    return {
-        parseExpression: parseExpression
-    };
-});
+    // return {
+    //     parseExpression: parseExpression
+    // };
+    
+    exports.parseExpression = parseExpression;
+//});

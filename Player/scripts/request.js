@@ -1,5 +1,7 @@
-define(['scriptrunner', 'ui'], function (scriptrunner, ui) {
-    return {
+//define(['scriptrunner', 'ui'], function (scriptrunner, ui) {
+    var scriptrunner = require('../scriptrunner.js');
+    var ui = require('../ui.js');
+    module.exports = {
         parameters: [2],
         execute: function (ctx) {               
             scriptrunner.evaluateExpression(ctx.parameters[1], function (data) {
@@ -19,4 +21,4 @@ define(['scriptrunner', 'ui'], function (scriptrunner, ui) {
             });
         }
     };
-});
+//});

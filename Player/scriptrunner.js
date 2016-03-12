@@ -1,4 +1,7 @@
-define(['state', 'functions', 'ui'], function (state, functions, ui) {
+//define(['state', 'functions', 'ui'], function (state, functions, ui) {
+    var state = require('./state.js');
+    var functions = require('./functions.js');
+    var ui = require('./ui.js');
 	var callstack = [];
     
     var getCallstack = function () {
@@ -313,12 +316,19 @@ define(['state', 'functions', 'ui'], function (state, functions, ui) {
         complete(fn(args));
     };
     
-    return {
-        executeScript: executeScript,
-        evaluateExpressions: evaluateExpressions,
-        evaluateExpression: evaluateExpression,
-        getCallstack: getCallstack,
-        executeNext: executeNext,
-        callFunction: callFunction
-    };
-});
+    // return {
+    //     executeScript: executeScript,
+    //     evaluateExpressions: evaluateExpressions,
+    //     evaluateExpression: evaluateExpression,
+    //     getCallstack: getCallstack,
+    //     executeNext: executeNext,
+    //     callFunction: callFunction
+    // };
+    
+    exports.executeScript = executeScript;
+    exports.evaluateExpressions = evaluateExpressions;
+    exports.evaluateExpression = evaluateExpression;
+    exports.getCallstack = getCallstack;
+    exports.executeNext = executeNext;
+    exports.callFunction = callFunction;
+//});

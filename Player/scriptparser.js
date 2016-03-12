@@ -1,4 +1,5 @@
-define(['jsep'], function (jsep) {
+//define(['jsep'], function (jsep) {
+    var jsep = require('./jsep.min.js');
     var removeSurroundingBraces = function (text) {
         // based on WorldModel.Utility.RemoveSurroundingBraces
 
@@ -189,13 +190,23 @@ define(['jsep'], function (jsep) {
         return result;
     };
     
-    return {
-        removeSurroundingBraces: removeSurroundingBraces,
-        getScriptLine: getScriptLine,
-        getAndSplitParameters: getAndSplitParameters,
-        obscureStrings: obscureStrings,
-        getParameter: getParameter,
-        getParameterInternal: getParameterInternal,
-        splitParameters: splitParameters
-    };
-});
+    // return {
+    //     removeSurroundingBraces: removeSurroundingBraces,
+    //     getScriptLine: getScriptLine,
+    //     getAndSplitParameters: getAndSplitParameters,
+    //     obscureStrings: obscureStrings,
+    //     getParameter: getParameter,
+    //     getParameterInternal: getParameterInternal,
+    //     splitParameters: splitParameters
+    // };
+    
+    
+    exports.removeSurroundingBraces = removeSurroundingBraces;
+    exports.getScriptLine = getScriptLine;
+    exports.getAndSplitParameters = getAndSplitParameters;
+    exports.obscureStrings = obscureStrings;
+    exports.getParameter = getParameter;
+    exports.getParameterInternal = getParameterInternal;
+    exports.splitParameters = splitParameters;
+    
+//});

@@ -17,7 +17,10 @@ requirejs.config({
 	}
 });
 
-requirejs(['asl6', 'ui'], function (asl6, ui) {
+//requirejs(['asl6', 'ui'], function (asl6, ui) {
+    var asl6 = require('./asl6.js');
+    var ui = require('./ui.js');
+    
 	window.quest = window.quest || {};
 	
 	var paperScript = document.createElement('script');
@@ -156,9 +159,9 @@ requirejs(['asl6', 'ui'], function (asl6, ui) {
     };
     
     var onLoadDesktop = function () {
-        var remote = require('electron').remote;
-        var openFile = remote.getCurrentWindow().openFile;
-        launchFilename(openFile);
+        // var remote = require('electron').remote;
+        // var openFile = remote.getCurrentWindow().openFile;
+        // launchFilename(openFile);
     };
 	
 	window.gridApi = window.gridApi || {};
@@ -188,4 +191,4 @@ requirejs(['asl6', 'ui'], function (asl6, ui) {
     //         }
     //     });
     // }
-});
+//});

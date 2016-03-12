@@ -1,4 +1,7 @@
-define(['state', 'xregexp'], function (state, xregexp) {
+//define(['state', 'xregexp'], function (state, xregexp) {
+    var state = require('./state.js');
+    var xregexp = require('./lib/xregexp-all.js').XRegExp;
+    
     var asyncFunctions = {
         'GetInput': function (args, complete) {
             // TODO: Override input handler
@@ -336,8 +339,11 @@ define(['state', 'xregexp'], function (state, xregexp) {
         return result;
     }
     
-    return {
-        asyncFunctions: asyncFunctions,
-        functions: functions
-    };
-});
+    // return {
+    //     asyncFunctions: asyncFunctions,
+    //     functions: functions
+    // };
+    
+    exports.asyncFunctions = asyncFunctions;
+    exports.functions = functions;
+//});

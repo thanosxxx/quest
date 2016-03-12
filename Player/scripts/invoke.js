@@ -1,5 +1,6 @@
-define(['scriptrunner'], function (scriptrunner) {
-    return {
+//define(['scriptrunner'], function (scriptrunner) {
+    var scriptrunner = require('../scriptrunner.js');
+    module.exports = {
         parameters: [1, 2],
         execute: function (ctx) {
             // TODO: Second parameter is a dictionary of parameters to pass in as locals
@@ -14,4 +15,4 @@ define(['scriptrunner'], function (scriptrunner) {
             });
         }
     };
-});
+//});

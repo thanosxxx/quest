@@ -1,4 +1,6 @@
-define(['state', 'scripts'], function (state, scripts) {   
+//define(['state', 'scripts'], function (state, scripts) {
+    var state = require('./state.js');
+    var scripts = require('./scripts.js');   
     var allowedVersions = [500, 510, 520, 530, 540, 550];
     var impliedTypes = {};
     
@@ -205,7 +207,9 @@ define(['state', 'scripts'], function (state, scripts) {
         state.dump();
     };
     
-    return {
-        load: load
-    };
-});
+    // return {
+    //     load: load
+    // };
+    
+    exports.load = load;
+//});

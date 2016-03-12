@@ -1,5 +1,6 @@
-define(['scriptrunner'], function (scriptrunner) {
-    return {
+//define(['scriptrunner'], function (scriptrunner) {
+    var scriptrunner = require('../scriptrunner.js');
+    module.exports = {
         parameters: [1],
         execute: function (ctx) {
             scriptrunner.evaluateExpression(ctx.parameters[0], function (result) {
@@ -7,4 +8,4 @@ define(['scriptrunner'], function (scriptrunner) {
             });
         }
     };
-});
+//});

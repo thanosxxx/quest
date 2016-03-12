@@ -1,43 +1,49 @@
-define([
-    'state',
-    'ui',
-    'expressions',
-    'scriptparser',
-    'scriptrunner',
-    'scripts/msg',
-    'scripts/set',
-    'scripts/setscript',
-    'scripts/request',
-    'scripts/return',
-    'scripts/invoke',
-    'scripts/if',
-    'scripts/switch',
-    'scripts/for',
-    'scripts/js',
-    'scripts/foreach',
-    'scripts/onready',
-    'scripts/listadd',
-    'scripts/dictionaryadd',
-    'scripts/setfield'
-    ],
-function (state, ui, expressions, scriptParser, scriptRunner) {
+// define([
+//     'state',
+//     'ui',
+//     'expressions',
+//     'scriptparser',
+//     'scriptrunner',
+//     'scripts/msg',
+//     'scripts/set',
+//     'scripts/setscript',
+//     'scripts/request',
+//     'scripts/return',
+//     'scripts/invoke',
+//     'scripts/if',
+//     'scripts/switch',
+//     'scripts/for',
+//     'scripts/js',
+//     'scripts/foreach',
+//     'scripts/onready',
+//     'scripts/listadd',
+//     'scripts/dictionaryadd',
+//     'scripts/setfield'
+//     ],
+// function (state, ui, expressions, scriptParser, scriptRunner) {
+    
+    var state = require('./state.js');
+    var ui = require('./ui.js');
+    var expressions = require('./expressions.js');
+    var scriptParser = require('./scriptparser.js');
+    var scriptRunner = require('./scriptrunner.js');
     
     var commands = {
-        'msg': requirejs('scripts/msg'),
-        '=': requirejs('scripts/set'),
-        '=>': requirejs('scripts/setscript'),
-        'request': requirejs('scripts/request'),
-        'return': requirejs('scripts/return'),
-        'invoke': requirejs('scripts/invoke'),
-        'if': requirejs('scripts/if'),
-        'switch': requirejs('scripts/switch'),
-        'for': requirejs('scripts/for'),
-        'JS.': requirejs('scripts/js'),
-        'foreach': requirejs('scripts/foreach'),
-        'on ready': requirejs('scripts/onready'),
-        'list add': requirejs('scripts/listadd'),
-        'dictionary add': requirejs('scripts/dictionaryadd'),
-        'set': requirejs('scripts/setfield')
+        'msg': require('./scripts/msg'),
+        '=': require('./scripts/set'),
+        '=>': require('./scripts/setscript'),
+        'request': require('./scripts/request'),
+        'return': require('./scripts/return'),
+        'invoke': require('./scripts/invoke'),
+        'if': require('./scripts/if'),
+        'switch': require('./scripts/switch'),
+        'for': require('./scripts/for'),
+        'JS.': require('./scripts/js'),
+        'foreach': require('./scripts/foreach'),
+        'on ready': require('./scripts/onready'),
+        'list add': require('./scripts/listadd'),
+        'dictionary add': require('./scripts/dictionaryadd'),
+        'set': require('./scripts/setfield')
     };
     
     var getSetScript = function (line) {
@@ -253,10 +259,16 @@ function (state, ui, expressions, scriptParser, scriptRunner) {
         return parameters.map(expressions.parseExpression);
     };
     
-    return {
-        parseScript: parseScript,
-        executeScript: scriptRunner.executeScript,
-        getScript: getScript,
-        parseParameters: parseParameters
-    };
-});
+    // return {
+    //     parseScript: parseScript,
+    //     executeScript: scriptRunner.executeScript,
+    //     getScript: getScript,
+    //     parseParameters: parseParameters
+    // };
+    
+    exports.parseScript = parseScript;
+    exports.executeScript = scriptRunner.executeScript;
+    exports.getScript = getScript;
+    exports.parseParameters = parseParameters;
+    
+//});

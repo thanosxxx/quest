@@ -1,7 +1,10 @@
-define(['require', 'scriptrunner', 'scriptparser'], function (require, scriptrunner, scriptParser) {
-    return {
+//define(['require', 'scriptrunner', 'scriptparser'], function (require, scriptrunner, scriptParser) {
+    var scriptrunner = require('../scriptrunner.js');
+    var scriptParser = require('../scriptparser.js');
+    
+    module.exports = {
         create: function (line) {
-            var scripts = require('scripts');
+            var scripts = require('../scripts.js');
             var parameters = scripts.parseParameters(scriptParser.getAndSplitParameters(line));
             var jsFunction = line.match(/^JS\.([\w\.\@]*)/)[1];
 
@@ -18,4 +21,4 @@ define(['require', 'scriptrunner', 'scriptparser'], function (require, scriptrun
             });
         }
     };
-});
+//});
