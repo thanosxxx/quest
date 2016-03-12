@@ -1,5 +1,6 @@
 module.exports = {
-  output: {
-    filename: 'quest.js'
-  }
+    watch: true,
+    output: {
+        filename: 'quest.js'
+    }
 }
