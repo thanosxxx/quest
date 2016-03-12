@@ -5,8 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "web": "node server.js",
-    "web-dist": "node server.js dist",
+    "web": "webpack-dev-server --content-base dist/",
     "package": "node node_modules/requirejs/bin/r.js -o build.js"
   },
   "license": "MIT",
@@ -15,8 +14,6 @@
     "url": "https://github.com/textadventures/quest.git"
   },
   "dependencies": {
-    "finalhandler": "^0.4.0",
-    "serve-static": "^1.10.0"
   },
   "devDependencies": {
     "electron-prebuilt": "^0.36.2",
@@ -26,6 +23,7 @@
     "gulp-typescript": "^2.9.2",
     "gulp-uglify": "^1.4.0",
     "requirejs": "^2.1.22",
+    "webpack-dev-server": "^1.14.1",
     "webpack-stream": "^3.1.0"
   }
 }

@@ -4,8 +4,12 @@ Quest 6
 Quest 6 is under development.
 
 Building Quest 6:
-- run `gulp asl4`
-- TODO: other instructions
+- `npm install`
+- `gulp asl4`
+- `gulp`
+- `npm run web`
+
+Now navigate to `http://localhost:8080/?file=blank.aslx`
 
 Documentation
 -------------
