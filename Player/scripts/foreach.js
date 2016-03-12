@@ -58,7 +58,7 @@ module.exports = {
                     });
                     scriptrunner.getCallstack().push({
                         script: script,
-                        index: 0,
+                        index: 0
                     });
                 }
                 ctx.complete();

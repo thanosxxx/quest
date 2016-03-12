@@ -1,6 +1,6 @@
 var scriptrunner = require('../scriptrunner.js');
-var scriptParser = require('../scriptparser.js');
-var expressions = require('../expressions.js');
+//var scriptParser = require('../scriptparser.js');
+//var expressions = require('../expressions.js');
 
 module.exports = {
     create: function (line) {
@@ -18,7 +18,7 @@ module.exports = {
         // are not, then just run the script immediately. 
         scriptrunner.getCallstack().push({
             script: ctx.parameters.script,
-            index: 0,
+            index: 0
         });
         ctx.complete();
     }

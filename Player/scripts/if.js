@@ -18,7 +18,7 @@ module.exports = {
             if (result) {
                 scriptrunner.getCallstack().push({
                     script: ctx.parameters.then,
-                    index: 0,
+                    index: 0
                 });
                 ctx.complete();
             }
@@ -27,7 +27,7 @@ module.exports = {
                     if (ctx.parameters.else) {
                         scriptrunner.getCallstack().push({
                             script: ctx.parameters.else,
-                            index: 0,
+                            index: 0
                         });
                     }
                     ctx.complete();
@@ -41,7 +41,7 @@ module.exports = {
                             if (result) {
                                 scriptrunner.getCallstack().push({
                                     script: ctx.parameters.elseIf[index].script,
-                                    index: 0,
+                                    index: 0
                                 });
                                 ctx.complete();
                             }
