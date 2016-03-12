@@ -6,6 +6,7 @@
 		"**/.DS_Store": true,
 		"node_modules": true,
 		"asl4.js": true,
-		"asl4.js.map": true
+		"asl4.js.map": true,
+        "dist": true
 	}
 }

@@ -1,4 +1,4 @@
-var jsep = require('./jsep.min.js');
+var jsep = require('./lib/jsep.min.js');
 
 jsep.removeUnaryOp('~');
 jsep.addUnaryOp('not');
