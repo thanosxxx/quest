@@ -7,9 +7,6 @@ var webpack = require('webpack-stream');
 
 gulp.task('asl4', function () {
     var tsProject = ts.createProject('asl4/tsconfig.json');
-    
-    gulp.src('./node_modules/gulp-babel/node_modules/babel-core/browser-polyfill.min.js')
-        .pipe(gulp.dest('.'));
       
     return gulp.src('asl4/asl4.ts')
         .pipe(sourcemaps.init())
@@ -42,8 +39,7 @@ gulp.task('files', function () {
         '*.asl',
         '*.aslx',
         '*.cas',
-        'asl4.js',
-        'browser-polyfill.min.js'
+        'asl4.js'
     ]).pipe(gulp.dest('dist'));
 });
 

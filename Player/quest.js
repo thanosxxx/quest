@@ -2,6 +2,7 @@
 /* global $ */
 /* global quest */
 
+require('babel-polyfill');
 var asl6 = require('./asl6.js');
 var ui = require('./ui.js');
 
