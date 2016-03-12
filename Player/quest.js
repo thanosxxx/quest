@@ -1,10 +1,7 @@
-/* global LegacyGame */
-/* global $ */
-/* global quest */
+/* global LegacyGame, $, quest, apiRoot, $_GET, onLoadDesktop */
 
 require('babel-polyfill');
 var asl6 = require('./asl6.js');
-var ui = require('./ui.js');
 
 window.quest = window.quest || {};
 
@@ -44,10 +41,10 @@ var binaryFileFetcher = function (filename, onSuccess, onFailure) {
 
 var checkCanSave = function () {
     $.ajax({
-        url: apiRoot + "games/cansave",
+        url: apiRoot + 'games/cansave',
         success: function (result) {
             if (result) {
-                $("#cmdSave").show();
+                $('#cmdSave').show();
             }
         },
         xhrFields: {
@@ -62,7 +59,7 @@ var launchV4 = function (url, resourceRoot, resumeData) {
         game.Begin();
     };
     var onFailure = function () {
-        console.log("fail");
+        console.log('fail');
     };
     quest.sendCommand = game.SendCommand.bind(game);
     quest.endWait = game.EndWait.bind(game);
