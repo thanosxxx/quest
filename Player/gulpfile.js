@@ -5,7 +5,7 @@ var babel = require('gulp-babel');
 var uglify = require('gulp-uglify');
 var tsProject = ts.createProject('./tsconfig.json');
 
-gulp.task('default', function() {
+gulp.task('asl4', function() {
     gulp.src('./node_modules/gulp-babel/node_modules/babel-core/browser-polyfill.min.js')
         .pipe(gulp.dest('.'));
       
