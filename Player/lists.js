@@ -1,12 +1,8 @@
-define(function () {
-    var listAdd = function (list, item) {
-        // TODO: Add to undo log, if list is attached to an element
-        // TODO: Check item type is correct for list
-        
-        list.value.push(item);
-    };
+var listAdd = function (list, item) {
+    // TODO: Add to undo log, if list is attached to an element
+    // TODO: Check item type is correct for list
     
-    return {
-        listAdd: listAdd
-    };
-});
+    list.value.push(item);
+};
+
+exports.listAdd = listAdd;
