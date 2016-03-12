@@ -6,6 +6,14 @@
     <script>
         if (window.require) {
             window.$ = window.jQuery = require(__dirname + "/lib/jquery-2.1.1.min.js");
+        
+            if (window.process) {
+                window.onLoadDesktop = function () {
+                    var remote = require('electron').remote;
+                    var openFile = remote.getCurrentWindow().openFile;
+                    launchFilename(openFile);
+                };
+            }
         }
     </script>
     <script src="lib/jquery-ui.min.js"></script>

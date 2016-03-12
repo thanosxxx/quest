@@ -143,12 +143,6 @@ var onLoadWeb = function () {
     }
 };
 
-var onLoadDesktop = function () {
-    // var remote = require('electron').remote;
-    // var openFile = remote.getCurrentWindow().openFile;
-    // launchFilename(openFile);
-};
-
 window.gridApi = window.gridApi || {};
 window.gridApi.onLoad = function () {
     if (window.process) {
