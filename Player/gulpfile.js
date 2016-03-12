@@ -2,7 +2,7 @@ var gulp = require('gulp');
 var sourcemaps = require('gulp-sourcemaps');  
 var ts = require('gulp-typescript');  
 var babel = require('gulp-babel');
-var uglify = require('gulp-uglify');
+//var uglify = require('gulp-uglify');
 var webpack = require('webpack-stream');
 
 gulp.task('asl4', function () {
@@ -18,9 +18,9 @@ gulp.task('asl4', function () {
 });
 
 gulp.task('webpack', function() {
-  return gulp.src('quest.js')
-    .pipe(webpack(require('./webpack.config.js')))
-    .pipe(gulp.dest('dist/'));
+    return gulp.src('quest.js')
+        .pipe(webpack(require('./webpack.config.js')))
+        .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('lib', function () {

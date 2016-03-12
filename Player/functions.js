@@ -6,7 +6,7 @@ var asyncFunctions = {
         // TODO: Override input handler
         
         setTimeout(function () {
-            complete("test");
+            complete('test');
         }, 200);
     }
 };
@@ -95,7 +95,7 @@ var functions = {
         var joinChar = args[1];
         // TODO: Handle other types
         if (!input.type || input.type != 'stringlist') {
-            throw "Unhandled type passed to Join";
+            throw 'Unhandled type passed to Join';
         }
         return input.value.join(joinChar);
     },
@@ -115,11 +115,11 @@ var functions = {
     },
     'LTrim': function (args) {
         var input = args[0];
-        return input.replace(/^\s+/,"");
+        return input.replace(/^\s+/,'');
     },
     'RTrim': function (args) {
         var input = args[0];
-        return input.replace(/\s+$/,"");
+        return input.replace(/\s+$/,'');
     },
     'Asc': function (args) {
         var input = args[0];
@@ -336,7 +336,7 @@ var getRegex = function (regex, cacheId) {
         regexCache[cacheId] = result;
     }
     return result;
-}
+};
 
 exports.asyncFunctions = asyncFunctions;
 exports.functions = functions;

@@ -16,7 +16,7 @@ var executeScript = function (script, locals) {
     callstack = [{
         script: script,
         index: 0,
-        locals: locals || {},
+        locals: locals || {}
     }];
     
     executeNext();
@@ -81,13 +81,11 @@ var executeNext = function () {
 
 var getParentFrameIndex = function () {
     var frameIndex = callstack.length - 1;
-    while (true) {
+    while (frameIndex >= 0) {
         if (callstack[frameIndex].locals) return frameIndex;
-        frameIndex--;
-        if (frameIndex === -1) {
-            throw 'Could not find parent frame';
-        } 
+        frameIndex--; 
     }
+    throw 'Could not find parent frame';
 };
 
 var getParentFrame = function () {

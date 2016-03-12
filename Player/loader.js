@@ -159,7 +159,7 @@ var elementLoaders = {
     },
     'template': function (node) {
         var name = getXmlAttribute(node, 'name');
-        var templateType = getXmlAttribute(node, 'templatetype');
+        //var templateType = getXmlAttribute(node, 'templatetype');
         // TODO: Template overrides - see Templates.cs (AddTemplate)
         var elementName = state.getUniqueId('template');
         var template = state.create(elementName, 'template');

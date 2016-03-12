@@ -7,7 +7,7 @@ const dialog = require('electron').dialog;
 const ipcMain = require('electron').ipcMain;
 const storage = require('./storage');
 
-var argv = process.argv;
+//var argv = process.argv;
 
 var openFile;
 
@@ -15,7 +15,7 @@ if (process.platform !== 'darwin' && process.argv[1] !== '.') {
     openFile = process.argv[1];
 }
 
-app.on('open-file', function (event, path) {
+app.on('open-file', function (event /*, path */) {
     event.preventDefault();
     // TODO: This handles dragging file onto app in OS X
     
@@ -33,17 +33,17 @@ var init = function() {
     var lastWindowState = storage.get('lastWindowState');
     if (lastWindowState === null) {
         lastWindowState = {
-        width: 1200,
-        height: 600,
-        maximized: false 
-        }; 
+            width: 1200,
+            height: 600,
+            maximized: false 
+        };
     }
     
     mainWindow = new BrowserWindow({
         x: lastWindowState.x,
         y: lastWindowState.y,
         width: lastWindowState.width, 
-        height: lastWindowState.height,
+        height: lastWindowState.height
         //icon: __dirname + '/quest.png'
     });
     
@@ -63,11 +63,11 @@ var init = function() {
     mainWindow.on('close', function () {
         var bounds = mainWindow.getBounds(); 
         storage.set('lastWindowState', {
-        x: bounds.x,
-        y: bounds.y,
-        width: bounds.width,
-        height: bounds.height,
-        maximized: mainWindow.isMaximized()
+            x: bounds.x,
+            y: bounds.y,
+            width: bounds.width,
+            height: bounds.height,
+            maximized: mainWindow.isMaximized()
         });
     });
 
@@ -100,9 +100,9 @@ app.on('ready', init);
 
 var fileOpen = function () {
     var result = dialog.showOpenDialog({
-    filters: [
-        { name: 'Quest games', extensions: ['aslx', 'asl', 'cas'] }
-    ]
+        filters: [
+            { name: 'Quest games', extensions: ['aslx', 'asl', 'cas'] }
+        ]
     });
     if (!result) return;
     mainWindow.openFile = result[0];
@@ -133,9 +133,9 @@ var template = [
                 click: function () {
                     
                 }
-            },
+            }
         ]
-      },
+    },
     {
         label: 'Edit',
         submenu: [
@@ -148,7 +148,7 @@ var template = [
                 label: 'Copy',
                 accelerator: 'CmdOrCtrl+C',
                 role: 'copy'
-            },
+            }
         ]
     },
     {
@@ -158,36 +158,43 @@ var template = [
                 label: 'Reload',
                 accelerator: 'CmdOrCtrl+R',
                 click: function(item, focusedWindow) {
-                if (focusedWindow)
-                    focusedWindow.reload();
+                    if (focusedWindow) {
+                        focusedWindow.reload();
+                    }
                 }
             },
             {
                 label: 'Toggle Full Screen',
                 accelerator: (function() {
-                if (process.platform == 'darwin')
-                    return 'Ctrl+Command+F';
-                else
-                    return 'F11';
+                    if (process.platform == 'darwin') {
+                        return 'Ctrl+Command+F';
+                    }
+                    else {
+                        return 'F11';
+                    }
                 })(),
                 click: function(item, focusedWindow) {
-                if (focusedWindow)
-                    focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+                    if (focusedWindow) {
+                        focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+                    }
                 }
             },
             {
                 label: 'Toggle Developer Tools',
                 accelerator: (function() {
-                if (process.platform == 'darwin')
-                    return 'Alt+Command+I';
-                else
-                    return 'Ctrl+Shift+I';
+                    if (process.platform == 'darwin') {
+                        return 'Alt+Command+I';
+                    }
+                    else {
+                        return 'Ctrl+Shift+I';
+                    }
                 })(),
                 click: function(item, focusedWindow) {
-                if (focusedWindow)
-                    focusedWindow.toggleDevTools();
+                    if (focusedWindow) {
+                        focusedWindow.toggleDevTools();
+                    }
                 }
-            },
+            }
         ]
     },
     {
@@ -203,7 +210,7 @@ var template = [
                 label: 'Close',
                 accelerator: 'CmdOrCtrl+W',
                 role: 'close'
-            },
+            }
         ]
     },
     {
@@ -213,9 +220,9 @@ var template = [
             {
                 label: 'Documentation',
                 click: function() { require('electron').shell.openExternal('http://docs.textadventures.co.uk/quest/'); }
-            },
+            }
         ]
-    },
+    }
 ];
 
 var name = 'Quest Player';
@@ -259,7 +266,7 @@ var appMenuTemplate = {
             label: 'Quit',
             accelerator: 'Command+Q',
             click: function() { app.quit(); }
-        },
+        }
     ]
 };
 

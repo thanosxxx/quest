@@ -152,11 +152,11 @@ var create = function (elementName, elementType, elementSubType) {
 
 var addTemplate = function (element) {
     templateLookup[element.attributes.templatename] = element;
-}
+};
 
 var getTemplate = function (name) {
     return templateLookup[name];
-}
+};
 
 var getElements = function (elementType, elementSubType) {
     var elements = elementsOfType[elementType];
@@ -228,7 +228,7 @@ var getUniqueId = function (prefix) {
 };
 
 var dump = function () {
-    console.log("Elements:");
+    console.log('Elements:');
     console.log(elements);
 };
 
@@ -256,4 +256,4 @@ exports.getDirectChildren = getDirectChildren;
 exports.getAllChildren = getAllChildren;
 exports.contains = contains;
 exports.getUniqueId = getUniqueId;
-exports.dump = dump
+exports.dump = dump;

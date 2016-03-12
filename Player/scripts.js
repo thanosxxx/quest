@@ -1,5 +1,3 @@
-var state = require('./state.js');
-var ui = require('./ui.js');
 var expressions = require('./expressions.js');
 var scriptParser = require('./scriptparser.js');
 var scriptRunner = require('./scriptrunner.js');
@@ -211,7 +209,7 @@ var parseScript = function (text) {
     text = scriptParser.removeSurroundingBraces(text);
 
     var result = [];
-    while (true) {
+    do {
         var scriptLine = scriptParser.getScriptLine(text);
 
         if (!scriptLine) break;
@@ -224,9 +222,8 @@ var parseScript = function (text) {
             }
         }
 
-        if (!scriptLine.after) break;
         text = scriptLine.after;
-    }
+    } while (scriptLine.after);
 
     return result;
 };
