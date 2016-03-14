@@ -9,5 +9,11 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     output: {
         filename: 'quest.js'
+    },
+    module: {
+        preLoaders: [{
+            test: /asl4\.js$/,
+            loader: 'source-map-loader'
+        }]
     }
 };

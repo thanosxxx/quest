@@ -38,8 +38,7 @@ gulp.task('files', function () {
         '*.html',
         '*.asl',
         '*.aslx',
-        '*.cas',
-        'asl4.js'
+        '*.cas'
     ]).pipe(gulp.dest('dist'));
 });
 

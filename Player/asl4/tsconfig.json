@@ -3,8 +3,7 @@
         "noImplicitAny": true,
         "sourceMap": true,
         "removeComments": true,
-        "target": "ES6",
-        "experimentalAsyncFunctions": true
+        "target": "es6"
     },
     "files": [
         "asl4.ts"

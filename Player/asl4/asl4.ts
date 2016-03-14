@@ -1,10 +1,10 @@
 "use strict";
 
-interface Window {
+interface QuestWindow extends Window {
     quest: any;
 }
 
-var quest = window.quest || {};
+var quest = (<QuestWindow> window).quest || {};
 
 function Left(input: string, length: number): string {
     return input.substring(0, length);
@@ -14531,3 +14531,12 @@ define type <giveable>
         }
 end define
 `;
+
+export function createGame(filename: string,
+        originalFilename: string,
+        data: string,
+        fileFetcher: FileFetcher,
+        binaryFileFetcher: BinaryFileFetcher,
+        resourceRoot: string) {
+            return new LegacyGame(filename, originalFilename, data, fileFetcher, binaryFileFetcher, resourceRoot);
+};

@@ -1,4 +1,4 @@
-/* global LegacyGame, $, quest, apiRoot, $_GET, onLoadDesktop */
+/* global $, quest, apiRoot, $_GET, onLoadDesktop */
 
 require('babel-polyfill');
 var asl6 = require('./asl6.js');
@@ -54,7 +54,8 @@ var checkCanSave = function () {
 };
 
 var launchV4 = function (url, resourceRoot, resumeData) {
-    var game = new LegacyGame(url, url, resumeData, fileFetcher, binaryFileFetcher, resourceRoot);
+    var asl4 = require('./asl4.js');
+    var game = asl4.createGame(url, url, resumeData, fileFetcher, binaryFileFetcher, resourceRoot);
     var onSuccess = function () {
         game.Begin();
     };
