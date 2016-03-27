@@ -2095,6 +2095,16 @@ namespace TextAdventures.Quest
                 };
             }
 
+            if (verbPattern == "look")
+            {
+                return new CanAddVerbResult
+                {
+                    CanAdd = false,
+                    ClashingCommand = "look",
+                    ClashingCommandDisplay = "look"
+                };
+            }
+
             CanAddVerbResult result = new CanAddVerbResult();
             verbPattern += " object";
 
