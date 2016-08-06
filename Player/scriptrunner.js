@@ -265,6 +265,10 @@ var binaryOperator = function (operator, left, right) {
             return left < right;
         case '>':
             return left > right;
+        case '<=':
+            return left <= right;
+        case '>=':
+            return left >= right;
         case '+':
             return left + right;
         case '-':
