@@ -305,6 +305,13 @@ var functions = {
         var regex = getRegex(pattern, cacheId);
         var result = regex.test(input);
         return result;
+    },
+    'GetMatchStrength': function (args) {
+        var pattern = getParameter(args[0], 'IsRegexMatch', 'string');
+        var input = getParameter(args[1], 'IsRegexMatch', 'string');
+        var cacheId = getParameter(args[2], 'IsRegexMatch', 'string', true);
+        var regex = getRegex(pattern, cacheId);
+        return getMatchStrength(regex, input);
     }
 };
 
@@ -336,6 +343,30 @@ var getRegex = function (regex, cacheId) {
         regexCache[cacheId] = result;
     }
     return result;
+};
+
+var getMatchStrength = function (regex, input) {
+    // Based on Utility.GetMatchStrengthInternal
+
+    if (!regex.test(input)) {
+        throw '"' + input + '" is not a match for regex "' + regex + '"';
+    }
+
+    // The idea is that you have a regex like
+    //          look at (?<object>.*)
+    // And you have a string like
+    //          look at thing
+    // The strength is the length of the "fixed" bit of the string, in this case "look at ".
+    // So we calculate this as the length of the input string, minus the length of the
+    // text that matches the named groups.
+
+    var lengthOfTextMatchedByGroups = 0;
+    var matches = regex.exec(input);
+    matches.shift();
+    matches.forEach(function (group) {
+        lengthOfTextMatchedByGroups += group.length;
+    });
+    return input.length - lengthOfTextMatchedByGroups;
 };
 
 exports.asyncFunctions = asyncFunctions;
