@@ -25,25 +25,37 @@ module.exports = {
         // TODO: Handle types other than stringlist
         scriptrunner.evaluateExpression(ctx.parameters.list, function (listResult) {
             if (!listResult.type || 
-                (listResult.type != 'stringlist' && listResult.type != 'objectlist')) {
+                (listResult.type != 'stringlist' &&
+                listResult.type != 'objectlist' &&
+                listResult.type != 'stringdictionary' &&
+                listResult.type != 'objectdictionary' &&
+                listResult.type != 'scriptdictionary')) {
                 throw 'Unexpected "foreach" list type: ' + listResult.type;
             }
+
+            var list = listResult.value;
+
+            if (listResult.type == 'stringdictionary' ||
+                listResult.type == 'objectdictionary' ||
+                listResult.type == 'scriptdictionary') {
+                list = Object.keys(list);
+            }
             
-            if (listResult.value.length == 0) {
+            if (list.length == 0) {
                 ctx.complete();
                 return;
             }
             
-            ctx.locals[ctx.parameters.variable] = listResult.value[0];
+            ctx.locals[ctx.parameters.variable] = list[0];
             var index = 0;
             
             var runLoop = function () {
-                if (index < listResult.value.length) {
+                if (index < list.length) {
                     var script = [].concat(ctx.parameters.loopScript);
                     script.push({
                         command: {
                             execute: function () {
-                                ctx.locals[ctx.parameters.variable] = listResult.value[index];
+                                ctx.locals[ctx.parameters.variable] = list[index];
                                 index++;
                                 if (index % 1000 != 0) {
                                     runLoop();
