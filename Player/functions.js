@@ -312,6 +312,15 @@ var functions = {
         var cacheId = getParameter(args[2], 'IsRegexMatch', 'string', true);
         var regex = getRegex(pattern, cacheId);
         return getMatchStrength(regex, input);
+    },
+    'Populate': function (args) {
+        var pattern = getParameter(args[0], 'IsRegexMatch', 'string');
+        var input = getParameter(args[1], 'IsRegexMatch', 'string');
+        var cacheId = getParameter(args[2], 'IsRegexMatch', 'string', true);
+        var regex = getRegex(pattern, cacheId);
+        var result = state.newAttribute('stringdictionary');
+        result.value = populate(regex, input);
+        return result;
     }
 };
 
@@ -368,6 +377,38 @@ var getMatchStrength = function (regex, input) {
     });
     return input.length - lengthOfTextMatchedByGroups;
 };
+
+var populate = function (regex, input) {
+    var matches = regex.exec(input);
+    var result = {};
+    var namedGroups = getRegexNamedGroups(matches);
+    for (var groupIdx in namedGroups) {
+        if (matches[namedGroups[groupIdx]] != undefined) {
+            var varName = namedGroups[groupIdx];
+            result[varName] = matches[namedGroups[groupIdx]];
+        }
+    }
+    console.log(result);
+    return result;
+};
+
+var getRegexNamedGroups = function (matches) {
+    var startsWith = function (input, text) {
+        return input.indexOf(text) == 0;
+    };
+
+    var result = [];
+    for (var prop in matches) {
+        if (matches.hasOwnProperty(prop)) {
+            if (startsWith(prop, 'object')
+             || startsWith(prop, 'text')
+             || startsWith(prop, 'exit')) {
+                result.push(prop);
+            }
+        }
+    }
+    return result;
+}
 
 exports.asyncFunctions = asyncFunctions;
 exports.functions = functions;
