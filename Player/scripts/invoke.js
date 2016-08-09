@@ -11,7 +11,7 @@
                     index: 0,
                     onReturn: ctx.complete
                 });
-                scriptrunner.executeNext();
+                scriptrunner.continueRunningScripts();
             });
         }
     };

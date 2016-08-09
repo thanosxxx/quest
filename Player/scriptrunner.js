@@ -3,6 +3,7 @@ var functions = require('./functions.js');
 var ui = require('./ui.js');
 
 var callstack = [];
+var isReady = true;
 
 var getCallstack = function () {
     return callstack;
@@ -19,10 +20,19 @@ var executeScript = function (script, locals) {
         locals: locals || {}
     }];
     
-    executeNext();
+    continueRunningScripts();
 };
 
-var nestedExecuteNextCount = 0;
+var isRunning = false;
+
+var continueRunningScripts = function () {
+    isRunning = true;
+    do {
+        isReady = false;
+        executeNext();
+    } while (isReady);
+    isRunning = false;
+};
 
 var executeNext = function () {
     if (callstack.length === 0) return;
@@ -40,43 +50,35 @@ var executeNext = function () {
     
     if (parentFrame.finished) {
         popCallstack();
-        executeNext();
+        isReady = true;
         return;
     }
     
     if (frame.index === frame.script.length) {
         callstack.pop();
-        executeNext();
+        isReady = true;
         return;
     }
     
     var script = frame.script[frame.index++];
     
-    var go = function () {
-        script.command.execute({
-            parameters: script.parameters,
-            locals: parentFrame.locals,
-            onReturn: function (result) {
-                parentFrame.finished = true;
-                popCallstack();
-                parentFrame.onReturn(result);
-            },
-            complete: function () {
-                executeNext();
+    script.command.execute({
+        parameters: script.parameters,
+        locals: parentFrame.locals,
+        onReturn: function (result) {
+            parentFrame.finished = true;
+            popCallstack();
+            parentFrame.onReturn(result);
+        },
+        complete: function () {
+            if (isRunning) {
+                isReady = true;
+                return;
             }
-        });
-    };
-    
-    if (nestedExecuteNextCount < 1000) {
-        nestedExecuteNextCount++;
-        go();
-        nestedExecuteNextCount--;
-    }
-    else {
-        setTimeout(function () {
-            go();
-        }, 0);
-    }
+
+            continueRunningScripts();
+        }
+    });
 };
 
 var getParentFrameIndex = function () {
@@ -333,5 +335,5 @@ exports.executeScript = executeScript;
 exports.evaluateExpressions = evaluateExpressions;
 exports.evaluateExpression = evaluateExpression;
 exports.getCallstack = getCallstack;
-exports.executeNext = executeNext;
+exports.continueRunningScripts = continueRunningScripts;
 exports.callFunction = callFunction;

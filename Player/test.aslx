@@ -95,6 +95,11 @@
         else if (command = "attrs") {
             msg (Join(GetAttributeNames(game, true), ","))
         }
+        else if (command = "input") {
+            msg ("Getting input...")
+            msg (GetInput())
+            msg ("Done")
+        }
         else {
             msg (command)
         }
