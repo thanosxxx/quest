@@ -307,20 +307,32 @@ var functions = {
         return result;
     },
     'GetMatchStrength': function (args) {
-        var pattern = getParameter(args[0], 'IsRegexMatch', 'string');
-        var input = getParameter(args[1], 'IsRegexMatch', 'string');
-        var cacheId = getParameter(args[2], 'IsRegexMatch', 'string', true);
+        var pattern = getParameter(args[0], 'GetMatchStrength', 'string');
+        var input = getParameter(args[1], 'GetMatchStrength', 'string');
+        var cacheId = getParameter(args[2], 'GetMatchStrength', 'string', true);
         var regex = getRegex(pattern, cacheId);
         return getMatchStrength(regex, input);
     },
     'Populate': function (args) {
-        var pattern = getParameter(args[0], 'IsRegexMatch', 'string');
-        var input = getParameter(args[1], 'IsRegexMatch', 'string');
-        var cacheId = getParameter(args[2], 'IsRegexMatch', 'string', true);
+        var pattern = getParameter(args[0], 'Populate', 'string');
+        var input = getParameter(args[1], 'Populate', 'string');
+        var cacheId = getParameter(args[2], 'Populate', 'string', true);
         var regex = getRegex(pattern, cacheId);
         var result = state.newAttribute('stringdictionary');
         result.value = populate(regex, input);
         return result;
+    },
+    'TypeOf': function (args) {
+        var value;
+        if (args.length === 1) {
+            value = args[0];
+        }
+        else {
+            var element = getParameter(args[0], 'TypeOf', 'element');
+            var attribute = getParameter(args[1], 'TypeOf', 'string');
+            value = state.get(element, attribute);
+        }
+        return state.typeOf(value);
     }
 };
 
