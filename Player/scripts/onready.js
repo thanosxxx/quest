@@ -1,6 +1,4 @@
 var scriptrunner = require('../scriptrunner.js');
-//var scriptParser = require('../scriptparser.js');
-//var expressions = require('../expressions.js');
 
 module.exports = {
     create: function (line) {
