@@ -232,6 +232,12 @@ var functions = {
         checkIsList(list);
         return list.value.indexOf(item) !== -1;
     },
+    'DictionaryContains': function (args) {
+        var dic = args[0];
+        var key = getParameter(args[1], 'DictionaryContains', 'string');
+        checkIsDictionary(dic);
+        return dic.hasOwnProperty(key);
+    },
     'AllObjects': function () {
         var objects = state.getElements('object', 'object');
         var result = state.newAttribute('objectlist');
@@ -339,6 +345,15 @@ var functions = {
 var checkIsList = function (list) {
     if (list.type != 'list' && list.type != 'stringlist' && list.type != 'objectlist') {
         throw 'Value is not a list type';
+    }
+};
+
+var checkIsDictionary = function (dic) {
+    if (dic.type != 'stringdictionary' &&
+        dic.type != 'objectdictionary' &&
+        dic.type != 'objectlist' &&
+        dic.type != 'dictionary') {
+        throw 'Value is not a dictionary type';
     }
 };
 
