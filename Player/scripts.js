@@ -3,21 +3,22 @@ var scriptParser = require('./scriptparser.js');
 var scriptRunner = require('./scriptrunner.js');
 
 var commands = {
-    'msg': require('./scripts/msg'),
     '=': require('./scripts/set'),
     '=>': require('./scripts/setscript'),
+    'dictionary add': require('./scripts/dictionaryadd'),
+    'for': require('./scripts/for'),
+    'foreach': require('./scripts/foreach'),
+    'if': require('./scripts/if'),
+    'invoke': require('./scripts/invoke'),
+    'JS.': require('./scripts/js'),
+    'list add': require('./scripts/listadd'),
+    'msg': require('./scripts/msg'),
+    'on ready': require('./scripts/onready'),
     'request': require('./scripts/request'),
     'return': require('./scripts/return'),
-    'invoke': require('./scripts/invoke'),
-    'if': require('./scripts/if'),
-    'switch': require('./scripts/switch'),
-    'for': require('./scripts/for'),
-    'JS.': require('./scripts/js'),
-    'foreach': require('./scripts/foreach'),
-    'on ready': require('./scripts/onready'),
-    'list add': require('./scripts/listadd'),
-    'dictionary add': require('./scripts/dictionaryadd'),
-    'set': require('./scripts/setfield')
+    'set': require('./scripts/setfield'),
+    'start transaction': require('./scripts/starttransaction'),
+    'switch': require('./scripts/switch')
 };
 
 var getSetScript = function (line) {
