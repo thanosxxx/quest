@@ -6,6 +6,7 @@ var commands = {
     '=': require('./scripts/set'),
     '=>': require('./scripts/setscript'),
     'dictionary add': require('./scripts/dictionaryadd'),
+    'do': require('./scripts/do'),
     'for': require('./scripts/for'),
     'foreach': require('./scripts/foreach'),
     'if': require('./scripts/if'),
