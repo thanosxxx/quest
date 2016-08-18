@@ -400,7 +400,7 @@ var getMatchStrength = function (regex, input) {
     var matches = regex.exec(input);
     matches.shift();
     matches.forEach(function (group) {
-        lengthOfTextMatchedByGroups += group.length;
+        if (group) lengthOfTextMatchedByGroups += group.length;
     });
     return input.length - lengthOfTextMatchedByGroups;
 };
