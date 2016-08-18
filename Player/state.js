@@ -98,6 +98,7 @@ var defaultValue = function (type) {
 };
 
 var typeOf = function (value) {
+    if (value === null) return 'null';
     if (typeof value === 'string') return 'string';
     if (typeof value === 'boolean') return 'boolean';
     if (typeof value === 'number') {
