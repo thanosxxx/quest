@@ -406,16 +406,18 @@ var getMatchStrength = function (regex, input) {
 };
 
 var populate = function (regex, input) {
-    var matches = regex.exec(input);
+    //var matches = regex.exec(input);
+    var matches = xregexp.exec(input, regex);
     var result = {};
     var namedGroups = getRegexNamedGroups(matches);
+    // TODO: This fails when group names are repeated in the same regex,
+    // only works if it's the final occurrence of the group name
     for (var groupIdx in namedGroups) {
         if (matches[namedGroups[groupIdx]] != undefined) {
             var varName = namedGroups[groupIdx];
             result[varName] = matches[namedGroups[groupIdx]];
         }
     }
-    console.log(result);
     return result;
 };
 
