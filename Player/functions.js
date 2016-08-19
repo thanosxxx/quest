@@ -133,6 +133,10 @@ var functions = {
         var name = getParameter(args[0], 'Template', 'string');
         return state.getTemplate(name).attributes.text;
     },
+    'DynamicTemplate': function () {
+        // TODO
+        throw 'DynamicTemplate not implemented';
+    },
     'HasString': function (args) {
         var element = getParameter(args[0], 'HasString', 'element');
         var attribute = getParameter(args[1], 'HasString', 'string');
@@ -183,9 +187,13 @@ var functions = {
         var attribute = getParameter(args[1], 'HasObject', 'string');
         return state.hasAttributeOfType(element, attribute, 'object');
     },
-    'GetObject': function (args) {
-        var name = getParameter(args[0], 'GetObject', 'string');
-        return state.tryGetElement(name);
+    'HasDelegateImplementation': function () {
+        // TODO
+        throw 'HasDelegateImplementation not implemented';
+    },
+    'GetAttribute': function () {
+        // TODO
+        throw 'GetAttribute not implemented';
     },
     'HasAttribute': function (args) {
         var element = getParameter(args[0], 'HasAttribute', 'element');
@@ -198,6 +206,14 @@ var functions = {
         var result = state.newAttribute('stringlist');
         result.value = state.attributeNames(element, includeInheritedAttributes);
         return result;
+    },
+    'GetExitByLink': function () {
+        // TODO
+        throw 'GetExitByLink not implemented';
+    },
+    'GetExitByName': function () {
+        // TODO
+        throw 'GetExitByName not implemented';
     },
     'Contains': function (args) {
         var parent = getParameter(args[0], 'Contains', 'element');
@@ -231,12 +247,6 @@ var functions = {
         checkIsList(list);
         return list.value.indexOf(item) !== -1;
     },
-    'DictionaryContains': function (args) {
-        var dic = args[0];
-        var key = getParameter(args[1], 'DictionaryContains', 'string');
-        checkIsDictionary(dic);
-        return dic.hasOwnProperty(key);
-    },
     'AllObjects': function () {
         var objects = state.getElements('object', 'object');
         var result = state.newAttribute('objectlist');
@@ -266,42 +276,45 @@ var functions = {
         checkIsList(list);
         return list.value.length;
     },
-    'ListCombine': function (args) {
-        var list1 = args[0];
-        var list2 = args[1];
-        checkIsList(list1);
-        if (list1.type != list2.type) {
-            throw 'Mismatched list types passed to ListCombine';
+    'ListItem': function () {
+        // TODO
+        throw 'ListItem not implemented';
+    },
+    'StringListItem': function () {
+        // TODO
+        throw 'StringListItem not implemented';
+    },
+    'ObjectListItem': function () {
+        // TODO
+        throw 'ObjectListItem not implemented';
+    },
+    'GetObject': function (args) {
+        var name = getParameter(args[0], 'GetObject', 'string');
+        return state.tryGetElement(name);
+    },
+    'GetTimer': function () {
+        // TODO
+        throw 'GetTimer not implemented';
+    },
+    'TypeOf': function (args) {
+        var value;
+        if (args.length === 1) {
+            value = args[0];
         }
-        var result = state.newAttribute(list1.type);
-        result.value = list1.value.concat(list2.value);
-        return result;
+        else {
+            var element = getParameter(args[0], 'TypeOf', 'element');
+            var attribute = getParameter(args[1], 'TypeOf', 'string');
+            value = state.get(element, attribute);
+        }
+        return state.typeOf(value);
     },
-    'GetAllChildObjects': function (args) {
-        var element = getParameter(args[0], 'GetAllChildObjects', 'element');
-        var result = state.newAttribute('objectlist');
-        result.value = state.getAllChildren(element, 'object', 'object');
-        return result;
-    },
-    'GetDirectChildren': function (args) {
-        var element = getParameter(args[0], 'GetAllChildObjects', 'element');
-        var result = state.newAttribute('objectlist');
-        result.value = state.getDirectChildren(element, 'object', 'object');
-        return result;
+    'RunDelegateFunction': function () {
+        // TODO
+        throw 'RunDelegateFunction not implemented';
     },
     'SafeXML': function (args) {
         var input = getParameter(args[0], 'SafeXML', 'string');
         return input.replace(/&/g, '&amp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;');
-    },
-    'GetUIOption': function (args) {
-        var option = getParameter(args[0], 'GetUIOption', 'string');
-        if (option == 'UseGameColours' || option == 'UseGameFont') {
-            return 'true';
-        }
-        return null;
-    },
-    'ToString': function (args) {
-        return '' + args[0];
     },
     'IsRegexMatch': function (args) {
         var pattern = getParameter(args[0], 'IsRegexMatch', 'string');
@@ -327,17 +340,148 @@ var functions = {
         result.value = populate(regex, input);
         return result;
     },
-    'TypeOf': function (args) {
-        var value;
-        if (args.length === 1) {
-            value = args[0];
+    'DictionaryItem': function () {
+        // TODO
+        throw 'DictionaryItem not implemented';
+    },
+    'StringDictionaryItem': function () {
+        // TODO
+        throw 'StringDictionaryItem not implemented';
+    },
+    'ObjectDictionaryItem': function () {
+        // TODO
+        throw 'ObjectDictionaryItem not implemented';
+    },
+    'ScriptDictionaryItem': function () {
+        // TODO
+        throw 'ScriptDictionaryItem not implemented';
+    },
+    'ShowMenu': function () {
+        // TODO
+        throw 'ShowMenu not implemented';
+    },
+    'DictionaryContains': function (args) {
+        var dic = args[0];
+        var key = getParameter(args[1], 'DictionaryContains', 'string');
+        checkIsDictionary(dic);
+        return dic.hasOwnProperty(key);
+    },
+    'DictionaryCount': function () {
+        // TODO
+        throw 'DictionaryCount not implemented';
+    },
+    'ToInt': function () {
+        // TODO
+        throw 'ToInt not implemented';
+    },
+    'ToDouble': function () {
+        // TODO
+        throw 'ToDouble not implemented';
+    },
+    'ToString': function (args) {
+        return '' + args[0];
+    },
+    'IsInt': function () {
+        // TODO
+        throw 'IsInt not implemented';
+    },
+    'IsDouble': function () {
+        // TODO
+        throw 'IsDouble not implemented';
+    },
+    'GetInput': function () {
+        // TODO
+        throw 'GetInput not implemented';
+    },
+    'GetFileURL': function () {
+        // TODO
+        throw 'GetFileURL not implemented';
+    },
+    'GetFileData': function () {
+        // TODO
+        throw 'GetFileData not implemented';
+    },
+    'GetUniqueElementName': function () {
+        // TODO
+        throw 'GetUniqueElementName not implemented';
+    },
+    'Ask': function () {
+        // TODO
+        throw 'Ask not implemented';
+    },
+    'GetRandomInt': function () {
+        // TODO
+        throw 'GetRandomInt not implemented';
+    },
+    'GetRandomDouble': function () {
+        // TODO
+        throw 'GetRandomDouble not implemented';
+    },
+    'Eval': function () {
+        // TODO
+        throw 'Eval not implemented';
+    },
+    'Clone': function () {
+        // TODO
+        throw 'Clone not implemented';
+    },
+    'DoesInherit': function () {
+        // TODO
+        throw 'DoesInherit not implemented';
+    },
+    'ListCombine': function (args) {
+        var list1 = args[0];
+        var list2 = args[1];
+        checkIsList(list1);
+        if (list1.type != list2.type) {
+            throw 'Mismatched list types passed to ListCombine';
         }
-        else {
-            var element = getParameter(args[0], 'TypeOf', 'element');
-            var attribute = getParameter(args[1], 'TypeOf', 'string');
-            value = state.get(element, attribute);
+        var result = state.newAttribute(list1.type);
+        result.value = list1.value.concat(list2.value);
+        return result;
+    },
+    'ListExclude': function () {
+        // TODO
+        throw 'ListExclude not implemented';
+    },
+    'GetAllChildObjects': function (args) {
+        var element = getParameter(args[0], 'GetAllChildObjects', 'element');
+        var result = state.newAttribute('objectlist');
+        result.value = state.getAllChildren(element, 'object', 'object');
+        return result;
+    },
+    'GetDirectChildren': function (args) {
+        var element = getParameter(args[0], 'GetAllChildObjects', 'element');
+        var result = state.newAttribute('objectlist');
+        result.value = state.getDirectChildren(element, 'object', 'object');
+        return result;
+    },
+    'IsGameRunning': function () {
+        // TODO
+        throw 'IsGameRunning not implemented';
+    },
+    'ObjectListSort': function () {
+        // TODO
+        throw 'ObjectListSort not implemented';
+    },
+    'ObjectListSortDescending': function () {
+        // TODO
+        throw 'ObjectListSortDescending not implemented';
+    },
+    'StringListSort': function () {
+        // TODO
+        throw 'StringListSort not implemented';
+    },
+    'StringListSortDescending': function () {
+        // TODO
+        throw 'StringListSortDescending not implemented';
+    },
+    'GetUIOption': function (args) {
+        var option = getParameter(args[0], 'GetUIOption', 'string');
+        if (option == 'UseGameColours' || option == 'UseGameFont') {
+            return 'true';
         }
-        return state.typeOf(value);
+        return null;
     }
 };
 
