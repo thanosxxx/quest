@@ -189,7 +189,7 @@ var functions = {
     },
     'HasDelegateImplementation': function () {
         // TODO
-        throw 'HasDelegateImplementation not implemented';
+        return false;
     },
     'GetAttribute': function () {
         // TODO
