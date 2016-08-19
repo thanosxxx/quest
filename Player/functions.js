@@ -1,5 +1,4 @@
 var state = require('./state.js');
-var xregexp = require('./lib/xregexp-all.js').XRegExp;
 
 var asyncFunctions = {
     'GetInput': function (args, complete) {
@@ -308,7 +307,7 @@ var functions = {
         var pattern = getParameter(args[0], 'IsRegexMatch', 'string');
         var input = getParameter(args[1], 'IsRegexMatch', 'string');
         var cacheId = getParameter(args[2], 'IsRegexMatch', 'string', true);
-        var regex = getRegex(pattern, cacheId);
+        var regex = getRegex(pattern, cacheId).regex;
         var result = regex.test(input);
         return result;
     },
@@ -316,7 +315,7 @@ var functions = {
         var pattern = getParameter(args[0], 'GetMatchStrength', 'string');
         var input = getParameter(args[1], 'GetMatchStrength', 'string');
         var cacheId = getParameter(args[2], 'GetMatchStrength', 'string', true);
-        var regex = getRegex(pattern, cacheId);
+        var regex = getRegex(pattern, cacheId).regex;
         return getMatchStrength(regex, input);
     },
     'Populate': function (args) {
@@ -374,7 +373,11 @@ var getRegex = function (regex, cacheId) {
         result = regexCache[cacheId];
         if (result) return result;
     }
-    result = xregexp(regex, 'i');
+    var cleanPattern = namedRegex.cleanRegExp(regex);
+    result = {
+        map: namedRegex.getMap(regex),
+        regex: new RegExp(cleanPattern, 'i')
+    };
     if (cacheId) {
         regexCache[cacheId] = result;
     }
@@ -405,39 +408,43 @@ var getMatchStrength = function (regex, input) {
     return input.length - lengthOfTextMatchedByGroups;
 };
 
-var populate = function (regex, input) {
-    //var matches = regex.exec(input);
-    var matches = xregexp.exec(input, regex);
-    var result = {};
-    var namedGroups = getRegexNamedGroups(matches);
-    // TODO: This fails when group names are repeated in the same regex,
-    // only works if it's the final occurrence of the group name
-    for (var groupIdx in namedGroups) {
-        if (matches[namedGroups[groupIdx]] != undefined) {
-            var varName = namedGroups[groupIdx];
-            result[varName] = matches[namedGroups[groupIdx]];
-        }
-    }
+var populate = function (regexAndMap, input) {
+    var matches = regexAndMap.regex.exec(input);
+    var result = namedRegex.mapCaptures(regexAndMap.map, matches);
     return result;
 };
 
-var getRegexNamedGroups = function (matches) {
-    var startsWith = function (input, text) {
-        return input.indexOf(text) == 0;
-    };
-
-    var result = [];
-    for (var prop in matches) {
-        if (matches.hasOwnProperty(prop)) {
-            if (startsWith(prop, 'object')
-             || startsWith(prop, 'text')
-             || startsWith(prop, 'exit')) {
-                result.push(prop);
+var namedRegex = {
+    // Based on https://gist.github.com/gbirke/2cc2370135b665eee3ef
+    getMap: function (rx) {
+        var braceMatch = /(\?<(\w+)>)/g,
+            braceMap = {},
+            braceCount = 0,
+            match;
+        while ((match = braceMatch.exec(rx))) {
+            braceCount++;
+            if (match[2]) {
+                braceMap[braceCount] = match[2];
             }
         }
+        return braceMap;
+    },
+    mapCaptures: function (map, captures) {
+        var idx, result = {};
+        if (captures === null) {
+            return null;
+        }
+        for (idx in map) {
+            if (captures[idx]) {
+                result[map[idx]] = captures[idx];
+            }
+        }
+        return result;
+    },
+    cleanRegExp: function (rx) {
+        return rx.replace(/\(\?<\w+>/g, '(');
     }
-    return result;
-}
+};
 
 exports.asyncFunctions = asyncFunctions;
 exports.functions = functions;
