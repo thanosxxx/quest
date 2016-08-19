@@ -27,7 +27,7 @@ var sendCommand = function (command, elapsedTime, metadata) {
     // TODO: Check if command override mode is on
     // TODO: Echo input for ASL <= 520
     
-    var metadataArg = state.newAttribute('stringlist');
+    var metadataArg = state.newAttribute('stringdictionary');
     if (metadata) metadataArg.value = metadata;
     
     scripts.executeScript(state.getFunction('HandleCommand'), {
