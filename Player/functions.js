@@ -337,21 +337,17 @@ var functions = {
         result.value = populate(regex, input);
         return result;
     },
-    'DictionaryItem': function () {
-        // TODO
-        throw 'DictionaryItem not implemented';
+    'DictionaryItem': function (args) {
+        return dictionaryItem('DictionaryItem', args);
     },
-    'StringDictionaryItem': function () {
-        // TODO
-        throw 'StringDictionaryItem not implemented';
+    'StringDictionaryItem': function (args) {
+        return dictionaryItem('DictionaryItem', args);
     },
-    'ObjectDictionaryItem': function () {
-        // TODO
-        throw 'ObjectDictionaryItem not implemented';
+    'ObjectDictionaryItem': function (args) {
+        return dictionaryItem('DictionaryItem', args);
     },
-    'ScriptDictionaryItem': function () {
-        // TODO
-        throw 'ScriptDictionaryItem not implemented';
+    'ScriptDictionaryItem': function (args) {
+        return dictionaryItem('DictionaryItem', args);
     },
     'ShowMenu': function () {
         // TODO
@@ -518,6 +514,18 @@ var listItem = function (fn, args) {
             list.value.length - 1 + ')';
     }
     return list.value[index];
+
+    // TODO: If type does not match expected type, return null
+};
+
+var dictionaryItem = function (fn, args) {
+    var dic = args[0];
+    checkIsDictionary(dic);
+    var key = getParameter(args[1], fn, 'string');
+    return dic.value[key];
+
+    // TODO: Check behaviour when key does not exist
+    // TODO: If type does not match expected type, return null
 };
 
 var regexCache = {};
