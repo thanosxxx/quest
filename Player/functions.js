@@ -273,8 +273,13 @@ var functions = {
     },
     'ListCount': function (args) {
         var list = args[0];
-        checkIsList(list);
-        return list.value.length;
+        if (isList(list)) {
+            return list.value.length;
+        }
+        if (isDictionary(list)) {
+            return Object.keys(list.value).length;
+        }
+        throw 'ListCount function expected list parameter but was passed ' + state.typeOf(list);
     },
     'ListItem': function (args) {
         return listItem('ListItem', args);
@@ -479,18 +484,28 @@ var functions = {
 };
 
 var checkIsList = function (list) {
-    if (list.type != 'list' && list.type != 'stringlist' && list.type != 'objectlist') {
+    if (!isList(list)) {
         throw 'Value is not a list type';
     }
 };
 
+var isList = function (list) {
+    return list.type == 'list' ||
+        list.type == 'stringlist' ||
+        list.type == 'objectlist';
+};
+
 var checkIsDictionary = function (dic) {
-    if (dic.type != 'stringdictionary' &&
-        dic.type != 'objectdictionary' &&
-        dic.type != 'objectlist' &&
-        dic.type != 'dictionary') {
+    if (!isDictionary(dic)) {
         throw 'Value is not a dictionary type';
     }
+};
+
+var isDictionary = function (dic) {
+    return dic.type == 'stringdictionary' ||
+        dic.type == 'objectdictionary' ||
+        dic.type == 'objectlist' ||
+        dic.type == 'dictionary';
 };
 
 var getParameter = function (parameter, caller, type, allowNull) {
