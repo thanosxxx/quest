@@ -276,17 +276,14 @@ var functions = {
         checkIsList(list);
         return list.value.length;
     },
-    'ListItem': function () {
-        // TODO
-        throw 'ListItem not implemented';
+    'ListItem': function (args) {
+        return listItem('ListItem', args);
     },
-    'StringListItem': function () {
-        // TODO
-        throw 'StringListItem not implemented';
+    'StringListItem': function (args) {
+        return listItem('StringListItem', args);
     },
-    'ObjectListItem': function () {
-        // TODO
-        throw 'ObjectListItem not implemented';
+    'ObjectListItem': function (args) {
+        return listItem('ObjectListItem', args);
     },
     'GetObject': function (args) {
         var name = getParameter(args[0], 'GetObject', 'string');
@@ -507,6 +504,20 @@ var getParameter = function (parameter, caller, type, allowNull) {
         throw caller + ' function expected ' + type + ' parameter but was passed ' + actualType;
     }
     return parameter;
+};
+
+var listItem = function (fn, args) {
+    var list = args[0];
+    checkIsList(list);
+    var index = getParameter(args[1], fn, 'int');
+    if (index < 0 || index >= list.value.length) {
+        throw fn + ': index ' + index +
+            ' is out of range for this list (' +
+            list.value.length +
+            ' items, last index is ' +
+            list.value.length - 1 + ')';
+    }
+    return list.value[index];
 };
 
 var regexCache = {};
