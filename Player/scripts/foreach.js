@@ -55,8 +55,8 @@ module.exports = {
                     script.push({
                         command: {
                             execute: function () {
-                                ctx.locals[ctx.parameters.variable] = list[index];
                                 index++;
+                                ctx.locals[ctx.parameters.variable] = list[index];
                                 if (index % 1000 != 0) {
                                     runLoop();
                                 }
