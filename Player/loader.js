@@ -151,6 +151,17 @@ var elementLoaders = {
         loadElementAttributes(element, node.childNodes);
         return element;
     },
+    'verb': function (node) {
+        // TODO: There may be "property" and "response" attributes,
+        // see ElementLoaders.cs (VerbLoader)
+        var name = getXmlAttribute(node, 'name');
+        if (name == null) name = state.getUniqueId();
+        var element = state.create(name, 'object', 'command');
+        state.addInheritedType(element, 'defaultverb');
+        state.set(element, 'isverb', true);
+        loadElementAttributes(element, node.childNodes);
+        return element;
+    },
     'implied': function (node) {
         var element = getXmlAttribute(node, 'element');
         var attribute = getXmlAttribute(node, 'property');
