@@ -19,8 +19,7 @@ module.exports = {
                     ui.locationUpdated(data);
                     break;
                 case 'GameName':
-                    // TODO
-                    console.log('Unhandled request type ' + request);
+                    ui.setGameName(data);
                     break;
                 case 'FontName':
                     // TODO
@@ -49,12 +48,15 @@ module.exports = {
                     ui.updateStatus(data.replace(/\n/g, '<br/>'));
                     break;
                 case 'ClearScreen':
-                    // TODO
-                    console.log('Unhandled request type ' + request);
+                    ui.clearScreen();
                     break;
                 case 'PanesVisible':
-                    // TODO
-                    console.log('Unhandled request type ' + request);
+                    if (data === 'on') {
+                        ui.panesVisible(true);
+                    }
+                    else if (data === 'off' || data === 'disabled') {
+                        ui.panesVisible(false);
+                    }
                     break;
                 case 'ShowPicture':
                     // TODO
@@ -86,16 +88,14 @@ module.exports = {
                     console.log('Unhandled request type ' + request);
                     break;
                 case 'SetPanelContents':
-                    // TODO
-                    console.log('Unhandled request type ' + request);
+                    ui.setPanelContents(data);
                     break;
                 case 'Log':
                     // TODO
                     console.log('Unhandled request type ' + request);
                     break;                
                 case 'Speak':
-                    // TODO
-                    console.log('Unhandled request type ' + request);
+                    // Do nothing
                     break;
                 default:
                     throw 'Unhandled request type ' + request;
