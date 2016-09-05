@@ -12,42 +12,52 @@ module.exports = {
 
             switch (request) {
                 case 'Quit':
+                    // TODO
                     console.log('Unhandled request type ' + request);
                     break;
                 case 'UpdateLocation':
-                    console.log('Unhandled request type ' + request);
+                    ui.locationUpdated(data);
                     break;
                 case 'GameName':
+                    // TODO
                     console.log('Unhandled request type ' + request);
                     break;
                 case 'FontName':
+                    // TODO
                     console.log('Unhandled request type ' + request);
                     break;
                 case 'FontSize':
+                    // TODO
                     console.log('Unhandled request type ' + request);
                     break;
                 case 'Background':
-                    console.log('Unhandled request type ' + request);
+                    ui.setBackground(data);
                     break;
                 case 'Foreground':
+                    // TODO
                     console.log('Unhandled request type ' + request);
                     break;
                 case 'LinkForeground':
+                    // TODO
                     console.log('Unhandled request type ' + request);
                     break;
                 case 'RunScript':
+                    // TODO
                     console.log('Unhandled request type ' + request);
                     break;
                 case 'SetStatus':
-                    console.log('Unhandled request type ' + request);
+                    ui.updateStatus(data.replace(/\n/g, '<br/>'));
                     break;
                 case 'ClearScreen':
+                    // TODO
                     console.log('Unhandled request type ' + request);
                     break;
                 case 'PanesVisible':
+                    // TODO
                     console.log('Unhandled request type ' + request);
                     break;
                 case 'ShowPicture':
+                    // TODO
                     console.log('Unhandled request type ' + request);
                     break;
                 case 'Show':
@@ -57,31 +67,38 @@ module.exports = {
                     ui.hide(data);
                     break;
                 case 'SetCompassDirections':
-                    console.log('Unhandled request type ' + request);
+                    ui.setCompassDirections(data.split(';'));
                     break;
                 case 'Pause':
+                    // TODO
                     console.log('Unhandled request type ' + request);
                     break;
                 case 'Wait':
+                    // TODO
                     console.log('Unhandled request type ' + request);
                     break;
                 case 'SetInterfaceString':
-                    console.log('Unhandled request type ' + request);
+                    var args = data.split('=');
+                    ui.setInterfaceString(args[0], args[1]);
                     break;
                 case 'RequestSave':
+                    // TODO
                     console.log('Unhandled request type ' + request);
                     break;
                 case 'SetPanelContents':
+                    // TODO
                     console.log('Unhandled request type ' + request);
                     break;
                 case 'Log':
+                    // TODO
                     console.log('Unhandled request type ' + request);
                     break;                
                 case 'Speak':
+                    // TODO
                     console.log('Unhandled request type ' + request);
                     break;
                 default:
-                    throw 'Unhandled request type ';
+                    throw 'Unhandled request type ' + request;
             }
             
             ctx.complete();

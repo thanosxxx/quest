@@ -18,6 +18,8 @@
 /* global updateCompass */
 /* global uiHide */
 /* global uiShow */
+/* global setCompassDirections */
+/* global setInterfaceString */
 
 // Globals are all in ui/player.js
 // TODO: Remove globals, move player.js stuff in here
@@ -111,3 +113,5 @@ exports.stopSound = stopAudio;
 exports.setBackground = setBackground;
 exports.panesVisible = panesVisible;
 exports.print = print;
+exports.setCompassDirections = setCompassDirections;
+exports.setInterfaceString = setInterfaceString;
