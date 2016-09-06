@@ -20,6 +20,7 @@
 /* global uiShow */
 /* global setCompassDirections */
 /* global setInterfaceString */
+/* global scrollToEnd */
 
 // Globals are all in ui/player.js
 // TODO: Remove globals, move player.js stuff in here
@@ -122,3 +123,4 @@ exports.panesVisible = panesVisible;
 exports.print = print;
 exports.setCompassDirections = setCompassDirections;
 exports.setInterfaceString = setInterfaceString;
+exports.scrollToEnd = scrollToEnd;

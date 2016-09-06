@@ -1,6 +1,7 @@
 var state = require('./state.js');
 var loader = require('./loader.js');
 var scripts = require('./scripts.js');
+var ui = require('./ui.js');
 
 var begin = function () {
     // Based on WorldModel.Begin
@@ -34,6 +35,10 @@ var sendCommand = function (command, elapsedTime, metadata) {
         command: command,
         metadata: metadataArg
     });
+
+    if (state.minVersion(540)) {
+        ui.scrollToEnd();
+    }
     
     // TODO: TryFinishTurn
     // TODO: UpdateLists
