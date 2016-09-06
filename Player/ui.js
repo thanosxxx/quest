@@ -29,6 +29,9 @@
 
 window.quest = window.quest || {};
 
+var state = require('./state.js');
+var scripts = require('./scripts.js');
+
 var elementMap = {
     'Panes': '#gamePanes',
     'Location': '#location',
@@ -67,12 +70,16 @@ var playSound = function (filename, synchronous, looped) {
 };
 
 var print = function (text, linebreak) {
-    if (typeof linebreak === 'undefined') linebreak = true;
-    
-    // TODO: If ASL >= 540 and there is an OutputText function, use that
-    // (should be within msg script probably, not here)
-    if (linebreak) text += '<br/>';
-    addTextAndScroll(text);
+    if (state.minVersion(540) && state.functionExists('OutputText')) {
+        scripts.executeScript(state.getFunction('OutputText'), {
+            text: text
+        }, true);
+    }
+    else {
+        if (typeof linebreak === 'undefined') linebreak = true;
+        if (linebreak) text += '<br/>';
+        addTextAndScroll(text);
+    }
 };
 
 quest.ui = quest.ui || {};

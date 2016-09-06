@@ -1,6 +1,19 @@
 var elements = {};
 var elementsOfType = {};
 var templateLookup = {};
+var version;
+
+var setVersion = function (value) {
+    version = value;
+};
+
+var minVersion = function (value) {
+    return version >= value;
+};
+
+var maxVersion = function (value) {
+    return version <= value;
+};
 
 var newAttribute = function (type) {
     if (type == 'stringlist' || type == 'objectlist' || type == 'list') {
@@ -233,6 +246,9 @@ var dump = function () {
     console.log(elements);
 };
 
+exports.setVersion = setVersion;
+exports.minVersion = minVersion;
+exports.maxVersion = maxVersion;
 exports.newAttribute = newAttribute;
 exports.set = set;
 exports.get = get;

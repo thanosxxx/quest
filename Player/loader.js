@@ -203,6 +203,7 @@ var load = function (data) {
     if (allowedVersions.indexOf(version) === -1) {
         throw 'Unrecognised ASL version number';
     }
+    state.setVersion(version);
     
     for (i = 1; i < asl.childNodes.length; i++) {
         if (asl.childNodes[i].nodeType !== 1) continue;

@@ -9,16 +9,23 @@ var getCallstack = function () {
     return callstack;
 };
 
-var executeScript = function (script, locals) {
-    if (callstack.length !== 0) {
-        throw 'Existing callstack is not empty';
-    }
-    
-    callstack = [{
+var executeScript = function (script, locals, appendToCallstack) {
+    var frame = {
         script: script,
         index: 0,
         locals: locals || {}
-    }];
+    };
+    
+    if (callstack.length !== 0) {
+        if (!appendToCallstack) {
+            throw 'Existing callstack is not empty';
+        }
+        callstack.push(frame);
+        executeNext();
+        return;
+    }
+    
+    callstack = [frame];
     
     continueRunningScripts();
 };
