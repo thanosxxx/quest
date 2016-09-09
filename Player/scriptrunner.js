@@ -312,6 +312,11 @@ var callFunction = function (name, args, complete) {
             locals: argumentValues,
             index: 0,
             onReturn: complete
+            // onReturn: function (result) {
+            //     console.log('FN: ' + name);
+            //     console.log(result);
+            //     complete(result);
+            // }
         });
         executeNext();
         return;
