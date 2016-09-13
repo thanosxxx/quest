@@ -1,7 +1,10 @@
+var scripts = require('./scripts.js');
+
 var elements = {};
 var elementsOfType = {};
 var templateLookup = {};
 var version;
+var loading = true;
 
 var setVersion = function (value) {
     version = value;
@@ -13,6 +16,10 @@ var minVersion = function (value) {
 
 var maxVersion = function (value) {
     return version <= value;
+};
+
+var finishedLoading = function () {
+    loading = false;
 };
 
 var newAttribute = function (type) {
@@ -46,6 +53,15 @@ var tryGetElement = function (elementName) {
 };
 
 var set = function (element, attribute, value) {
+    // TODO: See Fields.Set
+    var oldValue = null;
+    if (attribute in element.attributes) {
+        oldValue = get(element, attribute);
+    }
+    else {
+        // TODO: Check IsValidAttributeName
+    }
+
     // TODO: Determine if changed
     // TODO: Clone clonable value if required
     // TODO: Name must be a string, and can't be changed once set
@@ -53,11 +69,26 @@ var set = function (element, attribute, value) {
     // TODO: If >v530, setting an attribute to null removes it from the attributes
     //       (TODO: Reassess if null => remove makes sense for >v600)
     element.attributes[attribute] = value;
+
+    if (oldValue !== value) {
+        var changedScript = getAttributeOfType(element, 'changed' + attribute, 'script');
+
+        if (changedScript !== null) {
+            scripts.executeScript(changedScript.script, {
+                oldvalue: oldValue
+            }, true);
+        }
+    }
 };
 
 var get = function (element, attribute) {
     var result = element.attributes[attribute];
     if (typeof result === 'undefined') {
+        if (loading) {
+            // Types haven't been initialised yet if we're still loading
+            return null;
+        }
+
         for (var idx in element.inheritedTypes) {
             var inheritedTypeElement = getElement(element.inheritedTypes[idx]);
             if (hasAttribute(inheritedTypeElement, attribute)) {
@@ -82,6 +113,10 @@ var addInheritedType = function (element, typeName) {
 
 var hasAttribute = function (element, attribute) {
     if (attribute in element.attributes) return true;
+
+    // Types haven't been initialised yet if we're still loading 
+    if (loading) return false;
+    
     for (var idx in element.inheritedTypes) {
         var inheritedTypeElement = getElement(element.inheritedTypes[idx]);
         return hasAttribute(inheritedTypeElement, attribute);
@@ -255,6 +290,7 @@ var dump = function () {
 exports.setVersion = setVersion;
 exports.minVersion = minVersion;
 exports.maxVersion = maxVersion;
+exports.finishedLoading = finishedLoading;
 exports.newAttribute = newAttribute;
 exports.set = set;
 exports.get = get;

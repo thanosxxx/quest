@@ -216,6 +216,7 @@ var load = function (data) {
         }
     }
     
+    state.finishedLoading();
     state.dump();
 };
 
