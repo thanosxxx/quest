@@ -46,6 +46,12 @@ var tryGetElement = function (elementName) {
 };
 
 var set = function (element, attribute, value) {
+    // TODO: Determine if changed
+    // TODO: Clone clonable value if required
+    // TODO: Name must be a string, and can't be changed once set
+    // TODO: Parent cannot be set to self
+    // TODO: If >v530, setting an attribute to null removes it from the attributes
+    //       (TODO: Reassess if null => remove makes sense for >v600)
     element.attributes[attribute] = value;
 };
 
