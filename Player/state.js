@@ -163,6 +163,32 @@ var typeOf = function (value) {
     throw 'Unknown type';
 };
 
+var checkIsList = function (list) {
+    if (!isList(list)) {
+        throw 'Value is not a list type';
+    }
+};
+
+var isList = function (list) {
+    return list.type == 'list' ||
+        list.type == 'stringlist' ||
+        list.type == 'objectlist';
+};
+
+var checkIsDictionary = function (dic) {
+    if (!isDictionary(dic)) {
+        throw 'Value is not a dictionary type';
+    }
+};
+
+var isDictionary = function (dic) {
+    return dic.type == 'stringdictionary' ||
+        dic.type == 'objectdictionary' ||
+        dic.type == 'objectlist' ||
+        dic.type == 'dictionary';
+};
+
+
 var attributeNames = function (element, includeInheritedAttributes) {
     var result = Object.keys(element.attributes);
     if (includeInheritedAttributes) {
@@ -299,6 +325,10 @@ exports.hasAttribute = hasAttribute;
 exports.hasAttributeOfType = hasAttributeOfType;
 exports.getAttributeOfType = getAttributeOfType;
 exports.typeOf = typeOf;
+exports.checkIsList = checkIsList;
+exports.isList = isList;
+exports.checkIsDictionary = checkIsDictionary;
+exports.isDictionary = isDictionary;
 exports.attributeNames = attributeNames;
 exports.isElement = isElement;
 exports.getElement = getElement;

@@ -10,9 +10,17 @@ module.exports = {
                 ctx.complete();
                 return;
             }
+            var locals;
+            if (result[2]) {
+                state.checkIsDictionary(result[2]);
+                locals = result[2].value;
+            }
+            else {
+                locals = {};
+            }
             scriptrunner.getCallstack().push({
                 script: script.script,
-                locals: result[2] || {},
+                locals: locals,
                 index: 0,
                 onReturn: ctx.complete
             });

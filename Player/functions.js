@@ -484,28 +484,19 @@ var functions = {
 };
 
 var checkIsList = function (list) {
-    if (!isList(list)) {
-        throw 'Value is not a list type';
-    }
+    state.checkIsList(list);
 };
 
 var isList = function (list) {
-    return list.type == 'list' ||
-        list.type == 'stringlist' ||
-        list.type == 'objectlist';
+    return state.isList(list);
 };
 
 var checkIsDictionary = function (dic) {
-    if (!isDictionary(dic)) {
-        throw 'Value is not a dictionary type';
-    }
+    state.checkIsDictionary(dic);
 };
 
 var isDictionary = function (dic) {
-    return dic.type == 'stringdictionary' ||
-        dic.type == 'objectdictionary' ||
-        dic.type == 'objectlist' ||
-        dic.type == 'dictionary';
+    return state.isDictionary(dic);
 };
 
 var getParameter = function (parameter, caller, type, allowNull) {
