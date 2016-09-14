@@ -194,5 +194,6 @@
                 msg ("Something else")
             }
         }
+        msg ("Done switch")
     </function>
 </asl>

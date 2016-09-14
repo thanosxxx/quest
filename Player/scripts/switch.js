@@ -1,4 +1,4 @@
-//var scriptrunner = require('../scriptrunner.js');
+var scriptrunner = require('../scriptrunner.js');
 var scriptParser = require('../scriptparser.js');
 var expressions = require('../expressions.js');
 
@@ -34,7 +34,7 @@ module.exports = {
                     var matchList = scriptParser.splitParameters(expr);
                     result = result.concat(matchList.map(function (match) {
                         return {
-                            expr: match,
+                            expr: expressions.parseExpression(match),
                             script: script
                         };
                     }));
@@ -58,8 +58,35 @@ module.exports = {
         };
     },
     execute: function (ctx) {
-        console.log(ctx);
-        // TODO...
-        ctx.complete();
+        scriptrunner.evaluateExpression(ctx.parameters.expression, function (result) {            
+            var index = 0;
+            var evaluateCase = function () {
+                scriptrunner.evaluateExpression(ctx.parameters.cases[index].expr, function (caseResult) {
+                    if (result.toString() === caseResult.toString()) {
+                        scriptrunner.getCallstack().push({
+                            script: ctx.parameters.cases[index].script,
+                            index: 0
+                        });
+                        ctx.complete();
+                    }
+                    else {
+                        index++;
+                        if (index < ctx.parameters.cases.length) {
+                            evaluateCase();
+                        }
+                        else {
+                            if (ctx.parameters.defaultScript) {
+                                scriptrunner.getCallstack().push({
+                                    script: ctx.parameters.defaultScript,
+                                    index: 0
+                                });
+                            }
+                            ctx.complete();
+                        }
+                    }
+                });
+            };
+            evaluateCase();
+        });
     }
 };
