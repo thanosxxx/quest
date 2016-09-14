@@ -100,6 +100,9 @@
             msg (GetInput())
             msg ("Done")
         }
+        else if (Left(command, 2) = "sw") {
+            sw (Mid(command, 3))
+        }
         else {
             msg (command)
         }
@@ -174,5 +177,22 @@
     
     <function name="f" type="string">
         return ("f")
+    </function>
+
+    <function name="sw" parameters="value">
+        switch (value) {
+            case (1) {
+                msg ("One")
+            }
+            case (2, 3, 4) {
+                msg ("Two, three or four")
+            }
+            case (5) {
+                msg ("Five")
+            }
+            default {
+                msg ("Something else")
+            }
+        }
     </function>
 </asl>
