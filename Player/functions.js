@@ -1,4 +1,5 @@
 var state = require('./state.js');
+var scriptrunner = require('./scriptrunner.js');
 
 var asyncFunctions = {
     'GetInput': function (args, complete) {
@@ -7,6 +8,24 @@ var asyncFunctions = {
         setTimeout(function () {
             complete('test');
         }, 200);
+    },
+    'DynamicTemplate': function (args, complete) {
+        var name = getParameter(args[0], 'DynamicTemplate', 'string');
+        var element = state.tryGetElement(name);
+        if (!element || element.elementType !== 'dynamictemplate') {
+            // if there is no dynamictemplate of this name, return the "ordinary" template instead.
+            return state.getTemplate(name).attributes.text;
+        }
+        if (args.length > 2) {
+            // TODO
+            throw 'DynamicTemplate with multiple parameters not implemented';
+        }
+        if (args[1].type !== 'element') {
+            // TODO
+            throw 'DynamicTemplate with non-object parameter not implemented';
+        }
+        var expr = state.get(element, 'text');
+        scriptrunner.evaluateExpression(expr, complete);
     }
 };
 
@@ -132,10 +151,6 @@ var functions = {
     'Template': function (args) {
         var name = getParameter(args[0], 'Template', 'string');
         return state.getTemplate(name).attributes.text;
-    },
-    'DynamicTemplate': function () {
-        // TODO
-        throw 'DynamicTemplate not implemented';
     },
     'HasString': function (args) {
         var element = getParameter(args[0], 'HasString', 'element');

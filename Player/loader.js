@@ -1,5 +1,6 @@
 var state = require('./state.js');
 var scripts = require('./scripts.js');
+var expressions = require('./expressions.js');
     
 var allowedVersions = [500, 510, 520, 530, 540, 550];
 var impliedTypes = {};
@@ -177,6 +178,13 @@ var elementLoaders = {
         state.set(template, 'templatename', name);
         state.set(template, 'text', node.textContent);
         state.addTemplate(template);
+    },
+    'dynamictemplate': function (node) {
+        var name = getXmlAttribute(node, 'name');
+        // TODO: Template overrides - see Templates.cs (AddDynamicTemplate)
+        var element = state.create(name, 'dynamictemplate');
+        var expr = expressions.parseExpression(node.textContent);
+        state.set(element, 'text', expr);
     }
 };
 
