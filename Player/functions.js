@@ -110,7 +110,9 @@ var functions = {
     'Split': function (args) {
         var input = args[0];
         var splitChar = args[1];
-        return input.split(splitChar);
+        var result = state.newAttribute('stringlist');
+        result.value = input.split(splitChar);
+        return result;
     },
     'Join': function (args) {
         var input = args[0];
