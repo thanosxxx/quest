@@ -75,7 +75,10 @@ var set = function (element, attribute, value) {
 
         if (changedScript !== null) {
             scripts.executeScript(changedScript.script, {
-                oldvalue: oldValue
+                oldvalue: oldValue,
+                locals: {
+                    'this': element
+                }
             }, true);
         }
     }

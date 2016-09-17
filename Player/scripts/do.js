@@ -18,6 +18,7 @@ module.exports = {
             else {
                 locals = {};
             }
+            locals['this'] = result[0];
             scriptrunner.getCallstack().push({
                 script: script.script,
                 locals: locals,

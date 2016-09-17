@@ -146,6 +146,7 @@ var evaluateNext = function () {
     }
     var tree = expressionFrame.tree;
     if (expressionFrame.expr) lastExpr = expressionFrame.expr;
+    var locals;
     
     try {
         switch (tree.type) {
@@ -153,9 +154,9 @@ var evaluateNext = function () {
                 expressionFrame.complete(tree.value);
                 break;
             case 'Identifier':
-                var locals = getParentFrame().locals;
+                locals = getParentFrame().locals;
                 if (tree.name in locals) {
-                    expressionFrame.complete(locals[tree.name]);                
+                    expressionFrame.complete(locals[tree.name]);   
                 }
                 else if (state.isElement(tree.name)) {
                     expressionFrame.complete(state.getElement(tree.name));
@@ -164,6 +165,15 @@ var evaluateNext = function () {
                     throw 'Unknown variable ' + tree.name;
                 }
                 
+                break;
+            case 'ThisExpression':
+                locals = getParentFrame().locals;
+                if ('this' in locals) {
+                    expressionFrame.complete(locals['this']);
+                }
+                else {
+                    throw 'Unknown variable this';
+                }
                 break;
             case 'BinaryExpression':
                 frame.expressionStack.push({
