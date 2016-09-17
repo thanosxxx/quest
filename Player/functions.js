@@ -1,5 +1,6 @@
 var state = require('./state.js');
 var scriptrunner = require('./scriptrunner.js');
+var delegates = require('./delegates.js');
 
 var asyncFunctions = {
     'GetInput': function (args, complete) {
@@ -26,6 +27,9 @@ var asyncFunctions = {
         }
         var expr = state.get(element, 'text');
         scriptrunner.evaluateExpression(expr, complete);
+    },
+    'RunDelegateFunction': function (args, complete) {
+        delegates.runDelegate(args, complete);
     }
 };
 
@@ -324,10 +328,6 @@ var functions = {
             value = state.get(element, attribute);
         }
         return state.typeOf(value);
-    },
-    'RunDelegateFunction': function () {
-        // TODO
-        throw 'RunDelegateFunction not implemented';
     },
     'SafeXML': function (args) {
         var input = getParameter(args[0], 'SafeXML', 'string');
