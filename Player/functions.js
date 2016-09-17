@@ -454,9 +454,15 @@ var functions = {
         result.value = list1.value.concat(list2.value);
         return result;
     },
-    'ListExclude': function () {
-        // TODO
-        throw 'ListExclude not implemented';
+    'ListExclude': function (args) {
+        var list = args[0];
+        var exclude = args[1];
+        checkIsList(list);
+        var result = state.newAttribute(list.type);
+        result.value = list.value.filter(function (value) {
+            return value !== exclude;
+        });
+        return result;
     },
     'GetAllChildObjects': function (args) {
         var element = getParameter(args[0], 'GetAllChildObjects', 'element');
