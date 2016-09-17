@@ -19,6 +19,7 @@ var maxVersion = function (value) {
 };
 
 var finishedLoading = function () {
+    removeMissingDefaultTypeReferences();
     loading = false;
 };
 
@@ -309,6 +310,18 @@ var getUniqueId = function (prefix) {
         newId = prefix + nextUniqueId[prefix]++;
     } while (isElement(newId));
     return newId;
+};
+
+var removeMissingDefaultTypeReferences = function () {
+    for (var elementName in elementsOfType.object) {
+        var element = elementsOfType.object[elementName];
+        var defaultTypeName = 'default' + element.elementSubType;
+        var defaultType = tryGetElement(defaultTypeName);
+        if (!defaultType) {
+            var idx = element.inheritedTypes.indexOf(defaultTypeName);
+            element.inheritedTypes.splice(idx, 1);
+        }
+    }
 };
 
 var dump = function () {
