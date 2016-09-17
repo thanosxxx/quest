@@ -17,6 +17,7 @@ var commands = {
     'on ready': require('./scripts/onready'),
     'request': require('./scripts/request'),
     'return': require('./scripts/return'),
+    'rundelegate': require('./scripts/rundelegate'),
     'set': require('./scripts/setfield'),
     'start transaction': require('./scripts/starttransaction'),
     'switch': require('./scripts/switch')
@@ -192,7 +193,10 @@ var getScript = function (line, lastIf) {
     }
     else if (!parameters) {
         parameters = parseParameters(scriptParser.getAndSplitParameters(line));
-        if (command.parameters.indexOf(parameters.length) === -1) {
+        if (command.minParameters && parameters.length < command.minParameters) {
+            throw 'Expected at least ' + command.minParameters + ' parameters in command: ' + line;
+        }
+        else if (command.parameters && command.parameters.indexOf(parameters.length) === -1) {
             throw 'Expected ' + command.parameters.join(',') + ' parameters in command: ' + line;
         }
     }

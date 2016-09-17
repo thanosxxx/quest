@@ -111,10 +111,33 @@ var loadElementAttributes = function (element, nodes) {
                 loader(node, element, attributeName);
             }
             else {
-                console.log('no attribute loader for type ' + attributeType);
+                var delegate = state.tryGetElement(attributeType);
+                if (delegate && delegate.elementType === 'delegate') {
+                    var script = scripts.parseScript(node.textContent);
+                    state.set(element, attributeName, {
+                        script: script,
+                        type: 'delegateimplementation',
+                        delegateType: attributeType
+                    });
+                }
+                else {
+                    throw('Unrecognised attribute type "' +
+                        attributeType +
+                        '" in "' +
+                        element.name + '.' + attributeName + '"');
+                }
             }
         }
     }
+};
+
+var getParamList = function (node) {
+    var paramList;
+    var parameters = getXmlAttribute(node, 'parameters');
+    if (parameters) {
+        paramList = parameters.split(/, ?/);
+    }
+    return paramList;
 };
 
 var elementLoaders = {
@@ -125,11 +148,7 @@ var elementLoaders = {
         loadElementAttributes(element, node.childNodes);
     },
     'function': function (node) {
-        var paramList;
-        var parameters = getXmlAttribute(node, 'parameters');
-        if (parameters) {
-            paramList = parameters.split(/, ?/);
-        }
+        var paramList = getParamList(node);
         state.addFunction(getXmlAttribute(node, 'name'),
             scripts.parseScript(node.textContent),
             paramList);
@@ -185,6 +204,17 @@ var elementLoaders = {
         var element = state.create(name, 'dynamictemplate');
         var expr = expressions.parseExpression(node.textContent);
         state.set(element, 'text', expr);
+    },
+    'delegate': function (node) {
+        var name = getXmlAttribute(node, 'name');
+        var element = state.create(name, 'delegate');
+        var paramList = getParamList(node);
+        // Functions don't care about their return type in v6,
+        // so we probably don't care about them for delegates too
+        //var returnType = getXmlAttribute(node, 'type');
+        var paramListAttribute = state.newAttribute('stringlist');
+        paramListAttribute.value = paramList;
+        state.set(element, 'paramnames', paramListAttribute);
     }
 };
 
