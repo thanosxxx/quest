@@ -206,9 +206,10 @@ var functions = {
         var attribute = getParameter(args[1], 'HasObject', 'string');
         return state.hasAttributeOfType(element, attribute, 'object');
     },
-    'HasDelegateImplementation': function () {
-        // TODO
-        return false;
+    'HasDelegateImplementation': function (args) {
+        var element = getParameter(args[0], 'HasDelegateImplementation', 'element');
+        var attribute = getParameter(args[1], 'HasDelegateImplementation', 'string');
+        return state.hasAttributeOfType(element, attribute, 'delegateimplementation');
     },
     'GetAttribute': function () {
         // TODO
