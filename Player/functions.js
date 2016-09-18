@@ -614,7 +614,6 @@ var populate = function (regexAndMap, input) {
 };
 
 var namedRegex = {
-    // Based on https://gist.github.com/gbirke/2cc2370135b665eee3ef
     getMap: function (rx) {
         var map = {};
         var bracketCount = 0;
@@ -635,13 +634,13 @@ var namedRegex = {
         return map;
     },
     mapCaptures: function (map, captures) {
-        var idx, result = {};
         if (captures === null) {
             return null;
         }
-        for (idx in map) {
-            if (captures[idx]) {
-                result[map[idx]] = captures[idx];
+        var result = {};
+        for (var idx in map) {
+            if (!result[map[idx]]) {
+                result[map[idx]] = captures[idx] || '';
             }
         }
         return result;
