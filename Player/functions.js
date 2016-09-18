@@ -348,7 +348,7 @@ var functions = {
         var pattern = getParameter(args[0], 'GetMatchStrength', 'string');
         var input = getParameter(args[1], 'GetMatchStrength', 'string');
         var cacheId = getParameter(args[2], 'GetMatchStrength', 'string', true);
-        var regex = getRegex(pattern, cacheId).regex;
+        var regex = getRegex(pattern, cacheId);
         return getMatchStrength(regex, input);
     },
     'Populate': function (args) {
@@ -577,8 +577,10 @@ var getRegex = function (regex, cacheId) {
     return result;
 };
 
-var getMatchStrength = function (regex, input) {
+var getMatchStrength = function (regexAndMap, input) {
     // Based on Utility.GetMatchStrengthInternal
+
+    var regex = regexAndMap.regex;
 
     if (!regex.test(input)) {
         throw '"' + input + '" is not a match for regex "' + regex + '"';
@@ -594,10 +596,14 @@ var getMatchStrength = function (regex, input) {
 
     var lengthOfTextMatchedByGroups = 0;
     var matches = regex.exec(input);
-    matches.shift();
-    matches.forEach(function (group) {
-        if (group) lengthOfTextMatchedByGroups += group.length;
+    var groupIndexes = Object.keys(regexAndMap.map);
+    console.log(groupIndexes);
+
+    groupIndexes.forEach(function (idx) {
+        var match = matches[parseInt(idx)];
+        if (match) lengthOfTextMatchedByGroups += match.length;
     });
+
     return input.length - lengthOfTextMatchedByGroups;
 };
 
