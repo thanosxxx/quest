@@ -4,6 +4,7 @@ var elements = {};
 var elementsOfType = {};
 var templateLookup = {};
 var version;
+var loadFinishedActions = [];
 var loading = true;
 
 var setVersion = function (value) {
@@ -18,9 +19,17 @@ var maxVersion = function (value) {
     return version <= value;
 };
 
+var onLoadFinished = function (fn) {
+    loadFinishedActions.push(fn);
+};
+
 var finishedLoading = function () {
     removeMissingDefaultTypeReferences();
     loading = false;
+    loadFinishedActions.forEach(function (fn) {
+        fn();
+    });
+    loadFinishedActions = [];
 };
 
 var newAttribute = function (type) {
@@ -332,6 +341,7 @@ var dump = function () {
 exports.setVersion = setVersion;
 exports.minVersion = minVersion;
 exports.maxVersion = maxVersion;
+exports.onLoadFinished = onLoadFinished;
 exports.finishedLoading = finishedLoading;
 exports.newAttribute = newAttribute;
 exports.set = set;

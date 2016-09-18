@@ -1,6 +1,7 @@
 var state = require('./state.js');
 var scripts = require('./scripts.js');
 var expressions = require('./expressions.js');
+var simplepattern = require('./simplepattern.js');
     
 var allowedVersions = [500, 510, 520, 530, 540, 550];
 var impliedTypes = {};
@@ -53,25 +54,7 @@ var attributeLoaders = {
         });
     },
     'simplepattern': function (node, element, attributeName) {
-        var value = node.textContent
-            .replace(/\(/g, '\\(')
-            .replace(/\)/g, '\\)')
-            .replace(/\./g, '\\.')
-            .replace(/\?/g, '\\?')
-            .replace(/#([A-Za-z]\w+)#/g, function (match, group1) {
-                return '(?<' + group1 + '>.*)';
-            });
-        
-        if (value.indexOf('#') !== -1)
-        {
-            throw 'Invalid command pattern ' + element.attributes.name + '.' + attributeName + ' = ' + node.textContent;
-        }
-        
-        var patterns = value.split(/\s*;\s*/).map(function (pattern) {
-            return '^' + pattern + '$';
-        }).join('|');
-        
-        state.set(element, attributeName, patterns);
+        simplepattern.load(node, element, attributeName);
     }
 };
 
