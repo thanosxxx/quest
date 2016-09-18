@@ -610,17 +610,23 @@ var populate = function (regexAndMap, input) {
 var namedRegex = {
     // Based on https://gist.github.com/gbirke/2cc2370135b665eee3ef
     getMap: function (rx) {
-        var braceMatch = /(\?<(\w+)>)/g,
-            braceMap = {},
-            braceCount = 0,
-            match;
-        while ((match = braceMatch.exec(rx))) {
-            braceCount++;
-            if (match[2]) {
-                braceMap[braceCount] = match[2];
+        var map = {};
+        var bracketCount = 0;
+        var namedGroupMatch = /^\(\?<(\w+)>/;
+
+        for (var i = 0; i < rx.length; i++) {
+            switch (rx[i]) {
+                case '(':
+                    bracketCount++;
+                    var match = namedGroupMatch.exec(rx.substr(i));
+                    if (match) {
+                        map[bracketCount] = match[1];
+                    }
+                    break;
             }
         }
-        return braceMap;
+
+        return map;
     },
     mapCaptures: function (map, captures) {
         var idx, result = {};
