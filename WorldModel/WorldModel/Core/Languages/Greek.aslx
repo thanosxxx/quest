@@ -61,7 +61,7 @@
     <template name="Open">άνοιξε</template>
     <template name="Close">κλείσε</template> 
     <template name="Eat">φάε</template>
-    <dynamictemplate name="ObjectNotOpen">CapFirst(object.article)+ " " + GetDisplayAlias(object) + " δεν " + WriteVerb(object, "είμαι") + " ανοιχτ" + GetSuffix(object) + "."</dynamictemplate>
+    <dynamictemplate name="ObjectNotOpen">CapFirst(object.article)+ " " + GetDisplayAlias(object) + GreekOnomastiki(object) + " δεν " + WriteVerb(object, "είμαι") + " ανοιχτ" + GetSuffix(object) + "."</dynamictemplate>
     <template name="NeutralGender">το</template>
     <template name="MaleGender">ο</template>
     <template name="FemaleGender">η</template>
@@ -91,24 +91,24 @@
 	<template name="Health">Υγεία</template>
 	<template name="Money">Χρήματα</template>
 	<template name="Score">Σκορ</template>
-    <dynamictemplate name="AlreadyOpen">CapFirst(object.article)+ " " + GetDisplayAlias(object) + " " +  WriteVerb(object, "είμαι") + " ήδη ανοιχτ" + GetSuffix(object) + "."</dynamictemplate>
-    <dynamictemplate name="AlreadyClosed">CapFirst(object.article)+ " " + GetDisplayAlias(object) + " " +  WriteVerb(object, "είμαι") + " ήδη κλειστ" + GetSuffix(object) + "."</dynamictemplate>
+    <dynamictemplate name="AlreadyOpen">CapFirst(object.article)+ " " + GetDisplayAlias(object) + GreekOnomastiki(object) + " " +  WriteVerb(object, "είμαι") + " ήδη ανοιχτ" + GetSuffix(object) + "."</dynamictemplate>
+    <dynamictemplate name="AlreadyClosed">CapFirst(object.article)+ " " + GetDisplayAlias(object) + GreekOnomastiki(object) + " " +  WriteVerb(object, "είμαι") + " ήδη κλειστ" + GetSuffix(object) + "."</dynamictemplate>
     <dynamictemplate name="CantOpen">"Δεν μπορείς να " + object.gender + " ανοίξεις."</dynamictemplate>
     <dynamictemplate name="CantClose">"Δεν μπορείς να " + object.gender + " κλείσεις."</dynamictemplate>
     <dynamictemplate name="OpenSuccessful">CapFirst(object.gender) + " ανοίγεις."</dynamictemplate>
     <dynamictemplate name="CloseSuccessful">CapFirst(object.gender) + " κλείνεις."</dynamictemplate>
     <template name="CannotDoThat">Δεν μπορείς να το κάνεις αυτό.</template>
-    <dynamictemplate name="AlreadyThere">CapFirst(object.article)+ " " + GetDisplayAlias(object) + " " + WriteVerb(object, "είμαι") + " ήδη εκεί."</dynamictemplate>
+    <dynamictemplate name="AlreadyThere">CapFirst(object.article)+ " " + GetDisplayAlias(object) +  GreekOnomastiki(object) + " " + WriteVerb(object, "είμαι") + " ήδη εκεί."</dynamictemplate>
     <template name="Done">Έγινε.</template>
     <template name="ContainerContentsPrefix">έχει μέσα</template>
     <template name="SurfaceContentsPrefix">πάνω στο οποίο έχει</template>
-    <dynamictemplate name="ObjectContains">CapFirst(object.article)+ " " + GetDisplayAlias(object) + " έχει μέσα" </dynamictemplate>
-    <dynamictemplate name="ContainerFull">CapFirst(object.article)+ " " + GetDisplayAlias(object) + " " + WriteVerb(object, "είμαι") + " γεμάτ" + GetSuffix(object) + "."</dynamictemplate>
+    <dynamictemplate name="ObjectContains">CapFirst(object.article)+ " " + GetDisplayAlias(object) +  GreekOnomastiki(object) +" έχει μέσα" </dynamictemplate>
+    <dynamictemplate name="ContainerFull">CapFirst(object.article)+ " " + GetDisplayAlias(object) +  GreekOnomastiki(object) + " " + WriteVerb(object, "είμαι") + " γεμάτ" + GetSuffix(object) + "."</dynamictemplate>
     <dynamictemplate name="DisambiguateMenu">"Παρακαλώ διάλεξε ποιό '" + text + "' εννοείς:"</dynamictemplate>
     <dynamictemplate name="UndoTurn">"Αναίρεση: " + text</dynamictemplate>
     <template name="LockedExit">Αυτή η έξοδος είναι κλειδωμένη.</template>
-    <dynamictemplate name="DefaultAsk">CapFirst(object.article)+ " " + GetDisplayAlias(object) + " δεν απαντάει."</dynamictemplate>
-    <dynamictemplate name="DefaultTell">CapFirst(object.article)+ " " + GetDisplayAlias(object) + " δεν απαντάει."</dynamictemplate>
+    <dynamictemplate name="DefaultAsk">CapFirst(object.article)+ " " + GetDisplayAlias(object) + GreekOnomastiki(object) + " δεν απαντάει."</dynamictemplate>
+    <dynamictemplate name="DefaultTell">CapFirst(object.article)+ " " + GetDisplayAlias(object) +  GreekOnomastiki(object) + " δεν απαντάει."</dynamictemplate>
     <dynamictemplate name="DefaultTellTo">"Δεν " + WriteVerb(object, "κάνω") + " τίποτα."</dynamictemplate>
     <template name="NoKey">Δεν έχεις το κλειδί.</template>
     <template name="UnlockMessage">Ξεκλειδώθηκε.</template>
@@ -116,14 +116,14 @@
     <dynamictemplate name="LockedObject">CapFirst(object.article)+ " " + GetDisplayAlias(object) + " είναι κλειδωμένο."</dynamictemplate>
     <dynamictemplate name="AlreadyLocked">CapFirst(object.article)+ " " + GetDisplayAlias(object) + WriteVerb(object, "είμαι") + " ήδη κλειδωμέν" + GetSuffix(object)</dynamictemplate>
     <dynamictemplate name="AlreadyUnlocked">CapFirst(object.article)+ " " + GetDisplayAlias(object) + WriteVerb(object, "είμαι") + " ήδη ξεκλείδωτ" + GetSuffix(object)</dynamictemplate>
-    <dynamictemplate name="CannotLockOpen">"Δεν μπορείς να κλειδώσεις " + object.article + GetDisplayAlias(object) + " όσο " + Conjugate(object, "είμαι") + " ανοιχτ" + GetSuffix(object) + "."</dynamictemplate>
-    <dynamictemplate name="AlreadySwitchedOn">CapFirst(object.article)+ " " + GetDisplayAlias(object) + WriteVerb(object, "είμαι") + " ήδη ανοιχτ" + GetSuffix(object) + "."</dynamictemplate>"
-    <dynamictemplate name="AlreadySwitchedOff">CapFirst(object.article)+ " " + GetDisplayAlias(object) + " " + WriteVerb(object, "είμαι") + " ήδη σβηστ" + GetSuffix(object) + "."</dynamictemplate>"
+    <dynamictemplate name="CannotLockOpen">"Δεν μπορείς να κλειδώσεις " + object.gender + GetDisplayAlias(object) + " όσο " + Conjugate(object, "είμαι") + " ανοιχτ" + GetSuffix(object) + "."</dynamictemplate>
+    <dynamictemplate name="AlreadySwitchedOn">CapFirst(object.article)+ " " + GetDisplayAlias(object) + GreekOnomastiki(object) + " " + WriteVerb(object, "είμαι") + " ήδη ανοιχτ" + GetSuffix(object) + "."</dynamictemplate>"
+    <dynamictemplate name="AlreadySwitchedOff">CapFirst(object.article)+ " " + GetDisplayAlias(object) + GreekOnomastiki(object) + " " + WriteVerb(object, "είμαι") + " ήδη σβηστ" + GetSuffix(object) + "."</dynamictemplate>"
     <dynamictemplate name="SwitchedOn">CapFirst(object.gender) + " ανοίγεις."</dynamictemplate>
     <dynamictemplate name="SwitchedOff">CapFirst(object.gender) + " κλείνεις."</dynamictemplate>
     <dynamictemplate name="Eaten">"Τρως " + object.gender + " " + GetDisplayAlias(object) + "."</dynamictemplate>
     <template name="DefaultOops">Δεν υπάρχει κάτι να διορθώσω.</template>
-    <dynamictemplate name="ObjectDoesNotContain">CapFirst(object.gender) + GetDisplayAlias(object1) + " δεν περιλαμβάνει " + GetDisplayAlias(object2) + "."</dynamictemplate>
+    <dynamictemplate name="ObjectDoesNotContain">CapFirst(object.article) + GetDisplayAlias(object1) + GreekOnomastiki(object) + " δεν περιλαμβάνει " + object2.gender + GetDisplayAlias(object2) + "."</dynamictemplate>
     <dynamictemplate name="YouLooking">"Κοιτάζεις " + text +"."</dynamictemplate>
     <dynamictemplate name="LookAtDarkness">"Είναι τόσο σκοτεινά που δεν βλέπεις τίποτα."</dynamictemplate>
     <template name="VerbObjectSeparator">με</template>
@@ -355,10 +355,10 @@
     <template templatetype="command" name="version_cmd">^(έκδοση|πληροφορίες|σχετικά)$</template>
 
     <template name="DefaultHelp"><![CDATA[<u>Σύντομη Βοήθεια</u><br/><br/>
-    <b>- Αντικείμενα:</b>  Δοκίμασε ΚΟΙΤΑ ... ΜΙΛΑ ΣΤΟΝ ... ΠΑΡΕ ... ΡΙΞΕ ... ΑΝΟΙΞΕ ... ΔΩΣΕ ... ΣΤΟΝ ... ΧΡΗΣΙΜΟΠΟΙΗΣΕ ... ΣΤΟ ... <br/>
-    <b>- Κατάλογος:</b>  Για να δεις τα αντικείμενα που κουβαλάς, γράψε ΚΑΤ ή ΚΑΤΑΛΟΓΟΣ.<br/>
-    <b>- Μετακίνηση:</b>  Πάτησε τα κουμπιά στην πυξίδα, ή γράψε ΒΟΡΕΙΑ, ΝΟΤΙΑ, ΝΔ, ...<br/>
-    <b>- Συντομεύσεις:</b>  Πάτησε το πάνω και το κάτω βέλος για να δεις τις εντολές που έχεις ήδη γράψει. ]]></template>
+    - <u>Αντικείμενα:</u>  Δοκίμασε <b>δες ... μίλα στον ... πάρε ... ρίξε ... άνοιξε ... δώσε ... στον ... χρησιμοποίησε ...</b> <br/>
+    - <u>Κατάλογος:</u>  Για να δεις τα αντικείμενα που κουβαλάς, γράψε <b>κατ</b> ή <b>κατάλογος</b>.<br/>
+    - <u>Μετακίνηση:</u>  Πάτησε τα κουμπιά στην πυξίδα, ή γράψε <b>βόρεια, νότια, νδ, α, δ, ...</b><br/>
+    - <u>Συντομεύσεις:</u>  Πάτησε το πάνω και το κάτω βέλος για να δεις τις εντολές που έχεις ήδη γράψει. ]]></template>
 
     <!-- Editor-specific templates - should eventually be moved to e.g. EditorEnglish.aslx -->
     <template name="LanguageSpecificObjectTypes"></template>
@@ -388,6 +388,14 @@
 	
     <template name="EditorVerbDefaultExpression">"Δεν μπορείς να " + object.gender + " #verb#."</template>
 
+    <function name="GreekOnomastiki" type="string" parameters="obj">
+   if ( DoesInherit (obj, "male") or DoesInherit (obj, "masculine") ) {
+		  return ("ς")
+		} else {
+		  return ("")
+		}
+    </function>
+    
     <function name="GetDefaultPrefix" type="string" parameters="obj">
       return(GetPrefix(obj,"ένα"))
     </function>
